@@ -1,0 +1,41 @@
+
+
+1) Archiv entpacken. Inhalt des Verzeichnisses in den Ordner "opds"
+   direkt im DOCUMENT_ROOT des Webservers kopieren
+2) config.sample.php nach config.php umbenennen und im Editor anpassen:
+   - Erster Block (Directories) kann unveraendert bleiben
+   - im zweiten Block (Web Service) "localhost" durch den
+     Namen/die IP des Rechners ersetzen (sonst funktioniert das Ganze
+     am Ende nur auf dem lokalen Rechner, nicht aber vom eBook-Reader aus)
+   - im dritten Block (Person Info) die Daten anpassen.
+3) Datenbank vorbereiten:
+   - in den Ordner "install" wechseln
+   - Linux: install.sh ausfuehren
+     Windows: alle *.sql Dateien mit sqlite3 ausfuehren (?)
+   - Datei metadata.db in das uebergeordnete Verzeichnis verschieben
+4) Verzeichnisstruktur fuer Buecher vorbereiten:
+   - in den Ordner "books" wechseln
+   - fuer jede gewuenschte Sprache das entsprechende Verzeichnis
+     anlegen (z.B. "de" fuer Deutsch, "en" fuer Englisch...).
+     Nur fuer die benoetigten Sprachen.
+   - in jedem Sprachordner wiederum Ordner fuer die gewuenschten
+     Genres anlegen (z.B. "Computer", "Science Fiction", ...)
+   - in den Genre-Ordnern Verzeichnisse mit den Namen der Autoren
+     anlegen (z.B. "Jules Verne", "Paul Scheerbart", ...)
+   - die Buecher als <Titel>.<Typ> in die Autoren-Ordner kopieren
+   Eine Beispiel-Datei zur Veranschaulichung:
+   books/de/Science Fiction/Jules Verne/Reise um den Mond.epub
+   books/de/Science Fiction/Jules Verne/Reise um den Mond.mobi
+   Zu jedem Buch (das durchaus in mehreren Formaten vorliegen kann) kann
+   auch eine Textdatei mit einer Beschreibung angelegt werden, z.B.:
+   books/de/Science Fiction/Jules Verne/Reise um den Mond.desc
+   Diese muss dann die Erweiterung ".desc" haben - wie ersichtlich.
+5) Datenbank fuettern:
+   - wieder ins Hauptverzeichnis (opds) wechseln
+   - folgenden Befehl ausfuehren:
+     php scan.php
+
+Wenn alles geklappt hat, sollte man jetzt den Katalog benutzen koennen.
+Als URL im Browser/eBook-Reader einfach die konfigurierte $baseurl plus
+"/index.php" angeben - also z.B.
+http://meine_kiste/opds/index.php
