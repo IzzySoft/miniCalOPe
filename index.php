@@ -1,4 +1,14 @@
 <?
+#############################################################################
+# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
+# http://www.izzysoft.de/                                                   #
+# ------------------------------------------------------------------------- #
+# This program is free software; you can redistribute and/or modify it      #
+# under the terms of the GNU General Public License (see doc/LICENSE)       #
+#############################################################################
+# $Id$
+
 require_once('./config.php');
 require_once('./lib/template.php');
 $t = new Template('tpl');
@@ -12,6 +22,7 @@ $pubdate = date('c');
  */
 function set_basics(&$tpl) {
     foreach(array('owner','homepage','email','pubdate','baseurl','relurl') as $item) $tpl->set_var($item,$GLOBALS[$item]);
+    $tpl->set_var('lang',$GLOBALS['use_lang']);
 }
 
 /** Obtain information on available files for a given book

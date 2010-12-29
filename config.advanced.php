@@ -7,12 +7,12 @@
 # This program is free software; you can redistribute and/or modify it      #
 # under the terms of the GNU General Public License (see doc/LICENSE)       #
 # ------------------------------------------------------------------------- #
-# Simple configuration (no language-specific stuff)                         #
+# Advanced configuration (use language-specific stuff)                      #
 #############################################################################
 # $Id$
 
 #================================[ Directories ]===
-// database file
+// default database file (override in language specific settings)
 $dbfile = dirname(__FILE__).'/metadata.db';
 // Where your books are stored.
 $bookroot    = 'books';
@@ -39,8 +39,25 @@ $owner   = 'John Doe';
 $homepage= 'http://www.johndoe.com/';
 $email   = 'john@johndoe.com';
 
+#=========================[ Language dependent stuff ]===
+# Here we make use of the language-specific directories. You either can set
+# the $use_lang variable directly in your scan scripts for command-line use
+# (takes precedence), or pass "?lang=<lang>" in the URL.
+// check what language shall be used
+if ( !isset($use_lang) && isset($_REQUEST['lang']) ) $use_lang = $_REQUEST['lang'];
+elseif ( !isset($use_lang) ) $use_lang = '';
+// define language-specific settings
+switch ($use_lang) {
+    case 'en':
+        $uselangs = array('en');
+        $dbfile   = dirname(__FILE__).'/metadata_en.db';
+        break;
+    default  :
+        $uselangs = array('de');
+        break;
+}
+
 #===========================[ stuff ]===
-$uselangs = array(); // empty = all
 $debug = FALSE;
 
 ?>

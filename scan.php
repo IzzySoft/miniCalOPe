@@ -1,4 +1,16 @@
 <?
+#############################################################################
+# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
+# http://www.izzysoft.de/                                                   #
+# ------------------------------------------------------------------------- #
+# This program is free software; you can redistribute and/or modify it      #
+# under the terms of the GNU General Public License (see doc/LICENSE)       #
+# ------------------------------------------------------------------------- #
+# Scan for books and feed database                                          #
+#############################################################################
+# $Id$
+
 require_once('./config.php');
 require_once('./lib/common.php');
 require_once('./lib/files.php');
@@ -20,10 +32,17 @@ $authors = array();
 #===========================================================[ Collect data ]===
 // Go for the languages available
 debugOut("Scanning $bookroot");
+debugOut("use_lang: $use_lang");
+debugOut("Languages: ".implode(', ',$uselangs));
+debugOut("DBFile: $dbfile");
 $langs = scanFolder($bookroot);
 
 // Now collect the genres
 foreach($langs as $lang) {
+    if ( !empty($uselangs) && !in_array($lang,$uselangs) ) {
+        debugOut("* Skipping langDir '$lang'");
+        continue;
+    }
     debugOut("* Scanning langDir '$lang'");
     $genres[$lang] = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
     $allGenres     = array_merge($allGenres,$genres[$lang]);

@@ -1,8 +1,14 @@
 
+Schnellstart
+============
+
+Hier wird ein Schnellstart mit einfacher Konfiguration beschrieben. Wer etwas
+komplexeres benoetigt, und z.B. verschiedene Sprachen mit eigenen Katalogen
+verwenden moechte, findet weiter unten die entsprechenden Informationen.
 
 1) Archiv entpacken. Inhalt des Verzeichnisses in den Ordner "opds"
    direkt im DOCUMENT_ROOT des Webservers kopieren
-2) config.sample.php nach config.php umbenennen und im Editor anpassen:
+2) config.simple.php nach config.php umbenennen und im Editor anpassen:
    - Erster Block (Directories) kann unveraendert bleiben
    - im zweiten Block (Web Service) "localhost" durch den
      Namen/die IP des Rechners ersetzen (sonst funktioniert das Ganze
@@ -39,3 +45,28 @@ Wenn alles geklappt hat, sollte man jetzt den Katalog benutzen koennen.
 Als URL im Browser/eBook-Reader einfach die konfigurierte $baseurl plus
 "/index.php" angeben - also z.B.
 http://meine_kiste/opds/index.php
+
+
+Erweiterte Konfiguration
+========================
+
+Mit einer erweiterten Konfiguration lassen sich sprachspezifische Kataloge
+verwenden. Im Prinzip ist hier nach obigem Schema zu verfahren - nur der zweite
+Schritt wird leicht angepasst:
+
+Statt config.simple.php verwenden wir hier config.advanced.php als Vorlage - die
+Anpassung erfolgt, wie oben beschrieben. Sprach-spezifische Anpassungen erfolgen
+nun im Block "Language dependent stuff", und überschreiben jeweils die zuvor
+gesetzten Werte. Die Beispiel-Konfiguration gibt sinnvolle Werte für Deutsch
+und Englisch bereits an - mit Deutsch als der Default-Sprache, falls (z.B. in
+der URL) keine andere Sprache angegeben wurde. Natuerlich lassen sich hier noch
+weitere Einstellungen anpassen - etwa der Site-Title.
+
+Schritt 3 muss nun natuerlich fuer jede zusaetzliche Datenbank angepasst werden.
+Dabei kann die einmal erstellte (leere) Datenbank einfach kopiert werden.
+
+Wird nun die URL wie oben angegeben aufgerufen, greift die Default-Sprache (in
+unserem Falle also Deutsch). Besser ist es allemal, generell die Sprache mit
+anzugeben. Die URL waere dann z.B. fuer Englisch
+http://meine_kiste/opds/index.php?lang=en
+
