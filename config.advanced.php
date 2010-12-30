@@ -48,6 +48,9 @@ if ( !isset($use_lang) && isset($_REQUEST['lang']) ) $use_lang = $_REQUEST['lang
 elseif ( !isset($use_lang) ) $use_lang = '';
 // define language-specific settings
 switch ($use_lang) {
+    case 'cal': // not a lang - but use the Calibre DB
+        $dbfile   = '/mnt/data/eBooks/metadata.db';
+        break;
     case 'en':
         $uselangs = array('en');
         $dbfile   = dirname(__FILE__).'/metadata_en.db';

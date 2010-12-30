@@ -1,6 +1,10 @@
 
-Schnellstart
 ============
+INSTALLATION
+============
+
+Schnellstart
+------------
 
 Hier wird ein Schnellstart mit einfacher Konfiguration beschrieben. Wer etwas
 komplexeres benoetigt, und z.B. verschiedene Sprachen mit eigenen Katalogen
@@ -36,7 +40,11 @@ verwenden moechte, findet weiter unten die entsprechenden Informationen.
    auch eine Textdatei mit einer Beschreibung angelegt werden, z.B.:
    books/de/Science Fiction/Jules Verne/Reise um den Mond.desc
    Diese muss dann die Erweiterung ".desc" haben - wie ersichtlich.
-5) Datenbank fuettern:
+   Die Beschreibungen sollten dabei moeglichst keinerlei Sonderzeichen
+   enthalten (auch keine "Quotation marks"), da diese ggf. in dem einen
+   oder anderen Client zu Problemen fuehren. Warum, habe ich noch nicht
+   herausfinden koennen...
+5) Datenbank fuettern (ACHTUNG - NICHT MIT CALIBRE DB!):
    - wieder ins Hauptverzeichnis (opds) wechseln
    - folgenden Befehl ausfuehren:
      php scan.php
@@ -48,7 +56,7 @@ http://meine_kiste/opds/index.php
 
 
 Erweiterte Konfiguration
-========================
+------------------------
 
 Mit einer erweiterten Konfiguration lassen sich sprachspezifische Kataloge
 verwenden. Im Prinzip ist hier nach obigem Schema zu verfahren - nur der zweite
@@ -65,8 +73,18 @@ weitere Einstellungen anpassen - etwa der Site-Title.
 Schritt 3 muss nun natuerlich fuer jede zusaetzliche Datenbank angepasst werden.
 Dabei kann die einmal erstellte (leere) Datenbank einfach kopiert werden.
 
+Auch Schritt 5 aendert sich geringfuegig - als Beispiele liegen scan_de.php
+sowie scan_en.php mit bei.
+
 Wird nun die URL wie oben angegeben aufgerufen, greift die Default-Sprache (in
 unserem Falle also Deutsch). Besser ist es allemal, generell die Sprache mit
 anzugeben. Die URL waere dann z.B. fuer Englisch
 http://meine_kiste/opds/index.php?lang=en
 
+
+Calibre-DB nutzen
+-----------------
+
+Fuer die Nutzung der Calibre-Datenbank wird selbige einfach als $dbfile
+eingetragen. ABER AUFPASSEN: DAMIT KEINEN SCAN DURCHFUEHREN - SONST IST SIE
+DANACH HINUEBER!
