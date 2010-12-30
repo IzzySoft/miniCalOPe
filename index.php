@@ -184,18 +184,21 @@ switch($prefix) {
         $t->set_file(array("template"=>"tag.tpl"));
         $t->set_block('template','itemblock','item');
         set_basics($t);
-        $db->query('SELECT name FROM tags WHERE id='.$_REQUEST['query']);
+        if (is_numeric($_REQUEST['query'])) $tag_id = $_REQUEST['query'];
+        else $tag_id = 0;
+        $db->query('SELECT name FROM tags WHERE id='.$tag_id);
         $db->next_record();
         $t->set_var('tag_name',$db->f('name'));
         $t->set_var('total',$num_books);
         $t->set_var('per_page',$perpage);
+        $t->set_var('aid',$tag_id);
         $t->set_var('start',1);
         switch($_REQUEST['sort_order']) {
             case 'title' : $order = ' ORDER BY b.title'; break;
             case 'author': $order = ' ORDER BY a.name'; break;
             default     : $order = '';
         }
-        $db->query('SELECT b.id,b.title,b.isbn,a.name FROM books b,authors a, books_authors_link l WHERE b.id=l.book AND a.id=l.author AND b.id IN (SELECT book FROM books_tags_link WHERE tag='.$_REQUEST['query'].')');
+        $db->query('SELECT b.id,b.title,b.isbn,a.name FROM books b,authors a, books_authors_link l WHERE b.id=l.book AND a.id=l.author AND b.id IN (SELECT book FROM books_tags_link WHERE tag='.$_REQUEST['query'].')'.$order);
         $books = array();
         while ( $db->next_record() ) {
             $bid = $db->f('id');
