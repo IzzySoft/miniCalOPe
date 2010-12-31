@@ -21,6 +21,14 @@ $bookformats = array('epub','mobi');
 // file extension for book descriptions
 $bookdesc_ext = array('desc');
 
+#============================[ Book Covers ]===
+// Where to get the covers: calibre, simple, or off (none)
+$cover_mode = 'off';
+// maximum width to display them
+$cover_width = '200px';
+// where to place the cover img links
+$cover_base = 'covers';
+
 #============================[ Web Service ]===
 // Timezone
 $timezone = '+01:00';

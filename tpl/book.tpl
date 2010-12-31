@@ -4,7 +4,7 @@
 Details for the book
 
 --><feed xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/" xmlns="http://www.w3.org/2005/Atom" xml:base="{baseurl}?action=bookdetails&amp;book={id}">
-<id>{baseurl}/{id}.opds</id>
+<id>{baseurl}{id}.opds</id>
 <updated>{pubdate}</updated>
 <title>{title} von {author}</title>
 <subtitle>miniCalOPe.</subtitle>
@@ -15,7 +15,7 @@ Details for the book
 </author>
 
 <!--icon>http://m.gutenberg.org/pics/favicon.png</icon-->
-<link rel="self" title="Diese Seite" type="application/atom+xml" href="{relurl}?action=bookdetails&amp;book={id}&amp;lang={lang}"/>
+<link rel="self" title="Diese Seite" type="application/atom+xml" href="{baseurl}?action=bookdetails&amp;book={id}&amp;lang={lang}"/>
 <opensearch:totalResults>1</opensearch:totalResults>
 <opensearch:startIndex>1</opensearch:startIndex>
 <opensearch:itemsPerPage>1</opensearch:itemsPerPage>
@@ -36,6 +36,9 @@ Titel:
 <p>Herausgeber: {publisher}</p>
 <p>ISBN: {isbn}</p>
 <p>Kommentar:<br/>{comment}</p>
+<!-- BEGIN coverblock -->
+<center><img alt="cover" src="{baseurl}{cover_src}" width="{cover_width}" /></center>
+<!-- END coverblock -->
 </div>
 </content>
 

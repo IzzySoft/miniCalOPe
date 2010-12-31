@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/" xmlns="http://www.w3.org/2005/Atom" xml:base="{base_url}">
-<id>{base_url}index</id>
+<feed xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/" xmlns="http://www.w3.org/2005/Atom" xml:base="{baseurl}">
+<id>{baseurl}index</id>
 <updated>{pubdate}</updated>
 <title>{site_title}</title>
 <subtitle>miniCalOPe.</subtitle>
@@ -18,7 +18,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}/?default_prefix=authors&amp;lang={lang}</id>
+<id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
 <title>Autoren</title>
 <content type="text">Suche nach Autoren.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=authors&amp;lang={lang}"/>
@@ -27,7 +27,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}/?default_prefix=titles&amp;lang={lang}</id>
+<id>{baseurl}?default_prefix=titles&amp;lang={lang}</id>
 <title>Titel</title>
 <content type="text">Suche nach Titeln.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=titles&amp;lang={lang}"/>
@@ -36,7 +36,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}/?default_prefix=subjects&amp;lang={lang}</id>
+<id>{baseurl}?default_prefix=subjects&amp;lang={lang}</id>
 <title>Themen</title>
 <content type="text">Suche nach Themen.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=tags&amp;lang={lang}"/>
@@ -45,7 +45,7 @@
 
 <!--entry>
 <updated>{pubdate}</updated>
-<id>{base_url}?default_prefix=bookshelves</id>
+<id>{baseurl}?default_prefix=bookshelves</id>
 <title>Bücherregale</title>
 <content type="text">Stöbere im Bücherregal.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=bookshelves"/>
@@ -54,7 +54,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}?default_prefix=titles&amp;sort_order=downloads</id>
+<id>{baseurl}?default_prefix=titles&amp;sort_order=downloads</id>
 <title>Bestseller</title>
 <content type="text">Unsere beliebtesten Bücher.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=titles&amp;sort_order=downloads"/>
@@ -63,7 +63,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}?default_prefix=titles&amp;sort_order=release_date</id>
+<id>{baseurl}?default_prefix=titles&amp;sort_order=release_date</id>
 <title>Neuerscheinungen</title>
 <content type="text">Unsere neuesten Bücher.</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=titles&amp;sort_order=release_date"/>
@@ -72,7 +72,7 @@
 
 <entry>
 <updated>{pubdate}</updated>
-<id>{base_url}?default_prefix=languages&amp;sort_order=quantity</id>
+<id>{baseurl}?default_prefix=languages&amp;sort_order=quantity</id>
 <title>Sprache der Bücher</title>
 <content type="text">Ausgewählt: Alle Sprachen</content>
 <link type="application/atom+xml" href="{rel_url}?default_prefix=languages&amp;sort_order=quantity"/>

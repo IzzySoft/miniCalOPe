@@ -40,10 +40,6 @@ verwenden moechte, findet weiter unten die entsprechenden Informationen.
    auch eine Textdatei mit einer Beschreibung angelegt werden, z.B.:
    books/de/Science Fiction/Jules Verne/Reise um den Mond.desc
    Diese muss dann die Erweiterung ".desc" haben - wie ersichtlich.
-   Die Beschreibungen sollten dabei moeglichst keinerlei Sonderzeichen
-   enthalten (auch keine "Quotation marks"), da diese ggf. in dem einen
-   oder anderen Client zu Problemen fuehren. Warum, habe ich noch nicht
-   herausfinden koennen...
 5) Datenbank fuettern (ACHTUNG - NICHT MIT CALIBRE DB!):
    - wieder ins Hauptverzeichnis (opds) wechseln
    - folgenden Befehl ausfuehren:

@@ -12,7 +12,7 @@
  #                    Kristian Koehntopp                                     #
  #############################################################################
 
-//require_once(dirname(__FILE__).'/common.php');
+require_once(dirname(__FILE__).'/common.php');
 
 /**
  * @function scanDir
@@ -46,6 +46,53 @@ function scanFolder($dirname,$mode='dirs') {
 
     }
     return $list;
+}
+
+/** Purge all files in the specified directory
+ * @function purge_dir
+ * @param string path
+ */
+function purge_dir($path) {
+    if ( !is_dir($path) ) {
+        debugOut("! Cannot purge '$path' - directory does not exist!");
+        return;
+    }
+    debugOut("* Purging directory '$path'");
+    $dir = dir($path);
+    while ( $file=$dir->read() ) {
+      if ( in_array($file,array('.','..')) ) continue;
+      $fullname = $path . DIRECTORY_SEPARATOR . $file;
+      debugOut("  + removing '$file'");
+      unlink($fullname);
+    }
+}
+
+/** Checking for cover images and linking them to the cover dir
+ * @function prepare_covers
+ * @param string coverdir location to create the symlinks in
+ */
+function prepare_covers($coverdir) {
+    purge_dir($coverdir);
+    debugOut('* Linking cover images');
+    $db = new db($GLOBALS['dbfile']);
+    $db->query('SELECT id,path FROM books');
+    while ( $db->next_record() ) {
+      $path = $GLOBALS['bookroot'].$db->f('path');
+      $id   = $db->f('id');
+      switch($GLOBALS['cover_mode']) {
+        case 'calibre':
+          $coverimg  = $path.DIRECTORY_SEPARATOR.'cover.jpg';
+          $coverlink = $coverdir.DIRECTORY_SEPARATOR.$id.'.jpg';
+          if ( file_exists($coverimg) ) {
+              debugOut("  - $coverimg -> $coverlink");
+              symlink($coverimg,$coverlink);
+          }
+          else debugOut("  - No cover for ID '$id' at '$path'");
+          break;
+        case 'simple':
+        default: debugOut('Cover support disabled.');
+      }
+    }
 }
 
 ?>

@@ -221,7 +221,7 @@ switch($prefix) {
         exit;
     //----------------------------------------------[ Handle a single book ]---
     case '':
-        // Display boo details
+        // Display book details
         if (isset($_REQUEST['action']) && $_REQUEST['action']=='bookdetails') {
             $bookid = $_REQUEST['book'];
             $db->query("SELECT author FROM books_authors_link WHERE book=$bookid");
@@ -247,6 +247,7 @@ switch($prefix) {
             $files = get_filenames($db,$bookid);
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','itemblock','item');
+            $t->set_block('template','coverblock','cover');
             set_basics($t);
             $t->set_var('id',$bookid);
             $t->set_var('author',$author);
@@ -257,15 +258,23 @@ switch($prefix) {
             $t->set_var('isbn',$book['isbn']);
             $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
             $t->set_var('pubdate',$book['pubdate']);
+            $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
+            if ( file_exists($coverimg) && is_readable($coverimg) ) {
+                $t->set_var('cover_src',$coverimg);
+                $t->set_var('cover_width',$cover_width);
+                $t->parse('cover','coverblock');
+            }
             $more = FALSE;
             foreach ($files as $file) {
                 switch($file['format']) {
                     case 'epub': $t->set_var('ftype','epub+zip'); $t->set_var('ftitle','EPUB'); break;
                     case 'mobi': $t->set_var('ftype','x-mobipocket-ebook'); $t->set_var('ftitle','Kindle'); break;
+                    default: break;
                 }
                 $t->set_var('flength',$file['size']);
                 $t->set_var('format',$file['format']);
                 $t->parse('item','itemblock',$more);
+                $more = TRUE;
             }
             $t->pparse("out","template");
             exit;
