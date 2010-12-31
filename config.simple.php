@@ -22,6 +22,8 @@ $bookformats = array('epub','mobi');
 $bookdesc_ext = array('desc');
 
 #============================[ Web Service ]===
+// Timezone
+$timezone = '+01:00';
 // Site Title
 $sitetitle = 'Book Server';
 // Full URL to miniCalOPe

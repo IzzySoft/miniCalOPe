@@ -229,9 +229,9 @@ switch($prefix) {
             $db->query('SELECT name FROM authors WHERE id='.$db->f('author'));
             $db->next_record();
             $author = $db->f('name');
-            $db->query('SELECT title,isbn,series_index FROM books WHERE id='.$_REQUEST['book']);
+            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$_REQUEST['book']);
             $db->next_record();
-            $book = array('title'=>$db->f('title'),'isbn'=>$db->f('isbn'),'tags'=>'','series_index'=>$db->f('series_index'));
+            $book = array('title'=>$db->f('title'),'isbn'=>$db->f('isbn'),'tags'=>'','series_index'=>$db->f('series_index'),'pubdate'=>$db->f('pubdate').$timezone);
             $db->query("SELECT name FROM tags WHERE id IN (SELECT tag FROM books_tags_link WHERE book=$bookid)");
             while ( $db->next_record() ) $book['tags'] .= ', '.$db->f('name');
             if (strlen($book['tags'])) $book['tags'] = substr($book['tags'],2);
@@ -255,7 +255,8 @@ switch($prefix) {
             $t->set_var('series',$book['series']);
             $t->set_var('publisher',$book['publisher']);
             $t->set_var('isbn',$book['isbn']);
-            $t->set_var('comment',nl2br($book['comment']));
+            $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
+            $t->set_var('pubdate',$book['pubdate']);
             $more = FALSE;
             foreach ($files as $file) {
                 switch($file['format']) {
