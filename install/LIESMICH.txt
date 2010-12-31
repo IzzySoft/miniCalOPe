@@ -14,10 +14,11 @@ verwenden moechte, findet weiter unten die entsprechenden Informationen.
    direkt im DOCUMENT_ROOT des Webservers kopieren
 2) config.simple.php nach config.php umbenennen und im Editor anpassen:
    - Erster Block (Directories) kann unveraendert bleiben
-   - im zweiten Block (Web Service) "localhost" durch den
+   - Zweiten Block (Book Covers) ebenfalls belassen
+   - im dritten Block (Web Service) "localhost" durch den
      Namen/die IP des Rechners ersetzen (sonst funktioniert das Ganze
      am Ende nur auf dem lokalen Rechner, nicht aber vom eBook-Reader aus)
-   - im dritten Block (Person Info) die Daten anpassen.
+   - im vierten Block (Person Info) die Daten anpassen.
 3) Datenbank vorbereiten:
    - in den Ordner "install" wechseln
    - Linux: install.sh ausfuehren
@@ -84,3 +85,11 @@ Calibre-DB nutzen
 Fuer die Nutzung der Calibre-Datenbank wird selbige einfach als $dbfile
 eingetragen. ABER AUFPASSEN: DAMIT KEINEN SCAN DURCHFUEHREN - SONST IST SIE
 DANACH HINUEBER!
+
+Stattdessen koennen Anpassungen des zweiten Blocks (Book Covers - ggf. im
+sprach-spezifischen Teil) vorgenommen werden, um Cover-Images mit einzubinden.
+$cover_mode ist hierzu auf 'calibre' zu setzen. Fuer die Aufbereitung der
+Cover-Images werden mittels des Skriptes scan_calibre_covers.php Symlinks
+angelegt: Dies setzt ein Linux/Unix System voraus. Unter Windows sollte dies
+(Vista, Server 2008 oder neuer vorausgesetzt) mit PHP v5.3 oder hoeher ebenfalls
+funktionieren.

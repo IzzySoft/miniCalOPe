@@ -248,6 +248,7 @@ switch($prefix) {
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
+            $t->set_block('template','relcoverblock','relcover');
             set_basics($t);
             $t->set_var('id',$bookid);
             $t->set_var('author',$author);
@@ -263,6 +264,7 @@ switch($prefix) {
                 $t->set_var('cover_src',$coverimg);
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');
+                $t->parse('relcover','relcoverblock');
             }
             $more = FALSE;
             foreach ($files as $file) {
