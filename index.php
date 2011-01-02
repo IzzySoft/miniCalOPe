@@ -11,9 +11,13 @@
 
 require_once('./config.php');
 require_once('./lib/template.php');
-$t = new Template('tpl');
+switch($_REQUEST['pageformat']) {
+    case 'html' : $pageformat = 'html'; break;
+    default     : $pageformat = 'opds'; break;
+}
+$t = new Template("tpl/$pageformat");
 
-$pubdate = date('c');
+$pubdate = date('c',filemtime($dbfile));
 
 #================================================================[ Helpers ]===
 /** Setup common template values
@@ -115,6 +119,7 @@ switch($prefix) {
         $db->query('SELECT name FROM authors WHERE id='.$_REQUEST['query']);
         $db->next_record();
         $t->set_var('wikiauthor',str_replace(' ','_',$db->f('name')));
+        $t->set_var('author_name',$db->f('name'));
         $db->query('SELECT id,title,isbn FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$_REQUEST['query'].')');
         $more = FALSE;
         while ( $db->next_record() ) {
@@ -248,7 +253,6 @@ switch($prefix) {
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
-            $t->set_block('template','relcoverblock','relcover');
             set_basics($t);
             $t->set_var('id',$bookid);
             $t->set_var('author',$author);
@@ -264,7 +268,6 @@ switch($prefix) {
                 $t->set_var('cover_src',$coverimg);
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');
-                $t->parse('relcover','relcoverblock');
             }
             $more = FALSE;
             foreach ($files as $file) {
