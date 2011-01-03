@@ -1,0 +1,27 @@
+BODY,P,TD,TH {
+  font-family: sans-serif;
+  font-size:10pt;
+}
+BODY {
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-left: 0px;
+  background-color: #fff;
+  color: #00e;
+}
+
+A { text-decoration:none; }
+A:link { color: #b00; }
+A:visited { color: #f50; }
+.list TD A:link, TD A:visited { color: #00e; }
+.list TD:hover A { color:#ffffff; }
+.list TD:hover { background-color:#4d9dfc; }
+
+.error { color: #f00; }
+
+h1, div.updated, div.appsig { text-align:center; }
+h1 { font-size:110%; }
+div.appsig { font-size:70%; }
+div.updated, div.appsig { margin-top: 10px; }
+span.count { font-size:85%; }
+img { border:0; vertical-align:middle; }

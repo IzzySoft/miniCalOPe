@@ -18,6 +18,7 @@ switch($_REQUEST['pageformat']) {
 $t = new Template("tpl/$pageformat");
 
 $pubdate = date('c',filemtime($dbfile));
+$pubdate_human = date('Y-m-d H:i',filemtime($dbfile));
 
 #================================================================[ Helpers ]===
 /** Setup common template values
@@ -25,8 +26,9 @@ $pubdate = date('c',filemtime($dbfile));
  * @param object tpl template object
  */
 function set_basics(&$tpl) {
-    foreach(array('owner','homepage','email','pubdate','baseurl','relurl') as $item) $tpl->set_var($item,$GLOBALS[$item]);
+    foreach(array('owner','homepage','email','pubdate','pubdate_human','baseurl','relurl') as $item) $tpl->set_var($item,$GLOBALS[$item]);
     $tpl->set_var('lang',$GLOBALS['use_lang']);
+    $tpl->set_var('site_title',$GLOBALS['sitetitle']);
 }
 
 /** Obtain information on available files for a given book
@@ -57,7 +59,6 @@ if (!empty($_REQUEST['default_prefix'])) $prefix = $_REQUEST['default_prefix'];
 elseif (empty($_REQUEST['action'])) { // Startpage
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
-    $t->set_var('site_title',$sitetitle);
     $t->pparse("out","template");
     exit;
 }
@@ -236,7 +237,10 @@ switch($prefix) {
             $author = $db->f('name');
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$_REQUEST['book']);
             $db->next_record();
-            $book = array('title'=>$db->f('title'),'isbn'=>$db->f('isbn'),'tags'=>'','series_index'=>$db->f('series_index'),'pubdate'=>$db->f('pubdate').$timezone);
+            $book = array(
+              'title'=>$db->f('title'), 'isbn'=>$db->f('isbn'), 'tags'=>'', 'series_index'=>$db->f('series_index'),
+              'pubdate'=>$db->f('pubdate').$timezone, 'pubdate_human'=>date("d-m-Y H:i",strtotime($db->f('pubdate')))
+            );
             $db->query("SELECT name FROM tags WHERE id IN (SELECT tag FROM books_tags_link WHERE book=$bookid)");
             while ( $db->next_record() ) $book['tags'] .= ', '.$db->f('name');
             if (strlen($book['tags'])) $book['tags'] = substr($book['tags'],2);
@@ -263,6 +267,7 @@ switch($prefix) {
             $t->set_var('isbn',$book['isbn']);
             $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
             $t->set_var('pubdate',$book['pubdate']);
+            $t->set_var('pubdate_human',$book['pubdate_human']);
             $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
             if ( file_exists($coverimg) && is_readable($coverimg) ) {
                 $t->set_var('cover_src',$coverimg);
@@ -272,11 +277,20 @@ switch($prefix) {
             $more = FALSE;
             foreach ($files as $file) {
                 switch($file['format']) {
-                    case 'epub': $t->set_var('ftype','epub+zip'); $t->set_var('ftitle','EPUB'); break;
-                    case 'mobi': $t->set_var('ftype','x-mobipocket-ebook'); $t->set_var('ftitle','Kindle'); break;
+                    case 'epub':
+                       $t->set_var('ftype','epub+zip');
+                       $t->set_var('ftype_human','ePub');
+                       $t->set_var('ftitle','EPUB');
+                       break;
+                    case 'mobi':
+                       $t->set_var('ftype','x-mobipocket-ebook');
+                       $t->set_var('ftype_human','MobiPocket');
+                       $t->set_var('ftitle','Kindle');
+                      break;
                     default: break;
                 }
                 $t->set_var('flength',$file['size']);
+                $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
                 $t->set_var('format',$file['format']);
                 $t->parse('item','itemblock',$more);
                 $more = TRUE;
