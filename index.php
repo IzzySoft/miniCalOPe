@@ -39,7 +39,7 @@ function set_basics(&$tpl) {
  * @return array files [0..n] of array(name,size,format,path)
  */
 function get_filenames(&$db,$bookid,$format='') {
-    $db->query("SELECT path FROM books WHERE id=$bookid");
+    $db->query("SELECT title,path FROM books WHERE id=$bookid");
     $db->next_record();
     $path = $GLOBALS['bookroot'].$db->f('path');
     $dir = dir($path);
@@ -49,6 +49,8 @@ function get_filenames(&$db,$bookid,$format='') {
         $pos  = strrpos($file,'.');
         $suff = substr($file,$pos+1);
         if (!empty($format) && $suff!=$format) continue;
+        // in non-calibre mode (2-digit lang) different books of the author may be in the same dir:
+        if ( strlen($GLOBALS['use_lang'])==2 && substr($file,0,$pos)!=$db->f('title') ) continue;
         if (in_array($suff,$GLOBALS['bookformats'])) $files[] = array('name'=>$file,'size'=>filesize("$path/$file"),'format'=>$suff,'path'=>$path);
     }
     return $files;
