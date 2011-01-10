@@ -20,6 +20,8 @@ $bookroot    = 'books';
 $bookformats = array('epub','mobi');
 // file extension for book descriptions
 $bookdesc_ext = array('desc');
+// Where to write any log entries to. Empty string to disable for now.
+$logfile = './minicalope.log';
 
 #============================[ Book Covers ]===
 // Where to get the covers: calibre, simple, or off (none)

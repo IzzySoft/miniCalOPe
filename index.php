@@ -10,6 +10,7 @@
 # $Id$
 
 require_once('./config.php');
+require_once('./lib/files.php');
 require_once('./lib/template.php');
 switch($_REQUEST['pageformat']) {
     case 'html' : $pageformat = 'html'; break;
@@ -304,6 +305,7 @@ switch($prefix) {
             $files = get_filenames($db,$_REQUEST['book'],$_REQUEST['format']);
             $book  = $files[0]['path'].'/'.$files[0]['name'];
             if ($fd = fopen ($book,"rb")) {
+                logg($book,'DOWNLOAD');
                 switch($files[0]['format']) {
                     case 'epub': header("Content-type: application/epub+zip"); break;
                     case 'mobi': header("Content-type: application/x-mobipocket-ebook"); break;
