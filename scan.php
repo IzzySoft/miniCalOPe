@@ -71,12 +71,13 @@ sort($allGenres);
 $allGenres = array_unique($allGenres);
 $authors = array_unique($authors);
 
-debugOut( "Authors: ".implode(', ',$authors) );
 #======================================================[ Feed the database ]===
 $db->truncAll();
 $db->make_genres($allGenres);
 $db->make_authors($authors);
 $db->make_books($books);
+
+debugout("Processed:\n- ".count($authors)." authors\n- ".count($books)." books");
 
 exit;
 

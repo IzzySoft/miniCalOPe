@@ -23,7 +23,7 @@ class DB_Sql {
 
   var $AdjustQuotes = TRUE; // replace escaped quotes by SQLite Quotes - e.g.
                             // "\'" by "''"? Needed to be conform with other DBs
-  var $NumRowsEmulate = FALSE; // There is no num_rows for SQLite3. We can emulate
+  var $NumRowsEmulate = TRUE; // There is no num_rows for SQLite3. We can emulate
                             // it, but not very efficiently. If not emulated,
                             // num_rows() will simply return FALSE.
 
@@ -218,7 +218,7 @@ class DB_Sql {
     if (!$this->NumRowsEmulate) return FALSE;
     $i = 0;
     while ($this->next_record()) ++$i;
-    sqlite3_exec(); // no other way to reset the result set
+    sqlite3_exec($this->Link_ID,''); // no other way to reset the result set
     return $i;
   }
 

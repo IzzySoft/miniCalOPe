@@ -1,12 +1,13 @@
 <?
- #############################################################################
- # miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
- # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
- # http://www.izzysoft.de/                                                   #
- # ------------------------------------------------------------------------- #
- # This program is free software; you can redistribute and/or modify it      #
- # under the terms of the GNU General Public License (see doc/LICENSE)       #
- #############################################################################
+#############################################################################
+# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
+# http://www.izzysoft.de/                                                   #
+# ------------------------------------------------------------------------- #
+# This program is free software; you can redistribute and/or modify it      #
+# under the terms of the GNU General Public License (see doc/LICENSE)       #
+#############################################################################
+# $Id$
 
 /** Output debug message only if debugging is enabled
  * function debug
@@ -14,5 +15,17 @@
  */
 function debugOut($msg) {
   if ($GLOBALS['debug']) echo "$msg\n";
+}
+
+#=====================================================[ Checking URL input ]===
+/** Verifying integers
+ * @function req_int
+ * @param string in varname Name of the _REQUEST variable
+ * @param optional integer default Default value to return in case of mismatch (0)
+ * @return integer value
+ */
+function req_int($name,$default=0) {
+  if ( !isset($_REQUEST[$name]) ) return $default;
+  return (int) $_REQUEST[$name];
 }
 ?>

@@ -6,7 +6,7 @@
 
   <title>Alle Titel</title>
   <subtitle>miniCalOPe</subtitle>
-  <id>{baseurl}?default_prefix=titels&amp;sort_order=downloads&amp;lang={lang}</id>
+  <id>{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;lang={lang}</id>
   <updated>{pubdate}</updated>
 
   <author>
@@ -18,9 +18,15 @@
   <!--link rel="search" type="application/opensearchdescription+xml" title="Catalog Search" href="{baseurl}osd-authors.xml"/-->
   <link rel="self" title="Diese Seite"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?default_prefix=titels&amp;sort_order=downloads"/>
-  <!--link rel="next" title="Nächste Seite" type="application/atom+xml" href="/ebooks/search.opds/?default_prefix=authors&amp;sort_order=downloads&amp;start_index=26"/-->
-  <!-- previous, first, last -->
+        href="{baseurl}?default_prefix=titels&amp;sort_order={sortorder}"/>
+<!-- BEGIN prevblock -->
+  <link rel="first" title="Erste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;offset=0"/>
+  <link rel="previous" title="Vorige Seite" type="application/atom+xml" href="{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;offset={poffset}"/>
+<!-- END prevblock -->
+<!-- BEGIN nextblock -->
+  <link rel="next" title="Nächste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;offset={noffset}"/>
+  <link rel="last" title="Letzte Seite" type="application/atom+xml" href="{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;offset={loffset}"/>
+<!-- END nextblock -->
   <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
