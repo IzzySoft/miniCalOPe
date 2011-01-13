@@ -15,7 +15,7 @@
     <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> Themen</A></TD></TR>
 </TABLE>
 
-<DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}<BR>({num_allbooks} {allbooks})</DIV>
+<DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}<BR><SPAN CLASS='count'>({num_allbooks} {allbooks})</SPAN></DIV>
 
 <DIV CLASS='appsig'>Created by <A HREF='http://projects.izzysoft.de/trac/minicalope'>miniCalOPe</A></DIV>
 
