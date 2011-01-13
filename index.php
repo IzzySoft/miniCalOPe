@@ -155,6 +155,7 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('offset',$offset);
         $t->set_var('total',$num_books);
         $t->set_var('per_page',$perpage);
         $t->set_var('total',$all); // OPDS only

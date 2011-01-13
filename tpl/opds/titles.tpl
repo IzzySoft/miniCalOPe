@@ -6,7 +6,7 @@
 
   <title>Alle Titel</title>
   <subtitle>miniCalOPe</subtitle>
-  <id>{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;lang={lang}</id>
+  <id>{baseurl}?default_prefix=titels&amp;sort_order={sortorder}&amp;lang={lang}&amp;offset={offset}</id>
   <updated>{pubdate}</updated>
 
   <author>
