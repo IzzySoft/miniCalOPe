@@ -12,7 +12,7 @@
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
     <TR><TD><A HREF='{relurl}?default_prefix=authors&amp;lang={lang}&amp;pageformat=html'><IMG ALT='author' SRC='{relurl}tpl/icons/authors.png'> Autoren</A></TD></TR>
     <TR><TD><A HREF='{relurl}?default_prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> Titel</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/categories.png'> Themen</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> Themen</A></TD></TR>
 </TABLE>
 
 <DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}<BR>({num_allbooks} {allbooks})</DIV>

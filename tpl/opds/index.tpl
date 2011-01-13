@@ -40,7 +40,7 @@
     <id>{baseurl}?default_prefix=subjects&amp;lang={lang}</id>
     <content type="text">Suche nach Themen.</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=tags&amp;lang={lang}"/>
-    <link type="image/png" href="{relurl}tpl/icons/categories.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <link type="image/png" href="{relurl}tpl/icons/tags.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 

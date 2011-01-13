@@ -13,7 +13,7 @@
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> Startseite</A></TD></TR>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=authors&amp;sort_order=title'><IMG ALT='sort' SRC='{relurl}tpl/icons/alpha.png'> Alphabetisch sortieren</A></TD></TR>
 <!-- BEGIN itemblock -->
-    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=author_id&amp;sort_order=downloads&amp;query={id}'><IMG ALT='authors' SRC='{relurl}tpl/icons/authors.png'> {name}</A>
+    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=author_id&amp;sort_order=downloads&amp;query={id}'><IMG ALT='authors' SRC='{relurl}tpl/icons/author.png'> {name}</A>
             <SPAN CLASS='count'>({num_books} {books})</SPAN></TD></TR>
 <!-- END itemblock -->
 </TABLE>

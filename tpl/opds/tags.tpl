@@ -54,7 +54,7 @@
     <id>{baseurl}?default_prefix=tag_id&amp;sort_order=downloads&amp;query={id}&amp;lang={lang}</id>
     <content type="text">{num_books} {books}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tag_id&amp;sort_order=downloads&amp;query={id}&amp;lang={lang}"/>
-    <link type="image/png" href="{relurl}tpl/icons/categories.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <link type="image/png" href="{relurl}tpl/icons/tag.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 <!-- END itemblock -->

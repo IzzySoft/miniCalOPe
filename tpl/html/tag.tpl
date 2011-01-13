@@ -11,7 +11,7 @@
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> Startseite</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tags'><IMG ALT='tags' SRC='{relurl}tpl/icons/categories.png'> Zurück zu allen Tags</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tags'><IMG ALT='tags' SRC='{relurl}tpl/icons/tags.png'> Zurück zu allen Tags</A></TD></TR>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;sort_order=title&amp;query={aid}'><IMG ALT='alpha' SRC='{relurl}tpl/icons/alpha.png'> Alphabetisch sortieren</A></TD></TR>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;sort_order=author&amp;query={aid}'><IMG ALT='authors' SRC='{relurl}tpl/icons/authors.png'> Nach Autor sortieren</A></TD></TR>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;sort_order=release_date&amp;query={aid}'><IMG ALT='date' SRC='{relurl}tpl/icons/date.png'> Nach Datum sortieren</A></TD></TR>

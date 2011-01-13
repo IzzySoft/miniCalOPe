@@ -13,7 +13,7 @@
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> Startseite</A></TD></TR>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tags&amp;sort_order=title'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> Alphabetisch sortieren</A></TD></TR>
 <!-- BEGIN itemblock -->
-    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/categories.png'> {name}</A>
+    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/tag.png'> {name}</A>
             <SPAN CLASS='count'>({num_books} {books})</SPAN></TD></TR>
 <!-- END itemblock -->
 </TABLE>

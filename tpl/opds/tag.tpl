@@ -54,7 +54,7 @@
     <id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tags&amp;lang={lang}"/>
-    <link type="image/png" href="{relurl}tpl/icons/categories.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <link type="image/png" href="{relurl}tpl/icons/tags.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
