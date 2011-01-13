@@ -75,6 +75,20 @@ class DB_Sql {
     $this->Link_ID = 0;
   }
 
+  /** Perform a query using the LIMIT clause
+   * @method lim_query
+   * @param string Query_String Query without limit clause
+   * @param int start record to start at
+   * @param int limit max number of records wanted
+   * @return int allover records (w/o LIMIT used)
+   */
+  function lim_query($Query_String,$start,$limit) {
+    $this->query($Query_String);
+    $totals = $this->num_rows();
+    $this->query($Query_String . ' LIMIT ' . $limit . ' OFFSET ' . $start);
+    return $totals;
+  }
+
   /** Perform a query
    * @class DB_Sql
    * @method query

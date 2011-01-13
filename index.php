@@ -191,9 +191,10 @@ switch($prefix) {
         foreach ( $tags as $tag ) {
             $db->query('SELECT count(id) num_books FROM books WHERE id IN (SELECT book FROM books_tags_link WHERE tag='.$tag['id'].')');
             $db->next_record();
+            $tag['num_books'] = $db->f('num_books');
             $t->set_var('id',$tag['id']);
             $t->set_var('name',$tag['name']);
-            $t->set_var('num_books',$db->f('num_books'));
+            $t->set_var('num_books',$tag['num_books']);
             if ($tag['num_books']==1) $t->set_var('books','Buch');
             else $t->set_var('books','Bücher');
             $t->parse('item','itemblock',$more);
