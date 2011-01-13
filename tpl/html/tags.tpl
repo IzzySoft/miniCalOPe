@@ -18,7 +18,7 @@
 <!-- END itemblock -->
 </TABLE>
 
-<DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}</DIV>
+<DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}<BR>({num_allbooks} {allbooks})</DIV>
 
 <DIV CLASS='appsig'>Created by <A HREF='http://projects.izzysoft.de/trac/minicalope'>miniCalOPe</A></DIV>
 

@@ -57,19 +57,26 @@ function get_filenames(&$db,$bookid,$format='') {
     return $files;
 }
 
+// We need the database
+require_once('./lib/db_sqlite3.php');
+$db = new DB_Sql();
+$db->Database = $dbfile;
+
+$db->query('SELECT COUNT(id) AS num FROM books');
+$db->next_record();
+$allbookcount = $db->f('num');
+
 #========================================================[ Process request ]===
 if (!empty($_REQUEST['default_prefix'])) $prefix = $_REQUEST['default_prefix'];
 elseif (empty($_REQUEST['action'])) { // Startpage
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
+    $t->set_var('num_allbooks',$allbookcount);
+    if ($allbookcount==1) $t->set_var('allbooks','Buch');
+    else $t->set_var('allbooks','Bücher');
     $t->pparse("out","template");
     exit;
 }
-
-// This is no longer the start page -- so from here on we need the database
-require_once('./lib/db_sqlite3.php');
-$db = new DB_Sql();
-$db->Database = $dbfile;
 
 switch($prefix) {
     //-----------------------------------------[ list of authors requested ]---
@@ -148,6 +155,9 @@ switch($prefix) {
         $t->set_var('total',$num_books);
         $t->set_var('per_page',$perpage);
         $t->set_var('start',1);
+        $t->set_var('num_allbooks',$allbookcount);
+        if ($allbookcount==1) $t->set_var('allbooks','Buch');
+        else $t->set_var('allbooks','Bücher');
         $more = FALSE;
         while ( $db->next_record() ) {
             $t->set_var('bid',$db->f('id'));
@@ -173,6 +183,9 @@ switch($prefix) {
         $t->set_var('total',$num_books);
         $t->set_var('per_page',$perpage);
         $t->set_var('start',1);
+        $t->set_var('num_allbooks',$allbookcount);
+        if ($allbookcount==1) $t->set_var('allbooks','Buch');
+        else $t->set_var('allbooks','Bücher');
         $more = FALSE;
         #id,name,num_books,books
         foreach ( $tags as $tag ) {
