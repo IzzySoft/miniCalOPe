@@ -63,7 +63,7 @@ class db extends DB_Sql {
         $path = substr($file,strlen($GLOBALS['bookroot']),$pos-strlen($GLOBALS['bookroot']));
         break;
       }
-      $this->query("INSERT INTO books(id,title,path) VALUES ($b_id,'$name','$path')");
+      $this->query("INSERT INTO books(id,title,path,timestamp) VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."')");
       $this->query("SELECT id FROM authors WHERE name='".$books[$name]['author']."'");
       $this->next_record(); $a_id = $this->f('id');
       $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$b_id,$a_id)");

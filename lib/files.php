@@ -18,7 +18,7 @@ require_once(dirname(__FILE__).'/common.php');
  * @function scanDir
  * @param string dirname directory to scan
  * @param optional string mode scan for 'dirs' (default) or 'files'
- * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext] and [desc]
+ * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext], [desc] and [lastmod] (unixtime)
  */
 function scanFolder($dirname,$mode='dirs') {
     GLOBAL $bookformats, $bookdesc_ext;
@@ -41,6 +41,8 @@ function scanFolder($dirname,$mode='dirs') {
         $nam = substr($file,0,$pos);
         if ( in_array($ext,$bookformats) ) $list[$nam]['files'][$ext] = $fullname;
         elseif ( in_array($ext,$bookdesc_ext) ) $list[$nam]['desc'] = file_get_contents($fullname);
+        $lastmod = filemtime($fullname);
+        if ( empty($list[$nam]['lastmod']) || $list[$nam]['lastmod'] < $lastmod ) $list[$nam]['lastmod'] = $lastmod;
         continue;
       }
 

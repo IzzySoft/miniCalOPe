@@ -33,9 +33,12 @@
   <link rel="alternate" title="Alphabetisch sortieren"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=titles&amp;sort_order=title&amp;lang={lang}"/>
-  <!--link rel="http://opds-spec.org/sort/new" title="Nach Datum sortieren"
+  <link rel="alternate" title="Nach Autor sortieren"
         type="application/atom+xml;profile=opds-catalog"
-        href=""/-->
+        href="{baseurl}?default_prefix=titles&amp;sort_order=name&amp;lang={lang}"/>
+  <link rel="http://opds-spec.org/sort/new" title="Nach Datum sortieren"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?default_prefix=titles&amp;sort_order=time&amp;lang={lang}"/>
 
   <opensearch:totalResults>{total}</opensearch:totalResults>
   <opensearch:startIndex>{start}</opensearch:startIndex>
@@ -56,6 +59,24 @@
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=titles&amp;sort_order=title&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+
+  <entry>
+    <title>Nach Autor sortieren</title>
+    <id>{baseurl}?default_prefix=titles&amp;sort_order=name&amp;lang={lang}</id>
+    <content type="text"></content>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=titles&amp;sort_order=name&amp;lang={lang}"/>
+    <link type="image/png" href="{relurl}tpl/icons/authors.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+
+  <entry>
+    <title>Nach Datum sortieren</title>
+    <id>{baseurl}?default_prefix=titles&amp;sort_order=time&amp;lang={lang}</id>
+    <content type="text"></content>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=titles&amp;sort_order=time&amp;lang={lang}"/>
+    <link type="image/png" href="{relurl}tpl/icons/date.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 

@@ -146,10 +146,12 @@ switch($prefix) {
     //------------------------------[ List of all books by title requested ]---
     case 'titles':
         switch($_REQUEST['sort_order']) {
-            case 'title': $order = ' ORDER BY title'; $sortorder='title'; break;
+            case 'title': $order = ' ORDER BY b.title'; $sortorder='title'; break;
+            case 'name' : $order = ' ORDER BY a.name'; $sortorder='name'; break;
+            case 'time' : $order = ' ORDER BY b.timestamp'; $sortorder='time'; break;
             default     : $order = ''; $sortorder=''; break;
         }
-        $all = $db->lim_query('SELECT id,title,isbn FROM books'.$order, $offset, $perpage);
+        $all = $db->lim_query('SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a WHERE b.id=bl.book and a.id=bl.author '.$order, $offset, $perpage);
         $t->set_file(array("template"=>"titles.tpl"));
         $t->set_block('template','itemblock','item');
         $t->set_block('template','prevblock','prev');
@@ -209,11 +211,14 @@ switch($prefix) {
         $more = FALSE;
         while ( $db->next_record() ) {
             $t->set_var('bid',$db->f('id'));
-            $t->set_var('title',$db->f('title'));
+            $t->set_var('title',$db->f('title') .' von '. $db->f('name'));
             $t->set_var('isbn',$db->f('isbn'));
+            $t->set_var('pubdate',str_replace(' ','T',$db->f('timestamp')).$timezone);
+            $t->set_var('pubdate_human', $db->f('timestamp'));
             $t->parse('item','itemblock',$more);
             $more = TRUE;
         }
+        $t->set_var('pubdate',str_replace(' ','T',$pubdate).$timezone);
         $t->pparse("out","template");
         exit;
     //-------------------------------[ List of all books by tags requested ]---

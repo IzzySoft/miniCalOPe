@@ -40,7 +40,7 @@ $sitetitle = 'Book Server';
 $baseurl = 'http://localhost/opds/';
 // Path relative to the web servers DOCUMENT_ROOT
 $relurl  = '/opds/';
-// how many items per page (currently ignored)
+// how many items per page
 $perpage = 25;
 // Full URL to the Wikipedia to use for author info
 $wikibase= 'http://de.wikipedia.org/wiki/';
