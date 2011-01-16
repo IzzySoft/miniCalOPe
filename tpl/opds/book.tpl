@@ -56,8 +56,8 @@
     </content>
 
 <!-- BEGIN coverblock -->
-    <link type="image/jpeg" href="{baseurl}{cover_src}" rel="http://opds-spec.org/cover" />
-    <link type="image/jpeg" href="{baseurl}{cover_src}" rel="http://opds-spec.org/image" />
+    <link type="image/{cover_type}" href="{baseurl}{cover_src}" rel="http://opds-spec.org/cover" />
+    <link type="image/{cover_type}" href="{baseurl}{cover_src}" rel="http://opds-spec.org/image" />
 <!-- END coverblock -->
     <link type="image/png" href="{relurl}tpl/icons/book.png" rel="http://opds-spec.org/image/thumbnail"/>
 <!-- BEGIN itemblock -->
