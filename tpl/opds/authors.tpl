@@ -19,6 +19,13 @@
   <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
+  <link rel="alternate" title="Alphabetisch sortieren"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}"/>
+  <link rel="alternate" title="Nach Buchanzahl sortieren"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
+
 
   <title>Alle Autoren</title>
   <subtitle>miniCalOPe</subtitle>
