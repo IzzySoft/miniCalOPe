@@ -14,6 +14,10 @@
 </TABLE>
 <TABLE ALIGN='center' BORDER='0'>
     <TR><TD>
+<!-- BEGIN coverblock -->
+        <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
+<!-- END coverblock -->
+        </TD><TD>
         <p><b>Titel:</b> {title}</p>
         <p><b>Autor:</b> {author}</p>
         <p><b>Tags:</b> {tags}</p>
@@ -26,11 +30,6 @@
           <A HREF='{baseurl}?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}'>{ftype_human}</A> ({flength_human})&nbsp;
 <!-- END itemblock -->
     </TD></TR>
-<!-- BEGIN coverblock -->
-    <TR><TD ALIGN='center'>
-        <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}'>
-    </TD></TR>
-<!-- END coverblock -->
 </TABLE>
 
 <DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}</DIV>
