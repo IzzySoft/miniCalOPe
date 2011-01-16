@@ -4,7 +4,7 @@
     <META NAME="GENERATOR" CONTENT="miniCalOPe">
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
-    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?default_prefix=titles&amp;sort_order={sortorder}&amp;lang={lang}&amp;pageformat=opds">
+    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?default_prefix=titles&amp;sort_order={sortorder}&amp;lang={lang}&amp;offset={offset}&amp;pageformat=opds">
 </HEAD><BODY>
 
 <H1>{site_title} - Alle Titel</H1>

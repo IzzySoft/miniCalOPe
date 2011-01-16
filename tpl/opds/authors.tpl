@@ -8,8 +8,14 @@
   <link rel="self" title="Diese Seite"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}"/>
-  <!--link rel="next" title="Nächste Seite" type="application/atom+xml" href="/ebooks/search.opds/?default_prefix=authors&amp;sort_order=downloads&amp;start_index=26"/-->
-  <!-- previous, first, last -->
+<!-- BEGIN prevblock -->
+  <link rel="first" title="Erste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset=0"/>
+  <link rel="previous" title="Vorige Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={poffset}"/>
+<!-- END prevblock -->
+<!-- BEGIN nextblock -->
+  <link rel="next" title="Nächste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={noffset}"/>
+  <link rel="last" title="Letzte Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={loffset}"/>
+<!-- END nextblock -->
   <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
