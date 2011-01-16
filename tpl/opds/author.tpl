@@ -59,7 +59,7 @@
     <title>Alphabetisch sortieren</title>
     <id>baseurl}?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
@@ -68,7 +68,7 @@
     <title>Nach Datum sortieren</title>
     <id>{baseurl}?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/date.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
