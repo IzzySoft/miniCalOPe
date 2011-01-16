@@ -424,12 +424,6 @@ switch($prefix) {
             $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
             $t->set_var('pubdate',$book['pubdate']);
             $t->set_var('pubdate_human',$book['pubdate_human']);
-            $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
-            if ( file_exists($coverimg) && is_readable($coverimg) ) {
-                $t->set_var('cover_src',$coverimg);
-                $t->set_var('cover_width',$cover_width);
-                $t->parse('cover','coverblock');
-            }
             $more = FALSE;
             foreach ($files as $file) {
                 switch($file['format']) {
@@ -445,11 +439,18 @@ switch($prefix) {
                       break;
                     default: break;
                 }
+                $coverimg = $file['path'].DIRECTORY_SEPARATOR.substr($file['name'],0,strrpos($file['name'],'.')).'.jpg';
                 $t->set_var('flength',$file['size']);
                 $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
                 $t->set_var('format',$file['format']);
                 $t->parse('item','itemblock',$more);
                 $more = TRUE;
+            }
+            if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
+            if ( file_exists($coverimg) && is_readable($coverimg) ) {
+                $t->set_var('cover_src',$coverimg);
+                $t->set_var('cover_width',$cover_width);
+                $t->parse('cover','coverblock');
             }
             $t->pparse("out","template");
             exit;

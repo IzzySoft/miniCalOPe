@@ -97,6 +97,44 @@ function prepare_covers($coverdir) {
     }
 }
 
+#==========================================================[ Cover extract ]===
+/** Extract a specific file from an already open ZIP
+ * @function extract_file
+ * @param object zip ZIP resource returned by zip_open()
+ * @param object zip_entry ZIP_ENTRY resource returned by zip_read
+ * @param string target complete name of the file to create
+ */
+function extract_file($zip,$zip_entry,$target) {
+  if (zip_entry_open($zip, $zip_entry, "r")) {
+    if ($fd = @fopen($target, 'wb')) {
+      fwrite($fd, zip_entry_read($zip_entry, zip_entry_filesize($zip_entry)));
+      fclose($fd);
+    }
+    zip_entry_close($zip_entry);
+  }
+}
+
+/** Extract cover file from *.epub
+ * @function extract_cover
+ * @param string file complete name of the *.epub file
+ */
+function extract_cover($file) {
+  if ( !file_exists($file) ) return; // no input
+  $cover = substr($file,0,strrpos($file,'.')).'.jpg'; // name of the target cover image file
+  if ( file_exists($cover) ) return; // already there
+
+  $zip = zip_open($file);
+  if (!$zip || is_int($zip)) return;
+
+  while ($zip_entry = zip_read($zip)) { // walk the archive contents
+    if ( zip_entry_name($zip_entry) == 'content/resources/_cover_.jpg' ) { // Calibre cover
+      extract_file($zip,$zip_entry,$cover);
+      break;
+    }
+  }
+
+  zip_close($zip);
+}
 
 #================================================================[ Logging ]===
 /** Check for Logfile, create if it does not exist

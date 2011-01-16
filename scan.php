@@ -62,6 +62,7 @@ foreach($langs as $lang) {
               $tbooks[$book]['lang']   = $lang;
               $tbooks[$book]['genre']  = $genre;
               $tbooks[$book]['author'] = $author;
+              if ( isset($tbooks[$book]['files']['epub']) ) extract_cover($tbooks[$book]['files']['epub']);
             }
             $books = array_merge($books,$tbooks);
         }
