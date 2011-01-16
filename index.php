@@ -447,6 +447,7 @@ switch($prefix) {
                 $more = TRUE;
             }
             if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
+            if ( !file_exists($coverimg) ) $coverimg = preg_replace('!jpg$!','png',$coverimg);
             if ( file_exists($coverimg) && is_readable($coverimg) ) {
                 $t->set_var('cover_src',$coverimg);
                 $t->set_var('cover_width',$cover_width);

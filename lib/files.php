@@ -130,6 +130,10 @@ function extract_cover($file) {
     if ( zip_entry_name($zip_entry) == 'content/resources/_cover_.jpg' ) { // Calibre cover
       extract_file($zip,$zip_entry,$cover);
       break;
+    } elseif ( preg_match('!\bcover\.(png|jpg)$!i',zip_entry_name($zip_entry),$match) ) { // feedbooks & co
+      $cover = preg_replace('!jpg$!',$match[1],$cover);
+      extract_file($zip,$zip_entry,$cover);
+      break;
     }
   }
 
