@@ -50,11 +50,12 @@
     <updated>{pubdate}</updated>
   </entry>
 
+
   <entry>
     <title>Alphabetisch sortieren</title>
     <id>{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
@@ -63,7 +64,7 @@
     <title>Nach Buchanzahl sortieren</title>
     <id>{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookcase.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
