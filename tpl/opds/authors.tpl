@@ -3,11 +3,11 @@
       xmlns:dcterms="http://purl.org/dc/terms/"
       xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
       xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
-  <id>{baseurl}?default_prefix=authors&amp;sort_order=downloads&amp;lang={lang}</id>
+  <id>{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}</id>
 
   <link rel="self" title="Diese Seite"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?default_prefix=authors&amp;sort_order=downloads&amp;lang={lang}"/>
+        href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}"/>
   <!--link rel="next" title="Nächste Seite" type="application/atom+xml" href="/ebooks/search.opds/?default_prefix=authors&amp;sort_order=downloads&amp;start_index=26"/-->
   <!-- previous, first, last -->
   <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
@@ -43,6 +43,15 @@
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+
+  <entry>
+    <title>Nach Buchanzahl sortieren</title>
+    <id>{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}</id>
+    <content type="text"></content>
+    <link type="application/atom+xml;profile=opds-catalog" rel="alternate" href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
+    <link type="image/png" href="{relurl}tpl/icons/bookcase.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 

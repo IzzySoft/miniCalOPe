@@ -92,20 +92,18 @@ switch($prefix) {
         $t->set_var('per_page',$perpage);
         $t->set_var('start',1);
         switch($_REQUEST['sort_order']) {
-            case 'title': $order = ' ORDER BY name'; break;
+            case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
+            case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
             default     : $order = '';
         }
         if ($num_authors>0) {
-            $db->query('SELECT id,name FROM authors'.$order);
+            $db->query('SELECT a.id id,a.name name,COUNT(b.id) num FROM authors a,books_authors_link ba, books b WHERE a.id=ba.author AND b.id=ba.book group by a.id'.$order);
             $more = FALSE;
             $authors = array();
-            while ( $db->next_record() ) $authors[] = array('name'=>$db->f('name'),'id'=>$db->f('id'));
-            foreach ($authors as $author) {
-                $db->query('SELECT COUNT(id) books FROM books_authors_link WHERE author='.$author['id']);
-                $db->next_record();
-                $num_books = $db->f('books');
-                $t->set_var('name',$author['name']);
-                $t->set_var('id',$author['id']);
+            while ( $db->next_record() ) {
+                $num_books = $db->f('num');
+                $t->set_var('name',$db->f('name'));
+                $t->set_var('id',$db->f('id'));
                 $t->set_var('num_books',$num_books);
                 if ($num_books==1) $t->set_var('books','Buch');
                 else $t->set_var('books','Bücher');
@@ -113,6 +111,7 @@ switch($prefix) {
                 $more = TRUE;
             }
         }
+        $t->set_var('sortorder',$sortorder);
         $t->pparse("out","template");
         exit;
     //------------------------[ List of books for a given author requested ]---

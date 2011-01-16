@@ -58,6 +58,7 @@ class db extends DB_Sql {
   function make_books($books) {
     $b_id=0; $ba_id=0; $bt_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
+      if ( !is_array($books[$name]['files']) ) continue;
       foreach($books[$name]['files'] as $file) { // cannot address numerical - why?
         $pos = strrpos($file,DIRECTORY_SEPARATOR);
         $path = substr($file,strlen($GLOBALS['bookroot']),$pos-strlen($GLOBALS['bookroot']));
