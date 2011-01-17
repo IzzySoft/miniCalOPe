@@ -13,7 +13,7 @@
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> Startseite</A></TD></TR>
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=authors'><IMG ALT='home' SRC='{relurl}tpl/icons/authors.png'> Zurück zu allen Autoren</A></TD></TR>
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=author_id&amp;sort_order=title&amp;query={aid}'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> Alphabetisch sortieren</A></TD></TR>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}'><IMG ALT='home' SRC='{relurl}tpl/icons/date.png'> Nach Datum sortieren</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=author_id&amp;sort_order=date&amp;query={aid}'><IMG ALT='home' SRC='{relurl}tpl/icons/date.png'> Nach Datum sortieren</A></TD></TR>
     <TR><TD COLSPAN='2'><A HREF='{wikibase}{wikiauthor}' TARGET='_blank'><IMG ALT='home' SRC='{relurl}tpl/icons/world.png'> Wikipedia</A></TD></TR>
 <!-- BEGIN itemblock -->
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;action=bookdetails&amp;book={bid}'><IMG ALT='home' SRC='{relurl}tpl/icons/book.png'> {title}</A></TD></TR>

@@ -67,8 +67,8 @@ $db->next_record();
 $allbookcount = $db->f('num');
 
 #========================================================[ Process request ]===
-if (!empty($_REQUEST['default_prefix'])) $prefix = $_REQUEST['default_prefix'];
-elseif (empty($_REQUEST['action'])) { // Startpage
+$prefix = req_word('default_prefix');
+if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
     $t->set_var('num_allbooks',$allbookcount);
@@ -175,7 +175,12 @@ switch($prefix) {
         $db->next_record();
         $t->set_var('wikiauthor',str_replace(' ','_',$db->f('name')));
         $t->set_var('author_name',$db->f('name'));
-        $all = $db->lim_query('SELECT id,title,isbn FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')', $offset, $perpage);
+        switch($_REQUEST['sort_order']) {
+            case 'title': $order = ' ORDER BY title'; $sortorder='title'; break;
+            case 'date' : $order = ' ORDER BY timestamp'; $sortorder='date'; break;
+            default     : $order = '';
+        }
+        $all = $db->lim_query('SELECT id,title,isbn,timestamp FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')'.$order, $offset, $perpage);
         $more = FALSE;
         while ( $db->next_record() ) {
             $t->set_var('bid',$db->f('id'));
@@ -268,8 +273,8 @@ switch($prefix) {
             $t->set_var('icon2','1left.png');
             $poff = max(0,$offset - $perpage);
             $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$_REQUEST['sort_order'].'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$_REQUEST['sort_order'].'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sort_order.'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
             $t->set_var('link_close','</A>');
             $t->parse('prev','prevblock');
         }
@@ -289,8 +294,8 @@ switch($prefix) {
             $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
             $t->set_var('noffset',$noff); // OPDS only
             $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$_REQUEST['sort_order'].'&amp;offset='.$noff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$_REQUEST['sort_order'].'&amp;offset='.$loff.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;pageformat='.$pageformat.'">');
             $t->set_var('link_close','</A>');
             $t->parse('next','nextblock');
         }
@@ -391,8 +396,7 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
-        if (is_numeric($_REQUEST['query'])) $tag_id = $_REQUEST['query'];
-        else $tag_id = 0;
+        $tag_id = req_int('query');
         $db->query('SELECT name FROM tags WHERE id='.$tag_id);
         $db->next_record();
         $t->set_var('tag_name',$db->f('name'));
@@ -402,7 +406,7 @@ switch($prefix) {
             case 'author': $order = ' ORDER BY a.name'; $sortorder = 'author'; break;
             default     : $order = '';
         }
-        $all = $db->lim_query('SELECT b.id,b.title,b.isbn,a.name FROM books b,authors a, books_authors_link l WHERE b.id=l.book AND a.id=l.author AND b.id IN (SELECT book FROM books_tags_link WHERE tag='.$_REQUEST['query'].')'.$order, $offset, $perpage);
+        $all = $db->lim_query('SELECT b.id,b.title,b.isbn,a.name FROM books b,authors a, books_authors_link l WHERE b.id=l.book AND a.id=l.author AND b.id IN (SELECT book FROM books_tags_link WHERE tag='.$tag_id.')'.$order, $offset, $perpage);
         $books = array();
         while ( $db->next_record() ) {
             $bid = $db->f('id');
@@ -473,13 +477,13 @@ switch($prefix) {
     case '':
         // Display book details
         if (isset($_REQUEST['action']) && $_REQUEST['action']=='bookdetails') {
-            $bookid = $_REQUEST['book'];
+            $bookid = req_int('book');
             $db->query("SELECT author FROM books_authors_link WHERE book=$bookid");
             $db->next_record();
             $db->query('SELECT name FROM authors WHERE id='.$db->f('author'));
             $db->next_record();
             $author = $db->f('name');
-            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$_REQUEST['book']);
+            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$bookid);
             $db->next_record();
             $book = array(
               'title'=>$db->f('title'), 'isbn'=>$db->f('isbn'), 'tags'=>'', 'series_index'=>$db->f('series_index'),
@@ -550,7 +554,7 @@ switch($prefix) {
             exit;
         // Send the requested book for download
         } elseif (isset($_REQUEST['action']) && $_REQUEST['action']=='getbook') { // bookid=req[book], req[format] = epub/mobi
-            $files = get_filenames($db,$_REQUEST['book'],$_REQUEST['format']);
+            $files = get_filenames($db,req_int('book'),req_word('format'));
             $book  = $files[0]['path'].'/'.$files[0]['name'];
             if ($fd = fopen ($book,"rb")) {
                 logg($book,'DOWNLOAD');

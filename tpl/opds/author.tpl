@@ -33,7 +33,7 @@
         href="{baseurl}?lang={lang}"/>
   <link rel="http://opds-spec.org/sort/new" title="Nach Datum sortieren"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}/?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
+        href="{baseurl}/?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/>
   <link rel="alternate" title="Nach Titel sortieren"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}/?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
@@ -74,9 +74,9 @@
 
   <entry>
     <title>Nach Datum sortieren</title>
-    <id>{baseurl}?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}</id>
+    <id>{baseurl}?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/date.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>

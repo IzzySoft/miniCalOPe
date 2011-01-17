@@ -28,4 +28,15 @@ function req_int($name,$default=0) {
   if ( !isset($_REQUEST[$name]) ) return $default;
   return (int) $_REQUEST[$name];
 }
+/** Verifying words
+ * @function req_word
+ * @param string in varname Name of the _REQUEST variable
+ * @param optional string default Default value to return in case of mismatch ('')
+ * @return string value
+ */
+function req_word($name,$default='') {
+  if ( !isset($_REQUEST[$name]) ) return $default;
+  if (!preg_match('!^\w*$!',$_REQUEST[$name],$match)) return $default;
+  return $_REQUEST[$name];
+}
 ?>
