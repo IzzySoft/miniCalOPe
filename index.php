@@ -160,22 +160,22 @@ switch($prefix) {
         exit;
     //------------------------[ List of books for a given author requested ]---
     case 'author_id':
-        $db->query('SELECT COUNT(id) AS num FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$_REQUEST['query'].')');
+        $aid = req_int('query');
+        $db->query('SELECT COUNT(id) AS num FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')');
         if ($db->next_record()) $num_books = $db->f("num");
         else $num_books = 0;
         $t->set_file(array("template"=>"author.tpl"));
         $t->set_block('template','itemblock','item');
+        $t->set_block('template','prevblock','prev');
+        $t->set_block('template','nextblock','next');
         set_basics($t);
-        $t->set_var('total',$num_books);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('start',1);
-        $t->set_var('aid',$REQUEST['query']);
+        $t->set_var('aid',$aid);
         $t->set_var('wikibase',$wikibase);
-        $db->query('SELECT name FROM authors WHERE id='.$_REQUEST['query']);
+        $db->query('SELECT name FROM authors WHERE id='.$aid);
         $db->next_record();
         $t->set_var('wikiauthor',str_replace(' ','_',$db->f('name')));
         $t->set_var('author_name',$db->f('name'));
-        $db->query('SELECT id,title,isbn FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$_REQUEST['query'].')');
+        $all = $db->lim_query('SELECT id,title,isbn FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')', $offset, $perpage);
         $more = FALSE;
         while ( $db->next_record() ) {
             $t->set_var('bid',$db->f('id'));
@@ -183,6 +183,52 @@ switch($prefix) {
             $t->set_var('isbn',$db->f('isbn'));
             $t->parse('item','itemblock',$more);
             $more = TRUE;
+        }
+        // pagination:
+        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
+        $t->set_var('sortorder',$sortorder);
+        $t->set_var('total',$all);
+        $t->set_var('per_page',$perpage);
+        $t->set_var('offset',$offset);
+        $t->set_var('start',$offset +1);
+        if ($offset==0) { // first page
+            $t->set_var('icon1','2left_grey.png');
+            $t->set_var('icon2','1left_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $t->set_var('poffset','0'); // OPDS only
+            $t->parse('prev','prevblock');
+        } else { // somewhere after
+            $t->set_var('icon1','2left.png');
+            $t->set_var('icon2','1left.png');
+            $poff = max(0,$offset - $perpage);
+            $t->set_var('poffset',$poff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('prev','prevblock');
+        }
+        if ($all < $offset + $perpage) { // last page
+            $t->set_var('icon1','1right_grey.png');
+            $t->set_var('icon2','2right_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $noff = $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->parse('next','nextblock');
+        } else { // somewhere before
+            $t->set_var('icon1','1right.png');
+            $t->set_var('icon2','2right.png');
+            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('next','nextblock');
         }
         $t->pparse("out","template");
         exit;
@@ -339,7 +385,7 @@ switch($prefix) {
         $t->set_var('total',$all);
         $t->set_var('per_page',$perpage);
         $t->set_var('offset',$offset);
-        $t->set_var('start',1);
+        $t->set_var('start',$offset +1);
         if ($offset==0) { // first page
             $t->set_var('icon1','2left_grey.png');
             $t->set_var('icon2','1left_grey.png');
