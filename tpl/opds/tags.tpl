@@ -61,7 +61,7 @@
     <title>Nach Buchanzahl sortieren</title>
     <id>{baseurl}?default_prefix=tags&amp;sort_order=books&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tags&amp;sort_order=title&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tags&amp;sort_order=books&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
