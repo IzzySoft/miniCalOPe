@@ -312,33 +312,75 @@ switch($prefix) {
     case 'tags':
         switch($_REQUEST['sort_order']) {
             case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
+            case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
             default     : $order = '';
         }
-        $db->query('SELECT id,name FROM tags'.$order);
-        $tags = array();
-        while ( $db->next_record() ) $tags[] = array('id'=>$db->f('id'),'name'=>$db->f('name'));
+        $all = $db->lim_query('SELECT t.id id,t.name name, count(b.id) num FROM tags t,books_tags_link bt, books b WHERE bt.book=b.id and bt.tag = t.id GROUP BY t.id'.$order, $offset, $perpage);
         $t->set_file(array("template"=>"tags.tpl"));
         $t->set_block('template','itemblock','item');
+        $t->set_block('template','prevblock','prev');
+        $t->set_block('template','nextblock','next');
         set_basics($t);
-        $t->set_var('total',$num_books);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('start',1);
         $t->set_var('num_allbooks',$allbookcount);
         if ($allbookcount==1) $t->set_var('allbooks','Buch');
         else $t->set_var('allbooks','Bücher');
         $more = FALSE;
         #id,name,num_books,books
-        foreach ( $tags as $tag ) {
-            $db->query('SELECT count(id) num_books FROM books WHERE id IN (SELECT book FROM books_tags_link WHERE tag='.$tag['id'].')');
-            $db->next_record();
-            $tag['num_books'] = $db->f('num_books');
-            $t->set_var('id',$tag['id']);
-            $t->set_var('name',$tag['name']);
+        while ( $db->next_record() ) {
+            $tag['num_books'] = $db->f('num');
+            $t->set_var('id',$db->f('id'));
+            $t->set_var('name',$db->f('name'));
             $t->set_var('num_books',$tag['num_books']);
             if ($tag['num_books']==1) $t->set_var('books','Buch');
             else $t->set_var('books','Bücher');
             $t->parse('item','itemblock',$more);
             $more = TRUE;
+        }
+        // pagination:
+        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
+        $t->set_var('sortorder',$sortorder);
+        $t->set_var('total',$all);
+        $t->set_var('per_page',$perpage);
+        $t->set_var('offset',$offset);
+        $t->set_var('start',$offset +1);
+        if ($offset==0) { // first page
+            $t->set_var('icon1','2left_grey.png');
+            $t->set_var('icon2','1left_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $t->set_var('poffset','0'); // OPDS only
+            $t->parse('prev','prevblock');
+        } else { // somewhere after
+            $t->set_var('icon1','2left.png');
+            $t->set_var('icon2','1left.png');
+            $poff = max(0,$offset - $perpage);
+            $t->set_var('poffset',$poff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('prev','prevblock');
+        }
+        if ($all < $offset + $perpage) { // last page
+            $t->set_var('icon1','1right_grey.png');
+            $t->set_var('icon2','2right_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $noff = $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->parse('next','nextblock');
+        } else { // somewhere before
+            $t->set_var('icon1','1right.png');
+            $t->set_var('icon2','2right.png');
+            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('next','nextblock');
         }
         $t->pparse("out","template");
         exit;
