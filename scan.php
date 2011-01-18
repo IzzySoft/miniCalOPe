@@ -62,7 +62,7 @@ foreach($langs as $lang) {
               $tbooks[$book]['lang']   = $lang;
               $tbooks[$book]['genre']  = $genre;
               $tbooks[$book]['author'] = $author;
-              if ( isset($tbooks[$book]['files']['epub']) ) extract_cover($tbooks[$book]['files']['epub']);
+              if ( isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
             }
             $books = array_merge($books,$tbooks);
         }
@@ -73,9 +73,14 @@ $allGenres = array_unique($allGenres);
 $authors = array_unique($authors);
 
 #======================================================[ Feed the database ]===
+debugOut('* Updating database');
+debugOut('  + Truncating');
 $db->truncAll();
+debugOut('  + Inserting Tags');
 $db->make_genres($allGenres);
+debugOut('  + Inserting Authors');
 $db->make_authors($authors);
+debugOut('  + Inserting Books');
 $db->make_books($books);
 
 debugout("Processed:\n- ".count($authors)." authors\n- ".count($books)." books");
