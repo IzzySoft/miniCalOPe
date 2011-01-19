@@ -122,6 +122,7 @@ function extract_cover($file) {
   if ( !file_exists($file) ) return; // no input
   $cover = substr($file,0,strrpos($file,'.')).'.jpg'; // name of the target cover image file
   if ( file_exists($cover) ) return; // already there
+  if ( file_exists(preg_replace('!jpg$!','png',$cover)) ) return; // already there
 
   $zip = zip_open($file);
   if (!$zip || is_int($zip)) return;
