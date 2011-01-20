@@ -1,0 +1,11 @@
+$Id: history 144 2008-07-11 12:38:34Z izzy $
+
+History for miniCalOPe
+======================
+
+v1.0.0 (21.01.2011)
+-------------------
+* first public version
++ OPDS and HTML support
++ Calibre backend support
++ directory support (for own file base)
