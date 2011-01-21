@@ -20,6 +20,8 @@ $bookroot    = 'books';
 $bookformats = array('epub','mobi');
 // file extension for book descriptions
 $bookdesc_ext = array('desc');
+// file extension for Metadata
+$bookmeta_ext = 'data';
 // Where to write any log entries to. Empty string to disable for now.
 $logfile = './minicalope.log';
 

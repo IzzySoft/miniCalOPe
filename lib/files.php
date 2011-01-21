@@ -18,7 +18,8 @@ require_once(dirname(__FILE__).'/common.php');
  * @function scanDir
  * @param string dirname directory to scan
  * @param optional string mode scan for 'dirs' (default) or 'files'
- * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext], [desc] and [lastmod] (unixtime)
+ * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext], [desc], [lastmod] (unixtime)
+ *               plus optionally arrays [author] + [tag], strings [rating], [series], [series_index], [publisher], [isbn], [uri]
  */
 function scanFolder($dirname,$mode='dirs') {
     GLOBAL $bookformats, $bookdesc_ext;
@@ -41,6 +42,15 @@ function scanFolder($dirname,$mode='dirs') {
         $nam = substr($file,0,$pos);
         if ( in_array($ext,$bookformats) ) $list[$nam]['files'][$ext] = $fullname;
         elseif ( in_array($ext,$bookdesc_ext) ) $list[$nam]['desc'] = file_get_contents($fullname);
+        elseif ( $ext == $GLOBALS['bookmeta_ext'] ) {
+          $lines = explode( "\n", file_get_contents($fullname) );
+          foreach($lines as $line) {
+            $tmp = explode('::',$line);
+            $tmp[0] = strtolower($tmp[0]);
+            if ( in_array($tmp[0],array('author','tag')) ) $list[$nam][$tmp[0]][] = $tmp[1];
+            elseif ( in_array($tmp[0],array('series','series_index','rating','publisher','isbn','uri')) ) $list[$nam][$tmp[0]] = $tmp[1];
+          }
+        }
         $lastmod = filemtime($fullname);
         if ( empty($list[$nam]['lastmod']) || $list[$nam]['lastmod'] < $lastmod ) $list[$nam]['lastmod'] = $lastmod;
         continue;

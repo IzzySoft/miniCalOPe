@@ -3,6 +3,10 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.1.0
+-------------------
++ added metadata file support (*.data): books now can have multiple tags, series, isbn...
+
 v1.0.0 (21.01.2011)
 -------------------
 * first public version

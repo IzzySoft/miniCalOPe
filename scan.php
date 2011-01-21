@@ -57,12 +57,15 @@ foreach($langs as $lang) {
         foreach($tauthors as $author) {
             debugOut("    - Scanning author '$author'");
             $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . $author, 'files');
-            //array[name] with [files][ext] and [desc]
+            //array[name] with [files][ext], [desc] ([series],[series_index],[rating],[publisher],[isbn], [author],[tag]
             foreach($tbooks as $book=>$dummy) {
               $tbooks[$book]['lang']   = $lang;
               $tbooks[$book]['genre']  = $genre;
-              $tbooks[$book]['author'] = $author;
+              if ( !empty($tbooks[$book]['author']) ) $authors = array_merge($authors,$tbooks[$book]['author']); // from *.data file
+              if ( !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
               if ( isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
+              if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);    // from *.data file
+              if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];    // from *.data file
             }
             $books = array_merge($books,$tbooks);
         }
@@ -78,6 +81,10 @@ debugOut('  + Truncating');
 $db->truncAll();
 debugOut('  + Inserting Tags');
 $db->make_genres($allGenres);
+if (!empty($series)) {
+  debugOut('  + Inserting Series');
+  $db->make_series($series);
+}
 debugOut('  + Inserting Authors');
 $db->make_authors($authors);
 debugOut('  + Inserting Books');

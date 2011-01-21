@@ -51,31 +51,77 @@ class db extends DB_Sql {
     }
   }
 
+  /** Feed the series into the database
+   * @function make_series
+   * @param array series array of strings
+   */
+  function make_series($series) {
+    $i=0;
+    $series = array_unique($series);
+    foreach($series as $serie) {
+      $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
+      ++$i;
+    }
+  }
+
   /** Feed the books into the database
    * @function make_books
-   * @param array books array[string bookname] w/ props str lang, str genre, str author, array files[str type]=str filename
+   * @param array books array[string bookname] w/ props str lang, str genre, array tag, array author,
+   *        str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
    */
   function make_books($books) {
-    $b_id=0; $ba_id=0; $bt_id=0; $c_id=0;
+    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
+      $a_id=array(); $t_id=array();
       if ( !is_array($books[$name]['files']) ) continue;
       foreach($books[$name]['files'] as $file) { // cannot address numerical - why?
         $pos = strrpos($file,DIRECTORY_SEPARATOR);
         $path = substr($file,strlen($GLOBALS['bookroot']),$pos-strlen($GLOBALS['bookroot']));
         break;
       }
-      $this->query("INSERT INTO books(id,title,path,timestamp) VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."')");
-      $this->query("SELECT id FROM authors WHERE name='".$books[$name]['author']."'");
-      $this->next_record(); $a_id = $this->f('id');
-      $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$b_id,$a_id)");
-      $this->query("SELECT id FROM tags WHERE name='".$books[$name]['genre']."'");
-      $this->next_record(); $t_id = $this->f('id');
-      $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$b_id,$t_id)");
+      $bf = ''; $bv = '';
+      foreach(array('isbn','uri') as $fn) if (isset($books[$name][$fn])) {
+        $bf .= ",$fn"; $bv .= ",'".$books[$name][$fn]."'";
+      }
+      if (isset($books[$name]['series_index'])) { $bf .= ",series_index"; $bv .= ",".$books[$name]['series_index']; }
+      $this->query("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")");
+      // relation to authors
+      $anames = '';
+      $books[$name]['author'] = array_unique($books[$name]['author']);
+      foreach($books[$name]['author'] as $aut) $anames .= ",'".$aut."'";
+      $this->query("SELECT id FROM authors WHERE name IN (".substr($anames,1).")");
+      while ($this->next_record()) $a_id[] = $this->f('id');
+      foreach($a_id as $aid) {
+          $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$b_id,$aid)");
+          ++$ba_id;
+      }
+      // relation to tags/genres
+      $books[$name]['tag'][] = $books[$name]['genre'];
+      $books[$name]['tag'] = array_unique($books[$name]['tag']);
+      $tnames = '';
+//echo "Book: $name\n";
+      foreach($books[$name]['tag'] as $aut) $tnames .= ",'".$aut."'";
+      $this->query("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
+      while ($this->next_record()) $t_id[] = $this->f('id');
+      foreach($t_id as $tid)  {
+          $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$b_id,$tid)");
+          ++$bt_id;
+      }
+      // relation to series
+      if ( isset($books[$name]['series']) ) {
+        $this->query("SELECT id FROM series WHERE name='".$books[$name]['series']."'");
+        if ( $this->next_record() ) {
+          $s_id = $this->f('id');
+          $this->query("INSERT INTO books_series_link(id,book,series) VALUES ($bs_id,$b_id,$s_id)");
+          ++$bs_id;
+        }
+      }
+      // Detailled description
       if ( !empty($books[$name]['desc']) ) {
         $this->query("INSERT INTO comments(id,book,text) VALUES($c_id,$b_id,'".$this->escape($books[$name]['desc'])."')");
         ++$c_id;
       }
-      ++$b_id; ++$ba_id; ++$bt_id;
+      ++$b_id;
     }
   }
 
