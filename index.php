@@ -473,6 +473,168 @@ switch($prefix) {
         }
         $t->pparse("out","template");
         exit;
+    //----------------------------------------------------[ List of series ]---
+    case 'series':
+        $t->set_file(array("template"=>"series.tpl"));
+        $t->set_block('template','itemblock','item');
+        $t->set_block('template','prevblock','prev');
+        $t->set_block('template','nextblock','next');
+        set_basics($t);
+        switch($_REQUEST['sort_order']) {
+            case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
+            case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
+            default     : $order = '';
+        }
+        $all = $db->lim_query('SELECT s.id id,s.name name, count(b.id) num FROM series s, books b, books_series_link bs WHERE bs.book=b.id AND bs.series=s.id GROUP BY s.id'.$order, $offset, $perpage);
+        $t->set_var('num_allbooks',$allbookcount);
+        if ($allbookcount==1) $t->set_var('allbooks','Buch');
+        else $t->set_var('allbooks','Bücher');
+        $more = FALSE;
+        #id,name,num_books,books
+        while ( $db->next_record() ) {
+            $tag['num_books'] = $db->f('num');
+            $t->set_var('id',$db->f('id'));
+            $t->set_var('name',$db->f('name'));
+            $t->set_var('num_books',$tag['num_books']);
+            if ($tag['num_books']==1) $t->set_var('books','Buch');
+            else $t->set_var('books','Bücher');
+            $t->parse('item','itemblock',$more);
+            $more = TRUE;
+        }
+        // pagination:
+        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
+        $t->set_var('sortorder',$sortorder);
+        $t->set_var('total',$all);
+        $t->set_var('per_page',$perpage);
+        $t->set_var('offset',$offset);
+        $t->set_var('start',$offset +1);
+        if ($offset==0) { // first page
+            $t->set_var('icon1','2left_grey.png');
+            $t->set_var('icon2','1left_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $t->set_var('poffset','0'); // OPDS only
+            $t->parse('prev','prevblock');
+        } else { // somewhere after
+            $t->set_var('icon1','2left.png');
+            $t->set_var('icon2','1left.png');
+            $poff = max(0,$offset - $perpage);
+            $t->set_var('poffset',$poff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('prev','prevblock');
+        }
+        if ($all < $offset + $perpage) { // last page
+            $t->set_var('icon1','1right_grey.png');
+            $t->set_var('icon2','2right_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $noff = $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->parse('next','nextblock');
+        } else { // somewhere before
+            $t->set_var('icon1','1right.png');
+            $t->set_var('icon2','2right.png');
+            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('next','nextblock');
+        }
+        $t->pparse("out","template");
+        exit;
+    //-------------------------[ List of books for a given serie requested ]---
+    case 'series_id':
+        $t->set_file(array("template"=>"serie.tpl"));
+        $t->set_block('template','itemblock','item');
+        $t->set_block('template','prevblock','prev');
+        $t->set_block('template','nextblock','next');
+        set_basics($t);
+        $series_id = req_int('query');
+        $db->query('SELECT name FROM series WHERE id='.$series_id);
+        $db->next_record();
+        $series_name = $db->f('name');
+        $t->set_var('aid',$series_id);
+        $t->set_var('series_name',$series_name);
+        switch($_REQUEST['sort_order']) {
+            case 'title' : $order = ' ORDER BY b.title'; $sortorder = 'title'; break;
+            case 'author': $order = ' ORDER BY a.name'; $sortorder = 'author'; break;
+            case 'index' : $order = ' ORDER BY b.series_index'; $sortorder = 'index'; break;
+            default     : $order = '';
+        }
+        $all = $db->lim_query('SELECT b.id id,b.title title,b.isbn isbn,b.series_index series_index, a.name name from books b, books_series_link bs, books_authors_link ba, authors a WHERE bs.series='.$series_id.' AND bs.book=b.id AND ba.book=b.id AND ba.author=a.id'.$order, $offset, $perpage);
+        $books = array();
+        while ( $db->next_record() ) {
+            $bid = $db->f('id');
+            if ( isset($books[$bid]) ) {
+                $books[$bid]['author'] .= ', '.$db->f('name');
+            } else {
+                $books[$bid] = array('id'=>$bid,'title'=>$db->f('title'),'isbn'=>$db->f('isbn'),'author'=>$db->f('name'));
+            }
+        }
+        $more = FALSE;
+        foreach ( $books as $book ) {
+            $t->set_var('bid',$book['id']);
+            $t->set_var('title',$book['title']);
+            $t->set_var('author',$book['author']);
+            $t->set_var('isbn',$book['isbn']);
+            $t->parse('item','itemblock',$more);
+            $more = TRUE;
+        }
+        // pagination:
+        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
+        $t->set_var('sortorder',$sortorder);
+        $t->set_var('total',$all);
+        $t->set_var('per_page',$perpage);
+        $t->set_var('offset',$offset);
+        $t->set_var('start',$offset +1);
+        if ($offset==0) { // first page
+            $t->set_var('icon1','2left_grey.png');
+            $t->set_var('icon2','1left_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $t->set_var('poffset','0'); // OPDS only
+            $t->parse('prev','prevblock');
+        } else { // somewhere after
+            $t->set_var('icon1','2left.png');
+            $t->set_var('icon2','1left.png');
+            $poff = max(0,$offset - $perpage);
+            $t->set_var('poffset',$poff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('prev','prevblock');
+        }
+        if ($all < $offset + $perpage) { // last page
+            $t->set_var('icon1','1right_grey.png');
+            $t->set_var('icon2','2right_grey.png');
+            $t->set_var('link1_open','');
+            $t->set_var('link2_open','');
+            $t->set_var('link_close','');
+            $noff = $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->parse('next','nextblock');
+        } else { // somewhere before
+            $t->set_var('icon1','1right.png');
+            $t->set_var('icon2','2right.png');
+            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
+            $t->set_var('noffset',$noff); // OPDS only
+            $t->set_var('loffset',$loff); // OPDS only
+            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link_close','</A>');
+            $t->parse('next','nextblock');
+        }
+        $t->pparse("out","template");
+        exit;
     //----------------------------------------------[ Handle a single book ]---
     case '':
         // Display book details

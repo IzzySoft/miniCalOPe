@@ -44,4 +44,13 @@
     <updated>{pubdate}</updated>
   </entry>
 
+  <entry>
+    <title>Reihen</title>
+    <id>{baseurl}?default_prefix=series&amp;lang={lang}</id>
+    <content type="text">Suche nach Buchreihen.</content>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=series&amp;lang={lang}"/>
+    <link type="image/png" href="{relurl}tpl/icons/bookseries.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+
 </feed>

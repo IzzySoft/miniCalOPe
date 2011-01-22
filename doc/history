@@ -6,6 +6,7 @@ History for miniCalOPe
 v1.1.0
 -------------------
 + added metadata file support (*.data): books now can have multiple tags, series, isbn...
++ series support: added separate entry point on top-level
 
 v1.0.0 (21.01.2011)
 -------------------
