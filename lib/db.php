@@ -20,7 +20,7 @@ class db extends DB_Sql {
    * @function truncAll
    */
   function truncAll() {
-    $tables = array('comments','ratings','series','publishers','books','authors','tags',
+    $tables = array('comments','ratings','publishers','books','authors','tags','series',
                     'books_authors_link','books_publishers_link','books_ratings_link',
                     'books_series_link','books_tags_link','data');
     foreach($tables as $table) $this->query("DELETE FROM $table");

@@ -478,11 +478,10 @@ switch($prefix) {
         // Display book details
         if (isset($_REQUEST['action']) && $_REQUEST['action']=='bookdetails') {
             $bookid = req_int('book');
-            $db->query("SELECT author FROM books_authors_link WHERE book=$bookid");
-            $db->next_record();
-            $db->query('SELECT name FROM authors WHERE id='.$db->f('author'));
-            $db->next_record();
-            $author = $db->f('name');
+            $db->query("SELECT name FROM authors WHERE id IN (SELECT author FROM books_authors_link WHERE book=$bookid)");
+            $author = '';
+            while ( $db->next_record() ) $author .= ', ' . $db->f('name');
+            $author = substr($author,2);
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$bookid);
             $db->next_record();
             $book = array(
