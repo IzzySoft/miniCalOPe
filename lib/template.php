@@ -1,6 +1,6 @@
 <?php
  #############################################################################
- # phpVideoPro                              (c) 2001-2007 by Itzchak Rehberg #
+ # miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
  # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
  # http://www.izzysoft.de/                                                   #
  # ------------------------------------------------------------------------- #
@@ -55,38 +55,13 @@ class Template {
    * @param optional string unknowns how to handle unknown variables (remove/comment/keep)
    */
   function Template($root = ".", $unknowns = "remove") {
-    GLOBAL $pvp,$base_path,$base_url,$page_id;
     $this->set_root($root);
     $this->set_unknowns($unknowns);
-    $this->set_var("base_dir",$base_url."/");
-    $this->set_var("tpl_dir",str_replace($base_path,$base_url,$pvp->tpl_dir)."/");
-    $this->set_var("logoff_link",$base_url."login.php?logout=1");
-    $this->set_var("page_id",$page_id);
-    $this->set_var("help_link","open_help('$page_id')");
-    if (isset($pvp->link) && method_exists($pvp->link,"slink")) { // not needed for help system
-      $this->set_var("home_link",$pvp->link->slink($base_url."index.php"));
-      $this->set_var("search_link",$pvp->link->slink($base_url."search.php"));
-    }
     if (function_exists("lang")) {
       $this->set_var("home_title",lang("start_page"));
       $this->set_var("search_title",lang("search_movie"));
       $this->set_var("help_title",lang("help"));
       $this->set_var("logoff_title",lang("login"));
-#      if ($pvp->preferences->get("bubble_help_enable")) {
-      if (method_exists($pvp->preferences,"get") && $pvp->preferences->get("bubble_help_enable")) {
-        $self = dirname($_SERVER["PHP_SELF"]);
-        $pos  = strrpos($self,"/");
-        if (substr($self,$pos+1)=="help") {
-          $this->set_var("btn_index",lang("index"));
-          $this->set_var("btn_back",lang("back"));
-          $this->set_var("btn_close",lang("close"));
-        } else {
-          $this->set_var("home_title",lang("start_page"));
-          $this->set_var("search_title",lang("search"));
-          $this->set_var("help_title",lang("help"));
-          $this->set_var("logoff_title",lang("login"));
-        }
-      } // end bubble help
     }
   }
 
