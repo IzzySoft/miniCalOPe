@@ -20,7 +20,7 @@
   <entry>
     <title>Autoren</title>
     <id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
-    <content type="text">Suche nach Autoren.</content>
+    <content type="text">{author_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=authors&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/authors.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
@@ -29,7 +29,7 @@
   <entry>
     <title>Titel</title>
     <id>{baseurl}?default_prefix=titles&amp;lang={lang}</id>
-    <content type="text">Suche nach Titeln.</content>
+    <content type="text">{title_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=titles&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookcase.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
@@ -38,7 +38,7 @@
   <entry>
     <title>Themen</title>
     <id>{baseurl}?default_prefix=subjects&amp;lang={lang}</id>
-    <content type="text">Suche nach Themen.</content>
+    <content type="text">{tags_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=tags&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/tags.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
@@ -47,7 +47,7 @@
   <entry>
     <title>Reihen</title>
     <id>{baseurl}?default_prefix=series&amp;lang={lang}</id>
-    <content type="text">Suche nach Buchreihen.</content>
+    <content type="text">{series_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=series&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookseries.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>

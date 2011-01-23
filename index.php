@@ -11,12 +11,20 @@
 
 require_once('./config.php');
 require_once('./lib/files.php');
+// Setup templates
 require_once('./lib/template.php');
 switch($_REQUEST['pageformat']) {
     case 'html' : $pageformat = 'html'; break;
     default     : $pageformat = 'opds'; break;
 }
 $t = new Template("tpl/$pageformat");
+// Setup translations
+require_once('./lib/translation.php');
+$transl = new translation(dirname(__FILE__).'/lang','en');
+$transl->get_translations();
+function trans($key,$m1="",$m2="",$m3="",$m4="",$m5="") {
+  return $GLOBALS['transl']->transl($key,$m1,$m2,$m3,$m4,$m5);
+}
 
 $pubdate = date('c',filemtime($dbfile));
 $pubdate_human = date('Y-m-d H:i',filemtime($dbfile));
@@ -30,6 +38,10 @@ function set_basics(&$tpl) {
     foreach(array('owner','homepage','email','pubdate','pubdate_human','baseurl','relurl') as $item) $tpl->set_var($item,$GLOBALS[$item]);
     $tpl->set_var('lang',$GLOBALS['use_lang']);
     $tpl->set_var('site_title',$GLOBALS['sitetitle']);
+    $tpl->set_var('last_update',trans('last_update'));
+    $tpl->set_var('created_by',trans('created_by'));
+    foreach(array('start_page','this_page','first_page','prev_page','next_page','last_page') as $page) $tpl->set_var($page,trans($page));
+    foreach(array('sort_alpha','sort_bookcount','sort_date','sort_author') as $sort) $tpl->set_var($sort,trans($sort));
 }
 
 /** Obtain information on available files for a given book
@@ -71,6 +83,10 @@ $prefix = req_word('default_prefix');
 if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
+    $t->set_var('author_list',trans('authors'));
+    $t->set_var('title_list',trans('titles'));
+    $t->set_var('tags_list',trans('tags'));
+    $t->set_var('series_list',trans('series'));
     $t->set_var('num_allbooks',$allbookcount);
     if ($allbookcount==1) $t->set_var('allbooks','Buch');
     else $t->set_var('allbooks','Bücher');
@@ -90,11 +106,13 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('author_list',trans('authors'));
         $t->set_var('total',$num_authors);
         $t->set_var('per_page',$perpage);
         $t->set_var('start',1);
         $t->set_var('offset',$offset);
-        switch($_REQUEST['sort_order']) {
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
             case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
             default     : $order = '';
@@ -108,8 +126,8 @@ switch($prefix) {
                 $t->set_var('name',$db->f('name'));
                 $t->set_var('id',$db->f('id'));
                 $t->set_var('num_books',$num_books);
-                if ($num_books==1) $t->set_var('books','Buch');
-                else $t->set_var('books','Bücher');
+                if ($num_books==1) $t->set_var('books',trans('book'));
+                else $t->set_var('books',trans('books'));
                 $t->parse('item','itemblock',$more);
                 $more = TRUE;
             }
@@ -169,13 +187,15 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('back_to_authors',trans('back_to_authors'));
         $t->set_var('aid',$aid);
         $t->set_var('wikibase',$wikibase);
         $db->query('SELECT name FROM authors WHERE id='.$aid);
         $db->next_record();
         $t->set_var('wikiauthor',str_replace(' ','_',$db->f('name')));
-        $t->set_var('author_name',$db->f('name'));
-        switch($_REQUEST['sort_order']) {
+        $t->set_var('books_by_whom',trans('books_by_whom',$db->f('name')));
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title': $order = ' ORDER BY title'; $sortorder='title'; break;
             case 'date' : $order = ' ORDER BY timestamp'; $sortorder='date'; break;
             default     : $order = '';
@@ -239,7 +259,8 @@ switch($prefix) {
         exit;
     //------------------------------[ List of all books by title requested ]---
     case 'titles':
-        switch($_REQUEST['sort_order']) {
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title': $order = ' ORDER BY b.title'; $sortorder='title'; break;
             case 'name' : $order = ' ORDER BY a.name'; $sortorder='name'; break;
             case 'time' : $order = ' ORDER BY b.timestamp'; $sortorder='time'; break;
@@ -251,12 +272,13 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('title_list',trans('titles'));
         $t->set_var('offset',$offset);
         $t->set_var('per_page',$perpage);
         $t->set_var('total',$all); // OPDS only
         $t->set_var('num_allbooks',$allbookcount);
-        if ($allbookcount==1) $t->set_var('allbooks','Buch');
-        else $t->set_var('allbooks','Bücher');
+        if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
+        else $t->set_var('allbooks',trans('books'));
         // pagination:
         $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
@@ -315,7 +337,8 @@ switch($prefix) {
         exit;
     //-------------------------------[ List of all books by tags requested ]---
     case 'tags':
-        switch($_REQUEST['sort_order']) {
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
             case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
             default     : $order = '';
@@ -326,9 +349,10 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('tags_list',trans('tags'));
         $t->set_var('num_allbooks',$allbookcount);
-        if ($allbookcount==1) $t->set_var('allbooks','Buch');
-        else $t->set_var('allbooks','Bücher');
+        if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
+        else $t->set_var('allbooks',trans('books'));
         $more = FALSE;
         #id,name,num_books,books
         while ( $db->next_record() ) {
@@ -336,8 +360,8 @@ switch($prefix) {
             $t->set_var('id',$db->f('id'));
             $t->set_var('name',$db->f('name'));
             $t->set_var('num_books',$tag['num_books']);
-            if ($tag['num_books']==1) $t->set_var('books','Buch');
-            else $t->set_var('books','Bücher');
+            if ($tag['num_books']==1) $t->set_var('books',trans('book'));
+            else $t->set_var('books',trans('books'));
             $t->parse('item','itemblock',$more);
             $more = TRUE;
         }
@@ -396,12 +420,14 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('tags_list',trans('tags'));
         $tag_id = req_int('query');
         $db->query('SELECT name FROM tags WHERE id='.$tag_id);
         $db->next_record();
-        $t->set_var('tag_name',$db->f('name'));
+        $t->set_var('books_with_tag',trans('books_with_tag',$db->f('name')));
         $t->set_var('aid',$tag_id);
-        switch($_REQUEST['sort_order']) {
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title' : $order = ' ORDER BY b.title'; $sortorder = 'title'; break;
             case 'author': $order = ' ORDER BY a.name'; $sortorder = 'author'; break;
             default     : $order = '';
@@ -419,8 +445,7 @@ switch($prefix) {
         $more = FALSE;
         foreach ( $books as $book ) {
             $t->set_var('bid',$book['id']);
-            $t->set_var('title',$book['title']);
-            $t->set_var('author',$book['author']);
+            $t->set_var('title_by_author',trans('title_by_author',$book['title'],$book['author']));
             $t->set_var('isbn',$book['isbn']);
             $t->parse('item','itemblock',$more);
             $more = TRUE;
@@ -480,15 +505,17 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
-        switch($_REQUEST['sort_order']) {
+        $t->set_var('series_list',trans('series'));
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
             case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
             default     : $order = '';
         }
         $all = $db->lim_query('SELECT s.id id,s.name name, count(b.id) num FROM series s, books b, books_series_link bs WHERE bs.book=b.id AND bs.series=s.id GROUP BY s.id'.$order, $offset, $perpage);
         $t->set_var('num_allbooks',$allbookcount);
-        if ($allbookcount==1) $t->set_var('allbooks','Buch');
-        else $t->set_var('allbooks','Bücher');
+        if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
+        else $t->set_var('allbooks',trans('books'));
         $more = FALSE;
         #id,name,num_books,books
         while ( $db->next_record() ) {
@@ -496,8 +523,8 @@ switch($prefix) {
             $t->set_var('id',$db->f('id'));
             $t->set_var('name',$db->f('name'));
             $t->set_var('num_books',$tag['num_books']);
-            if ($tag['num_books']==1) $t->set_var('books','Buch');
-            else $t->set_var('books','Bücher');
+            if ($tag['num_books']==1) $t->set_var('books',trans('book'));
+            else $t->set_var('books',trans('books'));
             $t->parse('item','itemblock',$more);
             $more = TRUE;
         }
@@ -556,13 +583,15 @@ switch($prefix) {
         $t->set_block('template','prevblock','prev');
         $t->set_block('template','nextblock','next');
         set_basics($t);
+        $t->set_var('back_to_series',trans('back_to_series'));
+        $t->set_var('sort_index',trans('sort_index'));
         $series_id = req_int('query');
         $db->query('SELECT name FROM series WHERE id='.$series_id);
         $db->next_record();
-        $series_name = $db->f('name');
+        $t->set_var('books_in_serie',trans('books_in_serie',$db->f('name')));
         $t->set_var('aid',$series_id);
-        $t->set_var('series_name',$series_name);
-        switch($_REQUEST['sort_order']) {
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
             case 'title' : $order = ' ORDER BY b.title'; $sortorder = 'title'; break;
             case 'author': $order = ' ORDER BY a.name'; $sortorder = 'author'; break;
             case 'index' : $order = ' ORDER BY b.series_index'; $sortorder = 'index'; break;
@@ -581,8 +610,7 @@ switch($prefix) {
         $more = FALSE;
         foreach ( $books as $book ) {
             $t->set_var('bid',$book['id']);
-            $t->set_var('title',$book['title']);
-            $t->set_var('author',$book['author']);
+            $t->set_var('title_by_author',trans('title_by_author',$book['title'],$book['author']));
             $t->set_var('isbn',$book['isbn']);
             $t->parse('item','itemblock',$more);
             $more = TRUE;
@@ -655,7 +683,8 @@ switch($prefix) {
             if (strlen($book['tags'])) $book['tags'] = substr($book['tags'],2);
             $db->query("SELECT name FROM series WHERE id IN (SELECT series FROM books_series_link WHERE book=$bookid)");
             $db->next_record();
-            $book['series'] = $db->f('name').' (#'.$book['series_index'].')';
+            $book['series'] = $db->f('name');
+            if (!empty($book['series'])) $book['series'] .= ' (#'.$book['series_index'].')';
             $db->query("SELECT name FROM publishers WHERE id IN (SELECT publisher FROM books_publishers_link WHERE book=$bookid)");
             $db->next_record();
             $book['publisher'] = $db->f('name');
@@ -667,9 +696,12 @@ switch($prefix) {
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
             set_basics($t);
+            $t->set_var('back_to_authors',trans('back_to_authors'));
+            foreach (array('title','author','tags','serie','publisher','comment','download') as $field) $t->set_var("field_$field",trans($field));
             $t->set_var('id',$bookid);
             $t->set_var('author',$author);
             $t->set_var('title',$book['title']);
+            $t->set_var('title_by_author',trans('title_by_author',$book['title'],$author));
             $t->set_var('tags',$book['tags']);
             $t->set_var('series',$book['series']);
             $t->set_var('publisher',$book['publisher']);

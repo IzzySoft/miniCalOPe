@@ -5,7 +5,7 @@
       xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
 
   <id>{baseurl}?default_prefix=author_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={offset}&amp;lang={lang}</id>
-  <title>Bücher von {author_name}</title>
+  <title>{books_by_whom}</title>
   <updated>{pubdate}</updated>
   <subtitle>miniCalOPe.</subtitle>
 
@@ -15,29 +15,29 @@
     <email>{email}</email>
   </author>
 
-  <link rel="self" title="Diese Seite"
+  <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=author_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={offset}&amp;lang={lang}"/>
 
 <!-- BEGIN prevblock -->
-  <link rel="first" title="Erste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset=0"/>
-  <link rel="previous" title="Vorige Seite" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={poffset}"/>
+  <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset=0"/>
+  <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={poffset}"/>
 <!-- END prevblock -->
 <!-- BEGIN nextblock -->
-  <link rel="next" title="Nächste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={noffset}"/>
-  <link rel="last" title="Letzte Seite" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={loffset}"/>
+  <link rel="next" title="{next_page}" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={noffset}"/>
+  <link rel="last" title="{last_page}" type="application/atom+xml" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;sort_order={sortorder}&amp;offset={loffset}"/>
 <!-- END nextblock -->
 
-  <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
+  <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
-  <link rel="http://opds-spec.org/sort/new" title="Nach Datum sortieren"
+  <link rel="http://opds-spec.org/sort/new" title="{sort_date}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}/?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/>
-  <link rel="alternate" title="Nach Titel sortieren"
+  <link rel="alternate" title="{sort_title}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}/?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
-  <link rel="up" title="Zurück zu allen Autoren"
+  <link rel="up" title="{back_to_authors}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?default_prefix=authors&amp;lang={lang}"/>
 
@@ -46,7 +46,7 @@
   <opensearch:itemsPerPage>{per_page}</opensearch:itemsPerPage>
 
   <entry>
-    <title>Gehe an den Start</title>
+    <title>{start_page}</title>
     <id>{baseurl}?lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}"/>
@@ -55,7 +55,7 @@
   </entry>
 
   <entry>
-    <title>Zurück zu allen Autoren</title>
+    <title>{back_to_authors}</title>
     <id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=authors&amp;lang={lang}"/>
@@ -64,7 +64,7 @@
   </entry>
 
   <entry>
-    <title>Alphabetisch sortieren</title>
+    <title>{sort_alpha}</title>
     <id>baseurl}?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
@@ -73,7 +73,7 @@
   </entry>
 
   <entry>
-    <title>Nach Datum sortieren</title>
+    <title>{sort_date}</title>
     <id>{baseurl}?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/>

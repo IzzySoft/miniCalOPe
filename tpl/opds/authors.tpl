@@ -5,16 +5,16 @@
       xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
   <id>{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}</id>
 
-  <link rel="self" title="Diese Seite"
+  <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}"/>
 <!-- BEGIN prevblock -->
-  <link rel="first" title="Erste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset=0"/>
-  <link rel="previous" title="Vorige Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={poffset}"/>
+  <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset=0"/>
+  <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={poffset}"/>
 <!-- END prevblock -->
 <!-- BEGIN nextblock -->
-  <link rel="next" title="Nächste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={noffset}"/>
-  <link rel="last" title="Letzte Seite" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={loffset}"/>
+  <link rel="next" title="{next_page}" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={noffset}"/>
+  <link rel="last" title="{last_page}" type="application/atom+xml" href="{baseurl}?default_prefix=authors&amp;sort_order={sortorder}&amp;offset={loffset}"/>
 <!-- END nextblock -->
   <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
         type="application/atom+xml;profile=opds-catalog"
@@ -27,7 +27,7 @@
         href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
 
 
-  <title>Alle Autoren</title>
+  <title>{author_list}</title>
   <subtitle>miniCalOPe</subtitle>
   <updated>{pubdate}</updated>
 
@@ -42,7 +42,7 @@
   <opensearch:itemsPerPage>{per_page}</opensearch:itemsPerPage>
 
   <entry>
-    <title>Gehe an den Start</title>
+    <title>{start_page}</title>
     <id>{baseurl}?lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}"/>
@@ -52,7 +52,7 @@
 
 
   <entry>
-    <title>Alphabetisch sortieren</title>
+    <title>{sort_alpha}</title>
     <id>{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=authors&amp;sort_order=title&amp;lang={lang}"/>
@@ -61,7 +61,7 @@
   </entry>
 
   <entry>
-    <title>Nach Buchanzahl sortieren</title>
+    <title>{sort_bookcount}</title>
     <id>{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=authors&amp;sort_order=books&amp;lang={lang}"/>

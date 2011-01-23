@@ -14,18 +14,18 @@
     <email>{email}</email>
   </author>
 
-  <link rel="self" title="Diese Seite"
+  <link rel="self" title="{this_page}"
         type="application/atom+xml;type=entry;profile=opds-catalog"
         href="{baseurl}?action=bookdetails&amp;book={id}&amp;lang={lang}"/>
-  <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
+  <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
-  <link rel="up" title="Zurück zu allen Autoren"
+  <link rel="up" title="{back_to_authors}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?default_prefix=authors&amp;lang={lang}"/>
 
   <entry>
-    <title>Gehe an den Start</title>
+    <title>{start_page}</title>
     <id>{baseurl}?lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}"/>
@@ -45,13 +45,13 @@
     </author>
     <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">
-        <p><b>Titel:</b> {title}</p>
-        <p><b>Autor:</b> {author}</p>
-        <p><b>Tags:</b> {tags}</p>
-        <p><b>Reihe:</b> {series}</p>
-        <p><b>Herausgeber:</b> {publisher}</p>
+        <p><b>{field_title}:</b> {title}</p>
+        <p><b>{field_author}:</b> {author}</p>
+        <p><b>{field_tags}:</b> {tags}</p>
+        <p><b>{field_serie}:</b> {series}</p>
+        <p><b>{field_publisher}:</b> {publisher}</p>
         <p><b>ISBN:</b> {isbn}</p>
-        <p><b>Kommentar:</b><br/>{comment}</p>
+        <p><b>{field_comment}:</b><br/>{comment}</p>
       </div>
     </content>
 

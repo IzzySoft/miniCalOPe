@@ -4,7 +4,7 @@
       xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
       xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
 
-  <title>Bücher in der Reihe {series_name}</title>
+  <title>{books_in_serie}</title>
   <subtitle>miniCalOPe.</subtitle>
   <id>{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={offset}&amp;lang={lang}</id>
   <updated>{pubdate}</updated>
@@ -15,30 +15,30 @@
     <email>{email}</email>
   </author>
 
-  <link rel="self" title="Diese Seite"
+  <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;lang={lang}"/>
 <!-- BEGIN prevblock -->
-  <link rel="first" title="Erste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset=0"/>
-  <link rel="previous" title="Vorige Seite" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={poffset}"/>
+  <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset=0"/>
+  <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={poffset}"/>
 <!-- END prevblock -->
 <!-- BEGIN nextblock -->
-  <link rel="next" title="Nächste Seite" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={noffset}"/>
-  <link rel="last" title="Letzte Seite" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={loffset}"/>
+  <link rel="next" title="{next_page}" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={noffset}"/>
+  <link rel="last" title="{last_page}" type="application/atom+xml" href="{baseurl}?default_prefix=series_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={loffset}"/>
 <!-- END nextblock -->
-  <link rel="http://opds-spec.org/sort/start" title="Gehe an den Start"
+  <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
-  <link rel="http://opds-spec.org/sort/new" title="Nach Index sortieren"
+  <link rel="http://opds-spec.org/sort/new" title="{sort_index}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}/?default_prefix=series_id&amp;sort_order=index&amp;query={aid}&amp;lang={lang}"/>
-  <link rel="alternate" title="Nach Titel sortieren"
+  <link rel="alternate" title="{sort_alpha}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}/?default_prefix=series_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
-  <link rel="alternate" title="Nach Autor sortieren"
+  <link rel="alternate" title="{sort_author}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?default_prefix=series_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
-  <link rel="up" title="Zurück zu allen Serien"
+  <link rel="up" title="{back_to_series}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?default_prefix=series&amp;lang={lang}"/>
 
@@ -47,7 +47,7 @@
   <opensearch:itemsPerPage>{per_page}</opensearch:itemsPerPage>
 
   <entry>
-    <title>Gehe an den Start</title>
+    <title>{start_page}</title>
     <id>{baseurl}?lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}"/>
@@ -56,7 +56,7 @@
   </entry>
 
   <entry>
-    <title>Zurück zu allen Serien</title>
+    <title>{back_to_series}</title>
     <id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=series&amp;lang={lang}"/>
@@ -65,7 +65,7 @@
   </entry>
 
   <entry>
-    <title>Alphabetisch sortieren</title>
+    <title>{sort_alpha}</title>
     <id>baseurl}?default_prefix=series_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=series_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
@@ -74,7 +74,7 @@
   </entry>
 
   <entry>
-    <title>Nach Autor sortieren</title>
+    <title>{sort_author}</title>
     <id>{baseurl}?default_prefix=series_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=series_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
@@ -83,7 +83,7 @@
   </entry>
 
   <entry>
-    <title>Nach Index sortieren</title>
+    <title>{sort_index}</title>
     <id>{baseurl}?default_prefix=series_id&amp;sort_order=index&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=series_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
@@ -93,7 +93,7 @@
 
 <!-- BEGIN itemblock -->
   <entry>
-    <title>{title} by {author}</title>
+    <title>{title_by_author}</title>
     <id>{baseurl}{bid}.opds</id>
     <content type="text">ISBN: {isbn}</content>
     <link type="application/atom+xml;type=entry;profile=opds-catalog" href="{baseurl}?action=bookdetails&amp;book={bid}&amp;lang={lang}"/>

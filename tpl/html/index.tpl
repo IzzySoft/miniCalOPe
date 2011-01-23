@@ -10,14 +10,14 @@
 <H1>{site_title}</H1>
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
-    <TR><TD><A HREF='{relurl}?default_prefix=authors&amp;lang={lang}&amp;pageformat=html'><IMG ALT='author' SRC='{relurl}tpl/icons/authors.png'> Autoren</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> Titel</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> Themen</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=series&amp;lang={lang}&amp;pageformat=html'><IMG ALT='series' SRC='{relurl}tpl/icons/bookseries.png'> Serien</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?default_prefix=authors&amp;lang={lang}&amp;pageformat=html'><IMG ALT='author' SRC='{relurl}tpl/icons/authors.png'> {author_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?default_prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> {title_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> {tags_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?default_prefix=series&amp;lang={lang}&amp;pageformat=html'><IMG ALT='series' SRC='{relurl}tpl/icons/bookseries.png'> {series_list}</A></TD></TR>
 </TABLE>
 
-<DIV CLASS='updated'>Letzte Aktualisierung: {pubdate_human}<BR><SPAN CLASS='count'>({num_allbooks} {allbooks})</SPAN></DIV>
+<DIV CLASS='updated'>{last_update}: {pubdate_human}<BR><SPAN CLASS='count'>({num_allbooks} {allbooks})</SPAN></DIV>
 
-<DIV CLASS='appsig'>Created by <A HREF='http://projects.izzysoft.de/trac/minicalope'>miniCalOPe</A></DIV>
+<DIV CLASS='appsig'>{created_by} <A HREF='http://projects.izzysoft.de/trac/minicalope'>miniCalOPe</A></DIV>
 
 </BODY></HTML>
