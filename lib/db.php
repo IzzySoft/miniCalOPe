@@ -39,6 +39,19 @@ class db extends DB_Sql {
     }
   }
 
+  /** Feed the publisher into the database
+   * @function make_publisher
+   * @param array publisher array of strings
+   */
+  function make_publisher($publisher) {
+    $i=0;
+    $publisher = array_unique($publisher);
+    foreach($publisher AS $genre) {
+      $this->query("INSERT INTO publishers(id,name) VALUES ($i,'$genre')");
+      ++$i;
+    }
+  }
+
   /** Feed the authors into the database
    * @function make_authors
    * @param array authors array of strings
@@ -70,7 +83,7 @@ class db extends DB_Sql {
    *        str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
    */
   function make_books($books) {
-    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $c_id=0;
+    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !is_array($books[$name]['files']) ) continue;
@@ -99,7 +112,6 @@ class db extends DB_Sql {
       $books[$name]['tag'][] = $books[$name]['genre'];
       $books[$name]['tag'] = array_unique($books[$name]['tag']);
       $tnames = '';
-//echo "Book: $name\n";
       foreach($books[$name]['tag'] as $aut) $tnames .= ",'".$aut."'";
       $this->query("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
       while ($this->next_record()) $t_id[] = $this->f('id');
@@ -114,6 +126,15 @@ class db extends DB_Sql {
           $s_id = $this->f('id');
           $this->query("INSERT INTO books_series_link(id,book,series) VALUES ($bs_id,$b_id,$s_id)");
           ++$bs_id;
+        }
+      }
+      // relation to publisher
+      if ( isset($books[$name]['publisher']) ) {
+        $this->query("SELECT id FROM publishers WHERE name='".$books[$name]['publisher']."'");
+        if ( $this->next_record() ) {
+          $p_id = $this->f('id');
+          $this->query("INSERT INTO books_publishers_link(id,book,publisher) VALUES ($bp_id,$b_id,$p_id)");
+          ++$bp_id;
         }
       }
       // Detailled description

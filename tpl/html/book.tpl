@@ -18,12 +18,9 @@
         <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
 <!-- END coverblock -->
         </TD><TD>
-        <p><b>{field_title}:</b> {title}</p>
-        <p><b>{field_author}:</b> {author}</p>
-        <p><b>{field_tags}:</b> {tags}</p>
-        <p><b>{field_serie}:</b> {series}</p>
-        <p><b>{field_publisher}:</b> {publisher}</p>
-        <p><b>ISBN:</b> {isbn}</p>
+<!-- BEGIN datablock -->
+        <p><b>{data_name}:</b> {data_data}</p>
+<!-- END datablock -->
         <p><b>{field_comment}:</b><br/>{comment}</p>
         <p><b>{field_download}:</b>
 <!-- BEGIN itemblock -->

@@ -45,12 +45,9 @@
     </author>
     <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">
-        <p><b>{field_title}:</b> {title}</p>
-        <p><b>{field_author}:</b> {author}</p>
-        <p><b>{field_tags}:</b> {tags}</p>
-        <p><b>{field_serie}:</b> {series}</p>
-        <p><b>{field_publisher}:</b> {publisher}</p>
-        <p><b>ISBN:</b> {isbn}</p>
+<!-- BEGIN datablock -->
+        <p><b>{data_name}:</b> {data_data}</p>
+<!-- END datablock -->
         <p><b>{field_comment}:</b><br/>{comment}</p>
       </div>
     </content>

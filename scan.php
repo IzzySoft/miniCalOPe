@@ -25,6 +25,8 @@ $pubdate = date('c');
 $books = array();
 $genres = array(); $allGenres = array();
 $authors = array();
+$series = array();
+$publisher = array();
 
 // directory structure for books directory:
 // <lang>/<genre>/<author>/<books>
@@ -62,10 +64,11 @@ foreach($langs as $lang) {
               $tbooks[$book]['lang']   = $lang;
               $tbooks[$book]['genre']  = $genre;
               if ( !empty($tbooks[$book]['author']) ) $authors = array_merge($authors,$tbooks[$book]['author']); // from *.data file
-              if ( !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
+              if ( !isset($tbooks[$book]['author']) || !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
               if ( isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
-              if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);    // from *.data file
-              if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];    // from *.data file
+              if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
+              if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];                      // from *.data file
+              if ( !empty($tbooks[$book]['publisher']) ) $publisher[] = $tbooks[$book]['publisher'];             // from *.data file
             }
             $books = array_merge($books,$tbooks);
         }
@@ -81,6 +84,10 @@ debugOut('  + Truncating');
 $db->truncAll();
 debugOut('  + Inserting Tags');
 $db->make_genres($allGenres);
+if (!empty($publisher)) {
+  debugOut('  + Inserting Publisher');
+  $db->make_publisher($publisher);
+}
 if (!empty($series)) {
   debugOut('  + Inserting Series');
   $db->make_series($series);

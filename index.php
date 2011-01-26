@@ -672,10 +672,11 @@ switch($prefix) {
             $author = '';
             while ( $db->next_record() ) $author .= ', ' . $db->f('name');
             $author = substr($author,2);
-            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate FROM books WHERE id=".$bookid);
+            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
             $db->next_record();
             $book = array(
               'title'=>$db->f('title'), 'isbn'=>$db->f('isbn'), 'tags'=>'', 'series_index'=>$db->f('series_index'),
+              'uri'=>$db->f('uri'), 'author'=>$author,
               'pubdate'=>$db->f('pubdate').$timezone, 'pubdate_human'=>date("d-m-Y H:i",strtotime($db->f('pubdate')))
             );
             $db->query("SELECT name FROM tags WHERE id IN (SELECT tag FROM books_tags_link WHERE book=$bookid)");
@@ -693,20 +694,32 @@ switch($prefix) {
             $book['comment'] = htmlentities($db->f('text'));
             $files = get_filenames($db,$bookid);
             $t->set_file(array("template"=>"book.tpl"));
+            $t->set_block('template','datablock','data');
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
             set_basics($t);
             $t->set_var('back_to_authors',trans('back_to_authors'));
-            foreach (array('title','author','tags','serie','publisher','comment','download') as $field) $t->set_var("field_$field",trans($field));
+            $t->set_var('data_name',trans('title'));
+            $t->set_var('data_data',$book['title']);
+            $t->parse('data','datablock');
+#echo "<pre>";print_r($book);echo "</pre>";
+            foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
+                if ( empty($book[$field]) ) continue;
+                if ($field=='series') $t->set_var('data_name',trans('serie'));
+                else $t->set_var('data_name',trans($field));
+                if ($field=='uri') $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>");
+                else $t->set_var('data_data',$book[$field]);
+                $t->parse('data','datablock',TRUE);
+            }
+            $t->set_var("field_download",trans('download'));
             $t->set_var('id',$bookid);
-            $t->set_var('author',$author);
-            $t->set_var('title',$book['title']);
             $t->set_var('title_by_author',trans('title_by_author',$book['title'],$author));
-            $t->set_var('tags',$book['tags']);
-            $t->set_var('series',$book['series']);
-            $t->set_var('publisher',$book['publisher']);
-            $t->set_var('isbn',$book['isbn']);
-            $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
+            $t->set_var('field_comment',trans('comment'));
+            if ( empty($book['comment']) ) {
+                $t->set_var('comment',lang('not_available'));
+            } else {
+                $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
+            }
             $t->set_var('pubdate',$book['pubdate']);
             $t->set_var('pubdate_human',$book['pubdate_human']);
             $more = FALSE;
