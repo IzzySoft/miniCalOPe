@@ -13,7 +13,7 @@ BODY {
 A { text-decoration:none; }
 A:link { color: #b00; }
 A:visited { color: #f50; }
-.list TD A:link, TD A:visited { color: #00e; }
+.list TD A:link, .list TD A:visited { color: #00e; }
 .list TD:hover A { color:#ffffff; }
 .list TD:hover { background-color:#4d9dfc; }
 

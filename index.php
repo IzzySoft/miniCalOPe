@@ -692,6 +692,8 @@ switch($prefix) {
             $db->query("SELECT text FROM comments WHERE book=$bookid");
             $db->next_record();
             $book['comment'] = htmlentities($db->f('text'));
+            $db->query("SELECT r.rating FROM ratings r, books_ratings_link br WHERE br.book=$bookid AND r.id=br.rating");
+            if ( $db->next_record() ) $book['rating'] = $db->f('rating'); else $book['rating'] = 0;
             $files = get_filenames($db,$bookid);
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','datablock','data');
@@ -702,13 +704,17 @@ switch($prefix) {
             $t->set_var('data_name',trans('title'));
             $t->set_var('data_data',$book['title']);
             $t->parse('data','datablock');
-#echo "<pre>";print_r($book);echo "</pre>";
             foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
                 if ( empty($book[$field]) ) continue;
                 if ($field=='series') $t->set_var('data_name',trans('serie'));
                 else $t->set_var('data_name',trans($field));
                 if ($field=='uri') $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>");
                 else $t->set_var('data_data',$book[$field]);
+                $t->parse('data','datablock',TRUE);
+            }
+            if ( !empty($book['rating']) ) {
+                $t->set_var('data_name',trans('rating'));
+                $t->set_var('data_data','<IMG SRC="'.$relurl.'tpl/icons/rating_'.$book['rating'].'.gif" ALT="Rating '.$book['rating'].'">');
                 $t->parse('data','datablock',TRUE);
             }
             $t->set_var("field_download",trans('download'));

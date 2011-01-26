@@ -20,7 +20,7 @@ class db extends DB_Sql {
    * @function truncAll
    */
   function truncAll() {
-    $tables = array('comments','ratings','books','authors','tags','series','publishers',
+    $tables = array('comments','books','authors','tags','series','publishers',
                     'books_authors_link','books_publishers_link','books_ratings_link',
                     'books_series_link','books_tags_link','data');
     foreach($tables as $table) $this->query("DELETE FROM $table");
@@ -83,7 +83,7 @@ class db extends DB_Sql {
    *        str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
    */
   function make_books($books) {
-    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $c_id=0;
+    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !is_array($books[$name]['files']) ) continue;
@@ -136,6 +136,11 @@ class db extends DB_Sql {
           $this->query("INSERT INTO books_publishers_link(id,book,publisher) VALUES ($bp_id,$b_id,$p_id)");
           ++$bp_id;
         }
+      }
+      // relation to ratings
+      if ( !empty($books[$name]['rating']) ) {
+        $this->query("INSERT INTO books_ratings_link(id,book,rating) VALUES ($br_id,$b_id,".$books[$name]['rating'].")");
+        ++$br_id;
       }
       // Detailled description
       if ( !empty($books[$name]['desc']) ) {
