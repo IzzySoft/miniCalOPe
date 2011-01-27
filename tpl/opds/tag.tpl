@@ -74,7 +74,7 @@
   </entry>
 
   <entry>
-    <title>sort_author</title>
+    <title>{sort_author}</title>
     <id>{baseurl}?default_prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
     <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
