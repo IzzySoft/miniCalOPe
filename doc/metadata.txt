@@ -1,0 +1,35 @@
+Specifying MetaData
+===================
+
+For each book you can specify some additional MetaData placed in a file named
+<bookname>.data (which must reside within the same directory as the book file
+itself). Each line of this file specifies exactly one datum in the format
+
+name::value
+
+The following "names" are recognized and used:
+
+series          collection a book belongs to (if there are multiple volumes)
+series_index    which volume in above collection is this book
+isbn            ISBN number for this book (may refer to the printed edition)
+tag             a tag for this book. You can specify multiple tags using
+                multiple lines (see example below)
+author          additional author. As with the tags, multiple occurences
+                are possible.
+rating          Rating of this book. Must be an integer between 1..5
+publisher       Publisher of this book
+uri             Web URL for additional information (usually the publishers)
+
+A fake example:
+
+series::Babylon 5
+series_index::5
+isbn::123-12345-12345-1
+tag::Science Fiction
+tag::Space
+author::JMS
+author::Someone Else
+rating::5
+publisher::Publisher Info
+uri::http://publisher.website/
+

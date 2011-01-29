@@ -8,6 +8,7 @@
  # under the terms of the GNU General Public License (see doc/LICENSE)       #
  #############################################################################
 
+require_once(dirname(__FILE__).'/common.php'); // for debug output
 
 class db extends DB_Sql {
 
@@ -86,7 +87,10 @@ class db extends DB_Sql {
     $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
-      if ( !is_array($books[$name]['files']) ) continue;
+      if ( !isset($books[$name]['files']) || !is_array($books[$name]['files']) ) {
+        debugOut('! The book "'.$name.'" seems to have no files!');
+        continue;
+      }
       foreach($books[$name]['files'] as $file) { // cannot address numerical - why?
         $pos = strrpos($file,DIRECTORY_SEPARATOR);
         $path = substr($file,strlen($GLOBALS['bookroot']),$pos-strlen($GLOBALS['bookroot']));
