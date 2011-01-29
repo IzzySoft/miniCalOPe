@@ -549,7 +549,7 @@ switch($prefix) {
             $poff = max(0,$offset - $perpage);
             $t->set_var('poffset',$poff); // OPDS only
             $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
+            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
             $t->set_var('link_close','</A>');
             $t->parse('prev','prevblock');
         }
