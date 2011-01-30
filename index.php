@@ -668,9 +668,12 @@ switch($prefix) {
         // Display book details
         if (isset($_REQUEST['action']) && $_REQUEST['action']=='bookdetails') {
             $bookid = req_int('book');
-            $db->query("SELECT name FROM authors WHERE id IN (SELECT author FROM books_authors_link WHERE book=$bookid)");
+            $db->query("SELECT id,name FROM authors WHERE id IN (SELECT author FROM books_authors_link WHERE book=$bookid)");
             $author = '';
-            while ( $db->next_record() ) $author .= ', ' . $db->f('name');
+            while ( $db->next_record() ) {
+                $author .= ', ' . $db->f('name');
+                $authors[] = array('id'=>$db->f('id'),'name'=>$db->f('name'));
+            }
             $author = substr($author,2);
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
             $db->next_record();
@@ -679,12 +682,15 @@ switch($prefix) {
               'uri'=>$db->f('uri'), 'author'=>$author,
               'pubdate'=>$db->f('pubdate').$timezone, 'pubdate_human'=>date("d-m-Y H:i",strtotime($db->f('pubdate')))
             );
-            $db->query("SELECT name FROM tags WHERE id IN (SELECT tag FROM books_tags_link WHERE book=$bookid)");
-            while ( $db->next_record() ) $book['tags'] .= ', '.$db->f('name');
+            $db->query("SELECT id,name FROM tags WHERE id IN (SELECT tag FROM books_tags_link WHERE book=$bookid)");
+            while ( $db->next_record() ) {
+                $book['tags'] .= ', '.$db->f('name');
+            }
             if (strlen($book['tags'])) $book['tags'] = substr($book['tags'],2);
-            $db->query("SELECT name FROM series WHERE id IN (SELECT series FROM books_series_link WHERE book=$bookid)");
+            $db->query("SELECT id,name FROM series WHERE id IN (SELECT series FROM books_series_link WHERE book=$bookid)");
             $db->next_record();
-            $book['series'] = $db->f('name');
+            $book['series'] = $book['series_name'] = $db->f('name');
+            $book['series_id'] = $db->f('id');
             if (!empty($book['series'])) $book['series'] .= ' (#'.$book['series_index'].')';
             $db->query("SELECT name FROM publishers WHERE id IN (SELECT publisher FROM books_publishers_link WHERE book=$bookid)");
             $db->next_record();
@@ -696,6 +702,8 @@ switch($prefix) {
             if ( $db->next_record() ) $book['rating'] = $db->f('rating'); else $book['rating'] = 0;
             $files = get_filenames($db,$bookid);
             $t->set_file(array("template"=>"book.tpl"));
+            $t->set_block('template','authorblock','author');
+            $t->set_block('template','serialblock','serial');
             $t->set_block('template','datablock','data');
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
@@ -704,6 +712,20 @@ switch($prefix) {
             $t->set_var('data_name',trans('title'));
             $t->set_var('data_data',$book['title']);
             $t->parse('data','datablock');
+            $more = FALSE;
+            foreach ($authors as $aut) {
+                $t->set_var('aid',$aut['id']);
+                $t->set_var('authors_page',trans('all_books_by_whom',$aut['name']));
+                $t->parse('author','authorblock',$more);
+                $more = TRUE;
+            }
+            $more = FALSE;
+            if ( isset($book['series_id']) ) {
+                $t->set_var('id',$book['series_id']);
+                $t->set_var('series_page',trans('all_books_in_serie',$book['series_name']));
+                $t->parse('serial','serialblock',$more);
+                $more = TRUE;
+            }
             foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
                 if ( empty($book[$field]) ) continue;
                 if ($field=='series') $t->set_var('data_name',trans('serie'));
@@ -722,7 +744,7 @@ switch($prefix) {
             $t->set_var('title_by_author',trans('title_by_author',$book['title'],$author));
             $t->set_var('field_comment',trans('comment'));
             if ( empty($book['comment']) ) {
-                $t->set_var('comment',lang('not_available'));
+                $t->set_var('comment',trans('not_available'));
             } else {
                 $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
             }

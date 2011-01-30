@@ -11,6 +11,12 @@
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> {start_page}</A></TD></TR>
+<!-- BEGIN authorblock -->
+    <TR><TD><A HREF='{relurl}?default_prefix=author_id&amp;query={aid}&amp;lang={lang}&amp;pageformat=html'><IMG ALT='authors' SRC='{relurl}tpl/icons/author.png'>  {authors_page}</A></TD></TR>
+<!-- END authorblock -->
+<!-- BEGIN serialblock -->
+    <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=series_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/bookseries.png'> {series_page}</A></TD></TR>
+<!-- END serialblock -->
 </TABLE>
 <TABLE ALIGN='center' BORDER='0'>
     <TR><TD>

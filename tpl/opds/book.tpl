@@ -33,6 +33,27 @@
     <updated>{pubdate}</updated>
   </entry>
 
+<!-- BEGIN authorblock -->
+  <entry>
+    <title>{authors_page}</title>
+    <id>{baseurl}?default_prefix=author_id&amp;query={aid}&amp;lang={lang}</id>
+    <content type="text"></content>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=author_id&amp;query={aid}&amp;lang={lang}"/>
+    <link type="image/png" href="{relurl}tpl/icons/author.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+<!-- END authorblock -->
+
+<!-- BEGIN serialblock -->
+  <entry>
+    <title>{series_page}</title>
+    <id>{baseurl}?lang={lang}&amp;default_prefix=series_id&amp;query={id}</id>
+    <content type="text"></content>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}&amp;default_prefix=series_id&amp;query={id}"/>
+    <link type="image/png" href="{relurl}tpl/icons/bookseries.png" rel="http://opds-spec.org/image/thumbnail"/>
+    <updated>{pubdate}</updated>
+  </entry>
+<!-- END serialblock -->
 
   <entry>
     <title>{title}</title>
