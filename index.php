@@ -69,6 +69,60 @@ function get_filenames(&$db,$bookid,$format='') {
     return $files;
 }
 
+/** Do the pagination for lists
+ * @function paginate
+ * @param string url URL without the pagination element (offset)
+ * @param integer offset offset for the current page
+ * @param integer all total hits
+ */
+function paginate($url,$offset,$all) {
+  $tpl = $GLOBALS['t'];
+  $perpage = $GLOBALS['perpage'];
+  $tpl->set_var('offset',$offset);
+  $tpl->set_var('start',$offset +1);
+  $tpl->set_var('total',$all);
+  $tpl->set_var('per_page',$perpage);
+  if ($offset==0) { // first page
+      $tpl->set_var('icon1','2left_grey.png');
+      $tpl->set_var('icon2','1left_grey.png');
+      $tpl->set_var('link1_open','');
+      $tpl->set_var('link2_open','');
+      $tpl->set_var('link_close','');
+      $tpl->set_var('poffset','0'); // OPDS only
+      $tpl->parse('prev','prevblock');
+  } else { // somewhere after
+      $tpl->set_var('icon1','2left.png');
+      $tpl->set_var('icon2','1left.png');
+      $poff = max(0,$offset - $perpage);
+      $tpl->set_var('poffset',$poff); // OPDS only
+      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset=0">');
+      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$poff.'">');
+      $tpl->set_var('link_close','</A>');
+      $tpl->parse('prev','prevblock');
+  }
+  if ($all <= $offset + $perpage) { // last page
+      $tpl->set_var('icon1','1right_grey.png');
+      $tpl->set_var('icon2','2right_grey.png');
+      $tpl->set_var('link1_open','');
+      $tpl->set_var('link2_open','');
+      $tpl->set_var('link_close','');
+      $noff = $loff = floor($all/$perpage)*$perpage;
+      $tpl->set_var('noffset',$noff); // OPDS only
+      $tpl->set_var('loffset',$loff); // OPDS only
+      $tpl->parse('next','nextblock');
+  } else { // somewhere before
+      $tpl->set_var('icon1','1right.png');
+      $tpl->set_var('icon2','2right.png');
+      $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
+      $tpl->set_var('noffset',$noff); // OPDS only
+      $tpl->set_var('loffset',$loff); // OPDS only
+      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$noff.'">');
+      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$loff.'">');
+      $tpl->set_var('link_close','</A>');
+      $tpl->parse('next','nextblock');
+  }
+}
+
 // We need the database
 require_once('./lib/db_sqlite3.php');
 $db = new DB_Sql();
@@ -134,46 +188,7 @@ switch($prefix) {
         }
         $t->set_var('sortorder',$sortorder);
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$num_authors);
         $t->pparse("out","template");
         exit;
     //------------------------[ List of books for a given author requested ]---
@@ -210,51 +225,8 @@ switch($prefix) {
             $more = TRUE;
         }
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        $t->set_var('total',$all);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('offset',$offset);
-        $t->set_var('start',$offset +1);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //------------------------------[ List of all books by title requested ]---
@@ -280,47 +252,8 @@ switch($prefix) {
         if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
         else $t->set_var('allbooks',trans('books'));
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sort_order.'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         // records:
         $more = FALSE;
         while ( $db->next_record() ) {
@@ -335,7 +268,7 @@ switch($prefix) {
         $t->set_var('pubdate',str_replace(' ','T',$pubdate).$timezone);
         $t->pparse("out","template");
         exit;
-    //-------------------------------[ List of all books by tags requested ]---
+    //----------------------------------------[ List of all tags requested ]---
     case 'tags':
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -366,51 +299,8 @@ switch($prefix) {
             $more = TRUE;
         }
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        $t->set_var('total',$all);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('offset',$offset);
-        $t->set_var('start',$offset +1);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$aid.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //---------------------------[ List of books for a given tag requested ]---
@@ -451,51 +341,8 @@ switch($prefix) {
             $more = TRUE;
         }
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        $t->set_var('total',$all);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('offset',$offset);
-        $t->set_var('start',$offset +1);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //----------------------------------------------------[ List of series ]---
@@ -529,51 +376,8 @@ switch($prefix) {
             $more = TRUE;
         }
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        $t->set_var('total',$all);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('offset',$offset);
-        $t->set_var('start',$offset +1);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all <= $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //-------------------------[ List of books for a given serie requested ]---
@@ -616,51 +420,8 @@ switch($prefix) {
             $more = TRUE;
         }
         // pagination:
-        $t->set_var('start',$offset +1); // offset for OPDS (1st entry)
         $t->set_var('sortorder',$sortorder);
-        $t->set_var('total',$all);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('offset',$offset);
-        $t->set_var('start',$offset +1);
-        if ($offset==0) { // first page
-            $t->set_var('icon1','2left_grey.png');
-            $t->set_var('icon2','1left_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $t->set_var('poffset','0'); // OPDS only
-            $t->parse('prev','prevblock');
-        } else { // somewhere after
-            $t->set_var('icon1','2left.png');
-            $t->set_var('icon2','1left.png');
-            $poff = max(0,$offset - $perpage);
-            $t->set_var('poffset',$poff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;offset=0&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$poff.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('prev','prevblock');
-        }
-        if ($all < $offset + $perpage) { // last page
-            $t->set_var('icon1','1right_grey.png');
-            $t->set_var('icon2','2right_grey.png');
-            $t->set_var('link1_open','');
-            $t->set_var('link2_open','');
-            $t->set_var('link_close','');
-            $noff = $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->parse('next','nextblock');
-        } else { // somewhere before
-            $t->set_var('icon1','1right.png');
-            $t->set_var('icon2','2right.png');
-            $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
-            $t->set_var('noffset',$noff); // OPDS only
-            $t->set_var('loffset',$loff); // OPDS only
-            $t->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$noff.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].'?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;offset='.$loff.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat.'">');
-            $t->set_var('link_close','</A>');
-            $t->parse('next','nextblock');
-        }
+        paginate('?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //----------------------------------------------[ Handle a single book ]---
