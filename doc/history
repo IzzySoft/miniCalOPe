@@ -3,12 +3,13 @@ $Id$
 History for miniCalOPe
 ======================
 
-v1.1.0
+v1.1.0 (30.01.2011)
 -------------------
 + added metadata file support (*.data): books now can have multiple tags, series, isbn...
 + series support: added separate entry point on top-level
 + added localization (English, German)
 + uri, publisher and rating are now also supported in the metadata file
++ added back-links from book details to author and, if available, series
 
 v1.0.0 (21.01.2011)
 -------------------
