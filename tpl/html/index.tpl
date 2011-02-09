@@ -14,6 +14,7 @@
     <TR><TD><A HREF='{relurl}?prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> {title_list}</A></TD></TR>
     <TR><TD><A HREF='{relurl}?prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> {tags_list}</A></TD></TR>
     <TR><TD><A HREF='{relurl}?prefix=series&amp;lang={lang}&amp;pageformat=html'><IMG ALT='series' SRC='{relurl}tpl/icons/bookseries.png'> {series_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?prefix=search&amp;lang={lang}&amp;pageformat=html'><IMG ALT='search' SRC='{relurl}tpl/icons/find.png'> {search_form}</A></TD></TR>
 </TABLE>
 
 <DIV CLASS='updated'>{last_update}: {pubdate_human}<BR><SPAN CLASS='count'>({num_allbooks} {allbooks})</SPAN></DIV>

@@ -85,8 +85,8 @@ function get_idbyname($query,$nf,$name) {
     $name = "%$name%";
     $db->query($query . " $nf like '$name'");
     if ( $db->next_record() ) return array('match'=>'like','name'=>$name,'id'=>$db->f('id'));
-    $name = preg_replace('!\s+!','%',$name);
-    $db->query($query . " $nf like '$name'");
+    $name = strtolower( preg_replace('!\s+!','%',$name) );
+    $db->query($query . " lower($nf) like '$name'");
     if ( $db->next_record() ) return array('match'=>'similar','name'=>$name,'id'=>$db->f('id'));
     return array('match'=>'none','name'=>$name,'id'=>0);
 }
@@ -145,6 +145,58 @@ function paginate($url,$offset,$all) {
   }
 }
 
+/** Parse titles
+ *  As the same output template and structure is used by prefix=titles
+ *  + prefix=searchresults, common stuff goes here
+ * @function parse_titles
+ * @param object tpl Template instance
+ * @param object db  db instance
+ * @param integer offset
+ * @param integer all
+ * @param string url URL for pagination
+ * @param optional string prefix Usually 'titles' - but alternatively 'searchresults'
+ * @param optional string searchvals additional url parameters for pagination
+ */
+function parse_titles(&$tpl,&$db,$offset,$all,$url,$prefix='titles',$searchvals='') {
+    $tpl->set_file(array("template"=>"titles.tpl"));
+    $tpl->set_block('template','itemblock','item');
+    $tpl->set_block('template','prevblock','prev');
+    $tpl->set_block('template','nextblock','next');
+    set_basics($tpl);
+    $tpl->set_var('prefix',$prefix);
+    switch($prefix) {
+        case 'searchresults':
+            $tpl->set_var('title_list',trans('searchresults'));
+            break;
+        default:
+            $tpl->set_var('title_list',trans('titles'));
+            break;
+    }
+    $tpl->set_var('searchvals',$searchvals);
+    $tpl->set_var('offset',$offset);
+    $tpl->set_var('per_page',$GLOBALS['perpage']);
+    $tpl->set_var('total',$all); // OPDS only
+    $tpl->set_var('num_allbooks',$GLOBALS['allbookcount']);
+    if ($GLOBALS['allbookcount']==1) $tpl->set_var('allbooks',trans('book'));
+    else $tpl->set_var('allbooks',trans('books'));
+    // pagination:
+    $tpl->set_var('sortorder',$GLOBALS['sortorder']);
+    paginate('&amp;pageformat='.$GLOBALS['pageformat'],$offset,$all);
+    // records:
+    $more = FALSE;
+    while ( $db->next_record() ) {
+        $tpl->set_var('bid',$db->f('id'));
+        $tpl->set_var('title',$db->f('title') .' von '. $db->f('name'));
+        $tpl->set_var('isbn',$db->f('isbn'));
+        $tpl->set_var('pubdate',str_replace(' ','T',$db->f('timestamp')).$GLOBALS['timezone']);
+        $tpl->set_var('pubdate_human', $db->f('timestamp'));
+        $tpl->parse('item','itemblock',$more);
+        $more = TRUE;
+    }
+    $tpl->set_var('pubdate',str_replace(' ','T',$GLOBALS['pubdate']).$GLOBALS['timezone']);
+    $tpl->pparse("out","template");
+}
+
 // We need the database
 require_once('./lib/db_sqlite3.php');
 $db = new DB_Sql();
@@ -163,15 +215,83 @@ if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_var('title_list',trans('titles'));
     $t->set_var('tags_list',trans('tags'));
     $t->set_var('series_list',trans('series'));
+    $t->set_var('search_form',trans('search'));
     $t->set_var('num_allbooks',$allbookcount);
-    if ($allbookcount==1) $t->set_var('allbooks','Buch');
-    else $t->set_var('allbooks','Bücher');
+    if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
+    else $t->set_var('allbooks',trans('books'));
     $t->pparse("out","template");
     exit;
 }
 $offset = req_int('offset');
 
 switch($prefix) {
+    //---------------------------------------------[ search form requested ]---
+    case 'search':
+        $tpl = new Template('tpl/html'); // NO OPDS TEMPLATE FOR THIS!
+        $t->set_file(array("template"=>"search.tpl"));
+        $t->set_block('template','tagselblock','tagsel');
+        set_basics($t);
+        $t->set_var('form_action','?prefix=searchresults&amp;lang='.$GLOBALS['use_lang'].'&amp;pageformat='.$pageformat);
+        $t->set_var('bsearch',trans('book_search_title'));
+        $t->set_var('author_title',trans('author'));
+        $t->set_var('book_title',trans('book'));
+        $t->set_var('series_title',trans('serie'));
+        $t->set_var('tags_title',trans('tags'));
+        $t->set_var('submit_title',trans('search_do'));
+        $t->set_var('num_allbooks',$allbookcount);
+        if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
+        else $t->set_var('allbooks',trans('books'));
+        $db->query('SELECT id,name FROM tags ORDER BY name');
+        $more = FALSE;
+        while ( $db->next_record() ) {
+            $t->set_var('optname',$db->f('name'));
+            $t->set_var('optval',$db->f('id'));
+            $t->parse('tagsel','tagselblock',$more);
+            $more = TRUE;
+        }
+        $t->pparse("out","template");
+        exit;
+        break;
+    //--------------------------------------[ search result list requested ]---
+    case 'searchresults':
+        $saut = req_alnum('author');
+        $stit = req_alnum('title');
+        $sser = req_alnum('series');
+        $stag = req_intarr('tags');
+
+        $sortorder = req_word('sort_order');
+        switch($sortorder) {
+            case 'title': $order = ' ORDER BY b.title'; $sortorder='title'; break;
+            case 'name' : $order = ' ORDER BY a.name'; $sortorder='name'; break;
+            case 'time' : $order = ' ORDER BY b.timestamp'; $sortorder='time'; break;
+            default     : $order = ''; $sortorder=''; break;
+        }
+        $select = 'SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a';
+        $where = $searchvals = '';
+        if ( !empty($saut) ) {
+          $where .= " AND lower(a.name) LIKE '%".strtolower($saut)."%'";
+          $searchvals .= '&amp;author='.urlencode($saut);
+        }
+        if ( !empty($stit) ) {
+          $where .= " AND lower(b.title) LIKE '%".strtolower($stit)."%'";
+          $searchvals .= '&amp;title='.urlencode($stit);
+        }
+        if ( !empty($stag) ) {
+          $select .= ',books_tags_link bt';
+          $where .= ' AND bt.book=b.id AND bt.tag IN ('.implode(',',$stag).')';
+          foreach ($stag as $tt) $searchvals .= '&amp;tags[]='.$tt;
+        }
+        if ( !empty($sser) ) {
+          $select .= ',books_series_link bs,series s';
+          $where  .= " AND bs.book=b.id AND bs.series=s.id AND lower(s.name) LIKE '%".strtolower($sser)."%'";
+          $searchvals .= '&amp;series='.urlencode($sser);
+        }
+        $select .= ' WHERE b.id=bl.book and a.id=bl.author '.$where;
+
+        $all = $db->lim_query($select.$order, $offset, $perpage);
+        parse_titles($t,$db,$offset,$all,'?prefix=searchresults&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder,'searchresults',$searchvals);
+        exit;
+        break;
     //-----------------------------------------[ list of authors requested ]---
     case 'authors':
         $db->query('SELECT COUNT(id) AS num FROM authors');
@@ -266,34 +386,7 @@ switch($prefix) {
             default     : $order = ''; $sortorder=''; break;
         }
         $all = $db->lim_query('SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a WHERE b.id=bl.book and a.id=bl.author '.$order, $offset, $perpage);
-        $t->set_file(array("template"=>"titles.tpl"));
-        $t->set_block('template','itemblock','item');
-        $t->set_block('template','prevblock','prev');
-        $t->set_block('template','nextblock','next');
-        set_basics($t);
-        $t->set_var('title_list',trans('titles'));
-        $t->set_var('offset',$offset);
-        $t->set_var('per_page',$perpage);
-        $t->set_var('total',$all); // OPDS only
-        $t->set_var('num_allbooks',$allbookcount);
-        if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
-        else $t->set_var('allbooks',trans('books'));
-        // pagination:
-        $t->set_var('sortorder',$sortorder);
-        paginate('?prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
-        // records:
-        $more = FALSE;
-        while ( $db->next_record() ) {
-            $t->set_var('bid',$db->f('id'));
-            $t->set_var('title',$db->f('title') .' von '. $db->f('name'));
-            $t->set_var('isbn',$db->f('isbn'));
-            $t->set_var('pubdate',str_replace(' ','T',$db->f('timestamp')).$timezone);
-            $t->set_var('pubdate_human', $db->f('timestamp'));
-            $t->parse('item','itemblock',$more);
-            $more = TRUE;
-        }
-        $t->set_var('pubdate',str_replace(' ','T',$pubdate).$timezone);
-        $t->pparse("out","template");
+        parse_titles($t,$db,$offset,$all,'?prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder);
         exit;
     //----------------------------------------[ List of all tags requested ]---
     case 'tags':

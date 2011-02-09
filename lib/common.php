@@ -49,4 +49,17 @@ function req_alnum($name,$default='') {
   if ( preg_match('![^\w\s_-\pL]!u',$_REQUEST[$name],$match) ) return $default;
   return $_REQUEST[$name];
 }
+/** Verifying array of integer (HTML multi-select form element)
+ * @function req_intarr
+ * @param string in varname Name of the _REQUEST variable
+ * @param optional mixed default Default value to return in case of mismatch (array())
+ */
+function req_intarr($name,$default=array()) {
+  if ( !isset($_REQUEST[$name]) ) return $default;
+  if ( !is_array($_REQUEST[$name]) ) return $default;
+  foreach ($_REQUEST[$name] as $val) {
+    if ( !is_numeric($val) ) return $default;
+  }
+  return $_REQUEST[$name];
+}
 ?>
