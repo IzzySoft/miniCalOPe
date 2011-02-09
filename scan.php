@@ -82,7 +82,7 @@ $authors = array_unique($authors);
 debugOut('* Updating database');
 debugOut('  + Truncating');
 $db->truncAll();
-debugOut('  + Inserting Tags');
+debugOut('  + Inserting Tags ('.count($allGenres).')');
 $db->make_genres($allGenres);
 if (!empty($publisher)) {
   debugOut('  + Inserting Publisher');
@@ -92,12 +92,14 @@ if (!empty($series)) {
   debugOut('  + Inserting Series');
   $db->make_series($series);
 }
-debugOut('  + Inserting Authors');
+$authorcount = count($authors);
+debugOut("  + Inserting Authors ($authorcount)");
 $db->make_authors($authors);
-debugOut('  + Inserting Books');
+$bookcount = count($books);
+debugOut("  + Inserting Books ($bookcount)");
 $db->make_books($books);
 
-debugout("Processed:\n- ".count($authors)." authors\n- ".count($books)." books");
+debugout("Processed:\n- $authorcount authors\n- $bookcount books");
 
 exit;
 

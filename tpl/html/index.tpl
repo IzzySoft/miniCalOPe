@@ -10,10 +10,10 @@
 <H1>{site_title}</H1>
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
-    <TR><TD><A HREF='{relurl}?default_prefix=authors&amp;lang={lang}&amp;pageformat=html'><IMG ALT='author' SRC='{relurl}tpl/icons/authors.png'> {author_list}</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> {title_list}</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> {tags_list}</A></TD></TR>
-    <TR><TD><A HREF='{relurl}?default_prefix=series&amp;lang={lang}&amp;pageformat=html'><IMG ALT='series' SRC='{relurl}tpl/icons/bookseries.png'> {series_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?prefix=authors&amp;lang={lang}&amp;pageformat=html'><IMG ALT='author' SRC='{relurl}tpl/icons/authors.png'> {author_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?prefix=titles&amp;lang={lang}&amp;pageformat=html'><IMG ALT='books' SRC='{relurl}tpl/icons/bookcase.png'> {title_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?prefix=tags&amp;lang={lang}&amp;pageformat=html'><IMG ALT='topics' SRC='{relurl}tpl/icons/tags.png'> {tags_list}</A></TD></TR>
+    <TR><TD><A HREF='{relurl}?prefix=series&amp;lang={lang}&amp;pageformat=html'><IMG ALT='series' SRC='{relurl}tpl/icons/bookseries.png'> {series_list}</A></TD></TR>
 </TABLE>
 
 <DIV CLASS='updated'>{last_update}: {pubdate_human}<BR><SPAN CLASS='count'>({num_allbooks} {allbooks})</SPAN></DIV>

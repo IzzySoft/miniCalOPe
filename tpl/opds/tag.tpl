@@ -6,7 +6,7 @@
 
   <title>{books_with_tag}</title>
   <subtitle>miniCalOPe.</subtitle>
-  <id>{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={offset}&amp;lang={lang}</id>
+  <id>{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={offset}&amp;lang={lang}</id>
   <updated>{pubdate}</updated>
 
   <author>
@@ -17,30 +17,30 @@
 
   <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;lang={lang}"/>
+        href="{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;lang={lang}"/>
 <!-- BEGIN prevblock -->
-  <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset=0"/>
-  <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={poffset}"/>
+  <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset=0"/>
+  <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={poffset}"/>
 <!-- END prevblock -->
 <!-- BEGIN nextblock -->
-  <link rel="next" title="{next_page}" type="application/atom+xml" href="{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={noffset}"/>
-  <link rel="last" title="{last_page}" type="application/atom+xml" href="{baseurl}?default_prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={loffset}"/>
+  <link rel="next" title="{next_page}" type="application/atom+xml" href="{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={noffset}"/>
+  <link rel="last" title="{last_page}" type="application/atom+xml" href="{baseurl}?prefix=tag_id&amp;sort_order={sortorder}&amp;query={aid}&amp;offset={loffset}"/>
 <!-- END nextblock -->
   <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
   <!--link rel="http://opds-spec.org/sort/new" title="{sort_date}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}/?default_prefix=tag_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/-->
+        href="{baseurl}/?prefix=tag_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}"/-->
   <link rel="alternate" title="{sort_alpha}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}/?default_prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
+        href="{baseurl}/?prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
   <link rel="alternate" title="{sort_author}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?default_prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
+        href="{baseurl}?prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
   <link rel="up" title="{tags_list}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{relurl}?default_prefix=tags&amp;lang={lang}"/>
+        href="{relurl}?prefix=tags&amp;lang={lang}"/>
 
   <opensearch:totalResults>{total}</opensearch:totalResults>
   <opensearch:startIndex>{start}</opensearch:startIndex>
@@ -57,36 +57,36 @@
 
   <entry>
     <title>{tags_list}</title>
-    <id>{baseurl}?default_prefix=authors&amp;lang={lang}</id>
+    <id>{baseurl}?prefix=authors&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tags&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?prefix=tags&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/tags.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <entry>
     <title>{sort_alpha}</title>
-    <id>baseurl}?default_prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}</id>
+    <id>baseurl}?prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?prefix=tag_id&amp;sort_order=title&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/alpha.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <entry>
     <title>{sort_author}</title>
-    <id>{baseurl}?default_prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}</id>
+    <id>{baseurl}?prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?default_prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?prefix=tag_id&amp;sort_order=author&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/authors.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <!--entry>
     <title>{sort_date}</title>
-    <id>{baseurl}?default_prefix=tag_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}</id>
+    <id>{baseurl}?prefix=tag_id&amp;sort_order=date&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?default_prefix=tag_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=tag_id&amp;sort_order=release_date&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/date.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry-->

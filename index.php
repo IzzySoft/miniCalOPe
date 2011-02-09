@@ -13,7 +13,8 @@ require_once('./config.php');
 require_once('./lib/files.php');
 // Setup templates
 require_once('./lib/template.php');
-switch($_REQUEST['pageformat']) {
+$pageformat = req_word('pageformat');
+switch($pageformat) {
     case 'html' : $pageformat = 'html'; break;
     default     : $pageformat = 'opds'; break;
 }
@@ -67,6 +68,27 @@ function get_filenames(&$db,$bookid,$format='') {
         if (in_array($suff,$GLOBALS['bookformats'])) $files[] = array('name'=>$file,'size'=>filesize("$path/$file"),'format'=>$suff,'path'=>$path);
     }
     return $files;
+}
+
+/** Get the ID by name
+ * looks up the ID for a given name in multiple runs:<OL><LI>exact match</LI><LI>like ('%given name%')</LI><LI>similar ('%given%name%')</LI><LI>none</LI></OL>
+ * the SQL Query base needs to ensure (via alias if necessary) the ID column is named "id"
+ * @function get_idbyname
+ * @param string query SQL Query base up to "WHERE"
+ * @param string nf name field (e.g. "name", "title"...)
+ * @param string name name to search for
+ */
+function get_idbyname($query,$nf,$name) {
+    GLOBAL $db;
+    $db->query($query . " $nf='$name'");
+    if ( $db->next_record() ) return array('match'=>'exact','name'=>$name,'id'=>$db->f('id'));
+    $name = "%$name%";
+    $db->query($query . " $nf like '$name'");
+    if ( $db->next_record() ) return array('match'=>'like','name'=>$name,'id'=>$db->f('id'));
+    $name = preg_replace('!\s+!','%',$name);
+    $db->query($query . " $nf like '$name'");
+    if ( $db->next_record() ) return array('match'=>'similar','name'=>$name,'id'=>$db->f('id'));
+    return array('match'=>'none','name'=>$name,'id'=>0);
 }
 
 /** Do the pagination for lists
@@ -133,7 +155,7 @@ $db->next_record();
 $allbookcount = $db->f('num');
 
 #========================================================[ Process request ]===
-$prefix = req_word('default_prefix');
+$prefix = req_word('prefix');
 if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
@@ -188,12 +210,17 @@ switch($prefix) {
         }
         $t->set_var('sortorder',$sortorder);
         // pagination:
-        paginate('?default_prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$num_authors);
+        paginate('?prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$num_authors);
         $t->pparse("out","template");
         exit;
     //------------------------[ List of books for a given author requested ]---
     case 'author_id':
-        $aid = req_int('query');
+        $aname = req_alnum('name');
+        if ( empty($aname) ) $aid = req_int('query');
+        else {
+            $sarr = get_idbyname('SELECT id FROM authors WHERE','name',$aname);
+            $aid = (int) $sarr['id'];
+        }
         $db->query('SELECT COUNT(id) AS num FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')');
         if ($db->next_record()) $num_books = $db->f("num");
         else $num_books = 0;
@@ -226,7 +253,7 @@ switch($prefix) {
         }
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //------------------------------[ List of all books by title requested ]---
@@ -253,7 +280,7 @@ switch($prefix) {
         else $t->set_var('allbooks',trans('books'));
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=titles&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         // records:
         $more = FALSE;
         while ( $db->next_record() ) {
@@ -300,7 +327,7 @@ switch($prefix) {
         }
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //---------------------------[ List of books for a given tag requested ]---
@@ -311,7 +338,12 @@ switch($prefix) {
         $t->set_block('template','nextblock','next');
         set_basics($t);
         $t->set_var('tags_list',trans('tags'));
-        $tag_id = req_int('query');
+        $tag_name = req_alnum('name');
+        if ( empty($tag_name) ) $tag_id = req_int('query');
+        else {
+            $sarr = get_idbyname('SELECT id FROM tags WHERE','name',$tag_name);
+            $tag_id = (int) $sarr['id'];
+        }
         $db->query('SELECT name FROM tags WHERE id='.$tag_id);
         $db->next_record();
         $t->set_var('books_with_tag',trans('books_with_tag',$db->f('name')));
@@ -342,7 +374,7 @@ switch($prefix) {
         }
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //----------------------------------------------------[ List of series ]---
@@ -377,7 +409,7 @@ switch($prefix) {
         }
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //-------------------------[ List of books for a given serie requested ]---
@@ -389,7 +421,12 @@ switch($prefix) {
         set_basics($t);
         $t->set_var('back_to_series',trans('back_to_series'));
         $t->set_var('sort_index',trans('sort_index'));
-        $series_id = req_int('query');
+        $series_name = req_alnum('name');
+        if ( empty($series_name) ) $series_id = req_int('query');
+        else {
+            $sarr = get_idbyname('SELECT id,name FROM series WHERE','name',$series_name);
+            $series_id = (int) $sarr['id'];
+        }
         $db->query('SELECT name FROM series WHERE id='.$series_id);
         $db->next_record();
         $t->set_var('books_in_serie',trans('books_in_serie',$db->f('name')));
@@ -421,14 +458,19 @@ switch($prefix) {
         }
         // pagination:
         $t->set_var('sortorder',$sortorder);
-        paginate('?default_prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat,$offset,$all);
+        paginate('?prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat,$offset,$all);
         $t->pparse("out","template");
         exit;
     //----------------------------------------------[ Handle a single book ]---
     case '':
         // Display book details
         if (isset($_REQUEST['action']) && $_REQUEST['action']=='bookdetails') {
-            $bookid = req_int('book');
+            $bname = req_alnum('name');
+            if ( empty($bname) ) $bookid = req_int('book');
+            else {
+                $sarr = get_idbyname('SELECT id FROM books WHERE','title',$bname);
+                $bookid = (int) $sarr['id'];
+            }
             $db->query("SELECT id,name FROM authors WHERE id IN (SELECT author FROM books_authors_link WHERE book=$bookid)");
             $author = '';
             while ( $db->next_record() ) {

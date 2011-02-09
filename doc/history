@@ -3,6 +3,11 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.2.0
+-------------------
++ added possibility for "permlinks" using the URL param "name"
+* changed URL param "default_prefix" to "prefix" (shorter URL)
+
 v1.1.0 (30.01.2011)
 -------------------
 + added metadata file support (*.data): books now can have multiple tags, series, isbn...

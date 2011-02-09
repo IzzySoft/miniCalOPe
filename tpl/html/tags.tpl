@@ -4,17 +4,17 @@
     <META NAME="GENERATOR" CONTENT="miniCalOPe">
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
-    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?default_prefix=tags&amp;lang={lang}&amp;sort_order={sortorder}&amp;offset={offset}&amp;pageformat=opds">
+    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?prefix=tags&amp;lang={lang}&amp;sort_order={sortorder}&amp;offset={offset}&amp;pageformat=opds">
 </HEAD><BODY>
 
 <H1>{site_title} - {tags_list}</H1>
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> {start_page}</A></TD></TR>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tags&amp;sort_order=title'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> {sort_alpha}</A></TD></TR>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tags&amp;sort_order=books'><IMG ALT='home' SRC='{relurl}tpl/icons/bookcase.png'> {sort_bookcount}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=tags&amp;sort_order=title'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> {sort_alpha}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=tags&amp;sort_order=books'><IMG ALT='home' SRC='{relurl}tpl/icons/bookcase.png'> {sort_bookcount}</A></TD></TR>
 <!-- BEGIN itemblock -->
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;default_prefix=tag_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/tag.png'> {name}</A>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=tag_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/tag.png'> {name}</A>
             <SPAN CLASS='count'>({num_books} {books})</SPAN></TD></TR>
 <!-- END itemblock -->
     <TR><TD COLSPAN='2'>&nbsp;</TD></TR>

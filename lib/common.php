@@ -39,4 +39,14 @@ function req_word($name,$default='') {
   if (!preg_match('!^\w*$!',$_REQUEST[$name],$match)) return $default;
   return $_REQUEST[$name];
 }
+/** Verifying alpha-numerical input, e.g. names
+ * @function rel_alnum
+ * @param string in varname Name of the _REQUEST variable
+ * @param optional string default Default value to return in case of mismatch ('')
+ */
+function req_alnum($name,$default='') {
+  if ( !isset($_REQUEST[$name]) ) return $default;
+  if ( preg_match('![^\w\s_-\pL]!u',$_REQUEST[$name],$match) ) return $default;
+  return $_REQUEST[$name];
+}
 ?>
