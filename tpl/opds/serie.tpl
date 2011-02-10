@@ -41,6 +41,9 @@
   <link rel="up" title="{back_to_series}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?prefix=series&amp;lang={lang}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
 
   <opensearch:totalResults>{total}</opensearch:totalResults>
   <opensearch:startIndex>{start}</opensearch:startIndex>

@@ -41,6 +41,9 @@
   <link rel="up" title="{tags_list}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?prefix=tags&amp;lang={lang}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
 
   <opensearch:totalResults>{total}</opensearch:totalResults>
   <opensearch:startIndex>{start}</opensearch:startIndex>

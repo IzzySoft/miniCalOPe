@@ -25,6 +25,9 @@
   <link rel="alternate" title="Nach Buchanzahl sortieren"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?prefix=authors&amp;sort_order=books&amp;lang={lang}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
 
 
   <title>{author_list}</title>

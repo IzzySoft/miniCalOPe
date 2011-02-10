@@ -252,6 +252,22 @@ switch($prefix) {
         $t->pparse("out","template");
         exit;
         break;
+    //-------------------------------------[ OpenSearch document requested ]---
+    case 'ods':
+        echo '<?xml version="1.0" encoding="UTF-8"?>'."\n"
+           . ' <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'."\n"
+           . "  <ShortName>".trans('book_search_title')."</ShortName>\n"
+           . "  <Description>$sitetitle: ".trans('book_search_title')."</Description>\n"
+           . "  <Tags>ebooks</Tags>\n"
+           . "  <Contact>$email</Contact>\n"
+           . '  <Url type="application/atom+xml" template="'.$baseurl.'?lang='.$use_lang.'&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>'."\n"
+           . '  <Url type="text/html"            template="'.$baseurl.'?lang='.$use_lang.'&amp;pageformat=html&amp;prefix=searchresults&amp;q={searchTerms}"/>'."\n"
+           . '  <Image height="22" width="22" type="image/png">'.$baseurl."tpl/icons/find.png</Image>\n"
+           . "  <OutputEncoding>UTF-8</OutputEncoding>\n"
+           . "  <InputEncoding>UTF-8</InputEncoding>\n"
+           . "  <Language>".$use_lang."</Language>\n"
+           . " </OpenSearchDescription>\n";
+        exit;
     //--------------------------------------[ search result list requested ]---
     case 'searchresults':
         $sall = req_alnum('q');

@@ -8,6 +8,7 @@ v1.2.0
 + added possibility for "permlinks" using the URL param "name"
 * changed URL param "default_prefix" to "prefix" (shorter URL)
 + added search functionality (search form for now HTML only)
++ added OpenSearch support (integrated with OPDS and above search functionality)
 
 v1.1.0 (30.01.2011)
 -------------------

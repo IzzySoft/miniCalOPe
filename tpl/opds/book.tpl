@@ -23,6 +23,9 @@
   <link rel="up" title="{back_to_authors}"
         type="application/atom+xml;profile=opds-catalog"
         href="{relurl}?prefix=authors&amp;lang={lang}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
 
   <entry>
     <title>{start_page}</title>

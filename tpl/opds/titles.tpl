@@ -19,6 +19,9 @@
   <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?prefix=titels&amp;sort_order={sortorder}&amp;offset={offset}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
 <!-- BEGIN prevblock -->
   <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?prefix={prefix}{searchvals}&amp;sort_order={sortorder}&amp;offset=0"/>
   <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?prefix={prefix}{searchvals}&amp;sort_order={sortorder}&amp;offset={poffset}"/>

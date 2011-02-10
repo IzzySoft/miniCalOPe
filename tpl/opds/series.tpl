@@ -32,6 +32,9 @@
   <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
   <link rel="alternate" title="{sort_alpha}" type="application/atom+xml" href="{baseurl}?prefix=series&amp;sort_order=title&amp;lang={lang}"/>
   <link rel="http://opds-spec.org/sort/numerous" title="{sort_bookcount}" type="application/atom+xml" href="{baseurl}?prefix=series&amp;sort_order=books&amp;lang={lang}"/>
 

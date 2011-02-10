@@ -9,6 +9,9 @@
   <link rel="start"
         href="{baseurl}index.php?lang={lang}"
         type="application/atom+xml;profile=opds-catalog"/>
+  <link rel="search"
+        type="application/opensearchdescription+xml"
+        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
   <title>{site_title}</title>
   <updated>{pubdate}</updated>
   <author>
