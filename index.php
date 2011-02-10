@@ -254,6 +254,7 @@ switch($prefix) {
         break;
     //--------------------------------------[ search result list requested ]---
     case 'searchresults':
+        $sall = req_alnum('q');
         $saut = req_alnum('author');
         $stit = req_alnum('title');
         $sser = req_alnum('series');
@@ -268,23 +269,30 @@ switch($prefix) {
         }
         $select = 'SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a';
         $where = $searchvals = '';
-        if ( !empty($saut) ) {
-          $where .= " AND lower(a.name) LIKE '%".strtolower($saut)."%'";
-          $searchvals .= '&amp;author='.urlencode($saut);
-        }
-        if ( !empty($stit) ) {
-          $where .= " AND lower(b.title) LIKE '%".strtolower($stit)."%'";
-          $searchvals .= '&amp;title='.urlencode($stit);
-        }
-        if ( !empty($stag) ) {
-          $select .= ',books_tags_link bt';
-          $where .= ' AND bt.book=b.id AND bt.tag IN ('.implode(',',$stag).')';
-          foreach ($stag as $tt) $searchvals .= '&amp;tags[]='.$tt;
-        }
-        if ( !empty($sser) ) {
-          $select .= ',books_series_link bs,series s';
-          $where  .= " AND bs.book=b.id AND bs.series=s.id AND lower(s.name) LIKE '%".strtolower($sser)."%'";
-          $searchvals .= '&amp;series='.urlencode($sser);
+        if ( empty($sall) ) {
+            if ( !empty($saut) ) {
+              $where .= " AND lower(a.name) LIKE '%".strtolower($saut)."%'";
+              $searchvals .= '&amp;author='.urlencode($saut);
+            }
+            if ( !empty($stit) ) {
+              $where .= " AND lower(b.title) LIKE '%".strtolower($stit)."%'";
+              $searchvals .= '&amp;title='.urlencode($stit);
+            }
+            if ( !empty($stag) ) {
+              $select .= ',books_tags_link bt';
+              $where .= ' AND bt.book=b.id AND bt.tag IN ('.implode(',',$stag).')';
+              foreach ($stag as $tt) $searchvals .= '&amp;tags[]='.$tt;
+            }
+            if ( !empty($sser) ) {
+              $select .= ',books_series_link bs,series s';
+              $where  .= " AND bs.book=b.id AND bs.series=s.id AND lower(s.name) LIKE '%".strtolower($sser)."%'";
+              $searchvals .= '&amp;series='.urlencode($sser);
+            }
+        } else {
+            $sterm = '%'.strtolower($sall).'%';
+            $select     .= ',comments c';
+            $where      .= " AND c.book=b.id AND ( lower(c.text) LIKE '$sterm' OR lower(b.title) LIKE '$sterm' OR lower(a.name) LIKE '$term' )";
+            $searchvals .= '&amp;q='.urlencode($sall);
         }
         $select .= ' WHERE b.id=bl.book and a.id=bl.author '.$where;
 
