@@ -145,6 +145,9 @@ function extract_cover($file) {
       if ( $match[1]!='jpeg' ) $cover = preg_replace('!jpg$!',$match[1],$cover);
       extract_file($zip,$zip_entry,$cover);
       break;
+    } elseif ( preg_match('!cover-image.jpg$!i',zip_entry_name($zip_entry),$match) ) { // some on Archive.ORG
+      extract_file($zip,$zip_entry,$cover);
+      break;
     }
   }
 
