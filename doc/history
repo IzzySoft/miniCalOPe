@@ -10,6 +10,7 @@ v1.2.0
 + added search functionality (search form for now HTML only)
 + added OpenSearch support (integrated with OPDS and above search functionality)
 + more cover images detected
++ added and integrated regular logging class
 
 v1.1.0 (30.01.2011)
 -------------------

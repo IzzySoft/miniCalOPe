@@ -88,7 +88,7 @@ class db extends DB_Sql {
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !isset($books[$name]['files']) || !is_array($books[$name]['files']) ) {
-        debugOut('! The book "'.$name.'" seems to have no files!');
+        $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no files!','DB');
         continue;
       }
       foreach($books[$name]['files'] as $file) { // cannot address numerical - why?

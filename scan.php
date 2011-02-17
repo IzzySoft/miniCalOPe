@@ -11,6 +11,7 @@
 #############################################################################
 # $Id$
 
+require_once('./lib/logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
 require_once('./lib/common.php');
 require_once('./lib/files.php');
@@ -33,31 +34,31 @@ $publisher = array();
 
 #===========================================================[ Collect data ]===
 // Go for the languages available
-debugOut("Scanning $bookroot");
-debugOut("use_lang: $use_lang");
-debugOut("Languages: ".implode(', ',$uselangs));
-debugOut("DBFile: $dbfile");
+$logger->info("Scanning $bookroot",'SCAN');
+$logger->debug("use_lang: $use_lang",'SCAN');
+$logger->debug("Languages: ".implode(', ',$uselangs),'SCAN');
+$logger->debug("DBFile: $dbfile",'SCAN');
 $langs = scanFolder($bookroot);
 
 // Now collect the genres
 foreach($langs as $lang) {
     if ( !empty($uselangs) && !in_array($lang,$uselangs) ) {
-        debugOut("* Skipping langDir '$lang'");
+        $logger->debug("* Skipping langDir '$lang'",'SCAN');
         continue;
     }
-    debugOut("* Scanning langDir '$lang'");
+    $logger->info("* Scanning langDir '$lang'",'SCAN');
     $genres[$lang] = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
     $allGenres     = array_merge($allGenres,$genres[$lang]);
 
     // Now come the authors
     foreach($genres[$lang] as $genre) {
-        debugOut("  + Scanning genre '$genre'");
+        $logger->info("  + Scanning genre '$genre'",'SCAN');
         $tauthors = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre);
         $authors = array_merge( $authors, $tauthors);
 
         // Guess what - they wrote books!
         foreach($tauthors as $author) {
-            debugOut("    - Scanning author '$author'");
+            $logger->debug("    - Scanning author '$author'",'SCAN');
             $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . $author, 'files');
             //array[name] with [files][ext], [desc] ([series],[series_index],[rating],[publisher],[isbn], [author],[tag]
             foreach($tbooks as $book=>$dummy) {
@@ -79,27 +80,27 @@ $allGenres = array_unique($allGenres);
 $authors = array_unique($authors);
 
 #======================================================[ Feed the database ]===
-debugOut('* Updating database');
-debugOut('  + Truncating');
+$logger->info('* Updating database','SCAN');
+$logger->info('  + Truncating Tables','SCAN');
 $db->truncAll();
-debugOut('  + Inserting Tags ('.count($allGenres).')');
+$logger->info('  + Inserting Tags ('.count($allGenres).')','SCAN');
 $db->make_genres($allGenres);
 if (!empty($publisher)) {
-  debugOut('  + Inserting Publisher');
+  $logger->info('  + Inserting Publisher','SCAN');
   $db->make_publisher($publisher);
 }
 if (!empty($series)) {
-  debugOut('  + Inserting Series');
+  $logger->info('  + Inserting Series','SCAN');
   $db->make_series($series);
 }
 $authorcount = count($authors);
-debugOut("  + Inserting Authors ($authorcount)");
+$logger->info("  + Inserting Authors ($authorcount)",'SCAN');
 $db->make_authors($authors);
 $bookcount = count($books);
-debugOut("  + Inserting Books ($bookcount)");
+$logger->info("  + Inserting Books ($bookcount)",'SCAN');
 $db->make_books($books);
 
-debugout("Processed:\n- $authorcount authors\n- $bookcount books");
+$logger->info("Processed:\n- $authorcount authors\n- $bookcount books",'SCAN');
 
 exit;
 

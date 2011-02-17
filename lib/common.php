@@ -17,6 +17,9 @@ function debugOut($msg) {
   if ($GLOBALS['debug']) echo "$msg\n";
 }
 
+// Central Logger instance
+$logger = new logging($logfile,$fileloglevel,$screenloglevel);
+
 #=====================================================[ Checking URL input ]===
 /** Verifying integers
  * @function req_int

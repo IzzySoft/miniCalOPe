@@ -66,15 +66,15 @@ function scanFolder($dirname,$mode='dirs') {
  */
 function purge_dir($path) {
     if ( !is_dir($path) ) {
-        debugOut("! Cannot purge '$path' - directory does not exist!");
+        $GLOBALS['logger']->error("! Cannot purge '$path' - directory does not exist!",'SCAN');
         return;
     }
-    debugOut("* Purging directory '$path'");
+    $GLOBALS['logger']->info("* Purging directory '$path'",'SCAN');
     $dir = dir($path);
     while ( $file=$dir->read() ) {
       if ( in_array($file,array('.','..')) ) continue;
       $fullname = $path . DIRECTORY_SEPARATOR . $file;
-      debugOut("  + removing '$file'");
+      $GLOBALS['logger']->debug("  + removing '$file'",'SCAN');
       unlink($fullname);
     }
 }
@@ -85,7 +85,7 @@ function purge_dir($path) {
  */
 function prepare_covers($coverdir) {
     purge_dir($coverdir);
-    debugOut('* Linking cover images');
+    $GLOBALS['logger']->info('* Linking cover images','SCAN');
     $db = new db($GLOBALS['dbfile']);
     $db->query('SELECT id,path FROM books');
     while ( $db->next_record() ) {
@@ -96,13 +96,14 @@ function prepare_covers($coverdir) {
           $coverimg  = $path.DIRECTORY_SEPARATOR.'cover.jpg';
           $coverlink = $coverdir.DIRECTORY_SEPARATOR.$id.'.jpg';
           if ( file_exists($coverimg) ) {
-              debugOut("  - $coverimg -> $coverlink");
+              $GLOBALS['logger']->debug("  - $coverimg -> $coverlink",'SCAN');
               symlink($coverimg,$coverlink);
+          } else {
+              $GLOBALS['logger']->debug("  - No cover for ID '$id' at '$path'",'SCAN');
           }
-          else debugOut("  - No cover for ID '$id' at '$path'");
           break;
         case 'simple':
-        default: debugOut('Cover support disabled.');
+        default: $GLOBALS['logger']->debug('Cover support disabled.','SCAN');
       }
     }
 }
@@ -160,7 +161,7 @@ function extract_cover($file) {
  * @return boolean success TRUE if OK, FALSE otherwise, which means no logging possible.
  */
 function check_logfile() {
-    if ( isset($GLOBALS['logfile']) ) $logfile = $GLOBALS['logfile'];
+    if ( isset($GLOBALS['dllogfile']) ) $logfile = $GLOBALS['dllogfile'];
     else return FALSE;
     if ( empty($logfile) ) return FALSE;
     if ( is_writeable($logfile) ) return TRUE;
@@ -179,7 +180,7 @@ function logg($msg,$module='NONE',$level='INFO') {
     // log format: YYYYMMDD HH:MM:SS <who-was-it> <level> <modul> <message>
     if ( isset($_SERVER) ) $who = $_SERVER['REMOTE_ADDR'];
     else $who = 'local';
-    error_log(date('Y-m-d H:i:s')." $who $level $module $msg\n", 3, $GLOBALS['logfile']);
+    error_log(date('Y-m-d H:i:s')." $who $level $module $msg\n", 3, $GLOBALS['dllogfile']);
 }
 
 ?>
