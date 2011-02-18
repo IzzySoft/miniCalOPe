@@ -9,6 +9,7 @@
 #############################################################################
 # $Id$
 
+require_once('./lib/logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
 require_once('./lib/files.php');
 // Setup templates

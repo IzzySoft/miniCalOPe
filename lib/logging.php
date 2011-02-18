@@ -13,29 +13,45 @@
 
 #============================================================[ Constants ]===
 /** LogLevel Emergency
- * @constant EMERGENCY
+ * @constant integer EMERGENCY
  */
 define('EMERGENCY',0);
 /** LogLevel Critical
- * @constant CRITICAL
+ * @constant integer CRITICAL
  */
-define('CRITICAL',10);
+define('ALERT',10);
+/** LogLevel Alert
+ * @constant integer ALERT
+ */
+define('CRITICAL',20);
 /** LogLevel Error
- * @constant ERROR
+ * @constant integer ERROR
  */
-define('ERROR',20);
+define('ERROR',30);
 /** LogLevel Warning
- * @constant WARNING
+ * @constant integer WARNING
  */
-define('WARNING',30);
+define('WARNING',40);
+/** LogLevel Notice
+ * @constant integer NOTICE
+ */
+define('NOTICE',50);
 /** LogLevel Info
- * @constant INFO
+ * @constant integer INFO
  */
-define('INFO',40);
+define('INFO',60);
 /** LogLevel Debug
- * @constant DEBUG
+ * @constant integer DEBUG
  */
-define('DEBUG',50);
+define('DEBUG',70);
+/** Logging Disabled Level
+ * @constant integer NOLOG
+ */
+define('NOLOG',-1);
+/** Are we running in CLI mode (i.e. from command line, not browser)?
+ * @constant boolean IS_CLI
+ */
+define ('IS_CLI', !( isset($_SERVER) && isset($_SERVER['REMOTE_ADDR']) ));
 
 #======================================================[ The Logging Class ]===
 /** Logging to file and screen
@@ -78,6 +94,11 @@ class logging {
     $this->setlogfile($fname);
     $this->setloglevel('file',$flevel);
     $this->setloglevel('screen',$slevel);
+    if (IS_CLI) {
+      $this->scrnl = "\n";
+    } else {
+      $this->scrnl = "<BR>\n";
+    }
   }
 
   /** Store processing errors
@@ -162,7 +183,7 @@ class logging {
       error_log(date('Y-m-d H:i:s')." $who $llevel $mod $msg\n", 3, $this->logfile);
     }
     if ( $level <= $this->screenlevel ) {
-      echo "$msg\n";
+      echo "$msg" . $this->scrnl;
     }
   }
 
@@ -176,13 +197,24 @@ class logging {
     $this->log(EMERGENCY,$msg,$mod);
   }
 
+  /** Log an alert
+   *  (shortcut to logging::log)
+   * @method public alert
+   * @param string msg Log message
+   * @param optional string module Calling modul
+   */
+  public function alert($msg,$mod='') {
+    $this->log(ALERT,$msg,$mod);
+  }
+
   /** Log a critical error
    *  (shortcut to logging::log)
    * @method public critical
    * @param string msg Log message
+   * @param optional string module Calling modul
    */
-  public function critical($msg) {
-    $this->log(CRITICAL,$msg);
+  public function critical($msg,$mod='') {
+    $this->log(CRITICAL,$msg,$mod);
   }
 
   /** Log a "normal" error
@@ -212,6 +244,16 @@ class logging {
    */
   public function warn($msg,$mod='') {
     $this->warning($msg,$mod);
+  }
+
+  /** Log a notice
+   *  (shortcut to logging::log)
+   * @method public notice
+   * @param string msg Log message
+   * @param optional string module Calling modul
+   */
+  public function notice($msg,$mod='') {
+    $this->log(NOTICE,$msg,$mod);
   }
 
   /** Log an informal message

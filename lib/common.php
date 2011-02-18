@@ -9,16 +9,16 @@
 #############################################################################
 # $Id$
 
-/** Output debug message only if debugging is enabled
- * function debug
- * @param string msg debug message to print
- */
-function debugOut($msg) {
-  if ($GLOBALS['debug']) echo "$msg\n";
-}
+require_once(dirname(__FILE__).'/logging.php'); // just in case
 
 // Central Logger instance
-$logger = new logging($logfile,$fileloglevel,$screenloglevel);
+if (IS_CLI) {
+  $logger   = new logging($logfile,  $fileloglevel,$screenloglevel_cli);
+  $dllogger = new logging($dllogfile,$fileloglevel,$screenloglevel_cli);
+} else {
+  $logger   = new logging($logfile,  $fileloglevel,$screenloglevel);
+  $dllogger = new logging($dllogfile,$fileloglevel,$screenloglevel);
+}
 
 #=====================================================[ Checking URL input ]===
 /** Verifying integers
