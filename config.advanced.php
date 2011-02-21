@@ -22,8 +22,21 @@ $bookformats = array('epub','mobi');
 $bookdesc_ext = array('desc');
 // file extension for Metadata
 $bookmeta_ext = 'data';
-// Where to write any log entries to. Empty string to disable for now.
+
+#================================[ Logging ]===
+// Logfile to use. Empty means no logging to file.
 $logfile = './minicalope.log';
+// Seperate log file to log downloads to (in addition to the normal log).
+// Empty string to disable for now.
+$dllogfile = './minical_dl.log';
+// Available log levels: NOLOG, EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG
+// Yes - case IS important. Specified level includes all before-mentioned
+// File log level
+$fileloglevel = INFO;
+// Screen output when running in web mode
+$screenloglevel = NOLOG;
+// Screen output when running from command line
+$screenloglevel_cli = INFO;
 
 #============================[ Book Covers ]===
 // Where to get the covers: calibre, simple, or off (none)

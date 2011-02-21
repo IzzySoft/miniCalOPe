@@ -100,7 +100,7 @@ $bookcount = count($books);
 $logger->info("  + Inserting Books ($bookcount)",'SCAN');
 $db->make_books($books);
 
-$logger->info("Processed:\n- $authorcount authors\n- $bookcount books",'SCAN');
+$logger->info("* Done",'SCAN');
 
 exit;
 
