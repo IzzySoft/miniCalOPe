@@ -177,7 +177,7 @@ class logging {
       case DEBUG    : $llevel = 'DEBUG'; break;
       default       : $llevel = $level; break;
     }
-    if ( isset($_SERVER) && isset($SERVER['REMOTE_ADDR']) ) $who = $_SERVER['REMOTE_ADDR'];
+    if ( isset($_SERVER) && isset($_SERVER['REMOTE_ADDR']) ) $who = $_SERVER['REMOTE_ADDR'];
     else $who = 'local';
     if ( !empty($this->logfile) && $level <= $this->filelevel ) {
       error_log(date('Y-m-d H:i:s')." $who $llevel $mod $msg\n", 3, $this->logfile);
