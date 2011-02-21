@@ -155,32 +155,4 @@ function extract_cover($file) {
   zip_close($zip);
 }
 
-#================================================================[ Logging ]===
-/** Check for Logfile, create if it does not exist
- * @function check_logfile
- * @return boolean success TRUE if OK, FALSE otherwise, which means no logging possible.
- */
-function check_logfile() {
-    if ( isset($GLOBALS['dllogfile']) ) $logfile = $GLOBALS['dllogfile'];
-    else return FALSE;
-    if ( empty($logfile) ) return FALSE;
-    if ( is_writeable($logfile) ) return TRUE;
-    if ( file_exists($logfile) ) return FALSE; // file exists, but we cannot write into it
-    if ( is_dir(dirname($logfile)) && is_writeable(dirname($logfile)) ) return TRUE; // fresh file
-}
-
-/** Create log entry
- * @function logg
- * @param string msg Message to write to log
- * @param optional string module Module responsible (Default: 'NONE')
- * @param optional string level Log Level (Default: 'INFO')
- */
-function logg($msg,$module='NONE',$level='INFO') {
-    if ( !check_logfile() ) return; // if we have no log, there's nothing to do
-    // log format: YYYYMMDD HH:MM:SS <who-was-it> <level> <modul> <message>
-    if ( isset($_SERVER) ) $who = $_SERVER['REMOTE_ADDR'];
-    else $who = 'local';
-    error_log(date('Y-m-d H:i:s')." $who $level $module $msg\n", 3, $GLOBALS['dllogfile']);
-}
-
 ?>

@@ -712,7 +712,11 @@ switch($prefix) {
             $files = get_filenames($db,req_int('book'),req_word('format'));
             $book  = $files[0]['path'].'/'.$files[0]['name'];
             if ($fd = fopen ($book,"rb")) {
-                logg($book,'DOWNLOAD');
+                if ( empty($dllogfile) ) { // log DL to default log if no special log is set up
+                    $logger->info($book,'DOWNLOAD');
+                } else {
+                    $dllogger->info($book,'DOWNLOAD');
+                }
                 switch($files[0]['format']) {
                     case 'epub': header("Content-type: application/epub+zip"); break;
                     case 'mobi': header("Content-type: application/x-mobipocket-ebook"); break;
