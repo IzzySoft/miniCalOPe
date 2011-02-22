@@ -3,6 +3,10 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.3.0
+-------------------
+! search template was not committed to repository
+
 v1.2.0 (21.02.2011)
 -------------------
 + added possibility for "permlinks" using the URL param "name"
