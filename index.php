@@ -182,7 +182,7 @@ function parse_titles(&$tpl,&$db,$offset,$all,$url,$prefix='titles',$searchvals=
     else $tpl->set_var('allbooks',trans('books'));
     // pagination:
     $tpl->set_var('sortorder',$GLOBALS['sortorder']);
-    paginate('&amp;pageformat='.$GLOBALS['pageformat'],$offset,$all);
+    paginate("$url&amp;pageformat=".$GLOBALS['pageformat'],$offset,$all);
     // records:
     $more = FALSE;
     while ( $db->next_record() ) {
