@@ -271,11 +271,12 @@ switch($prefix) {
         exit;
     //--------------------------------------[ search result list requested ]---
     case 'searchresults':
-        $sall = req_alnum('q');
-        $saut = req_alnum('author');
-        $stit = req_alnum('title');
-        $sser = req_alnum('series');
+        $sall = str_replace('*','%',req_alnumwild('q'));
+        $saut = str_replace('*','%',req_alnumwild('author'));
+        $stit = str_replace('*','%',req_alnumwild('title'));
+        $sser = str_replace('*','%',req_alnumwild('series'));
         $stag = req_intarr('tags');
+        $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;tags=".implode(',',$stag),'SEARCH');
 
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -313,6 +314,7 @@ switch($prefix) {
         }
         $select .= ' WHERE b.id=bl.book and a.id=bl.author '.$where;
 
+        $logger->debug($select.$order,'SEARCH');
         $all = $db->lim_query($select.$order, $offset, $perpage);
         parse_titles($t,$db,$offset,$all,'?prefix=searchresults&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder,'searchresults',$searchvals);
         exit;

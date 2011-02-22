@@ -7,6 +7,7 @@ v1.3.0
 -------------------
 ! search template was not committed to repository
 ! pagination was broken in title list and search results
+* wildcards ("*") in search terms truncated the whole term being treated as "vulnerable"
 
 v1.2.0 (21.02.2011)
 -------------------
