@@ -92,6 +92,23 @@ function get_idbyname($query,$nf,$name) {
     return array('match'=>'none','name'=>$name,'id'=>0);
 }
 
+/** Get ISBNSearch URLs
+ * @function get_isbnurls
+ * @param string isbn ISBN to search for
+ */
+function get_isbnurls($isbn) {
+   $csv = new csv(";",'"',TRUE,FALSE);
+   $csv->import('./lib/isbnsearch.csv');
+   $list = array();
+   $isbn = preg_replace('![^0-9]!','',$isbn);
+   foreach ($csv->data as $data) {
+     if ( in_array($data['name'],$GLOBALS['isbnservices']) ) {
+       $list[] = array('name'=>$data['name'],'url'=>str_replace('{isbn}',$isbn,$data['url']));
+     }
+   }
+   return $list;
+}
+
 /** Do the pagination for lists
  * @function paginate
  * @param string url URL without the pagination element (offset)
@@ -653,8 +670,20 @@ switch($prefix) {
                 if ( empty($book[$field]) ) continue;
                 if ($field=='series') $t->set_var('data_name',trans('serie'));
                 else $t->set_var('data_name',trans($field));
-                if ($field=='uri') $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>");
-                else $t->set_var('data_data',$book[$field]);
+                switch ($field) {
+                  case 'uri' : $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>"); break;
+                  case 'isbn':
+                    $iurls = get_isbnurls($book[$field]);
+                    $text  = $book[$field];
+                    if ($pageformat=='html') {
+                      $text .= "<SPAN ID='isbnsearch'>";
+                      foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
+                      $text .= "</SPAN>";
+                    }
+                    $t->set_var('data_data',$text);
+                    break;
+                  default    : $t->set_var('data_data',$book[$field]); break;
+                }
                 $t->parse('data','datablock',TRUE);
             }
             if ( !empty($book['rating']) ) {

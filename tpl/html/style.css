@@ -13,9 +13,16 @@ BODY {
 A { text-decoration:none; }
 A:link { color: #b00; }
 A:visited { color: #f50; }
-.list TD A:link, .list TD A:visited { color: #00e; }
-.list TD:hover A { color:#ffffff; }
-.list TD:hover { background-color:#4d9dfc; }
+.list TD A:link, .list TD A:visited, #isbnsearch A:link, #isbnsearch A:visited { color: #00e; }
+.list TD:hover A, #isbnsearch A:hover { color:#ffffff; }
+.list TD:hover, #isbnsearch A:hover { background-color:#4d9dfc; }
+#isbnsearch A {
+  border: 1px solid #4d9dfc;
+  padding-left: 2px;
+  padding-right: 2px;
+  background-color: #ddd;
+}
+#isbnsearch A:hover { border-color: yellow; }
 
 .error { color: #f00; }
 

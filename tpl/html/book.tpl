@@ -19,7 +19,7 @@
 <!-- END serialblock -->
 </TABLE>
 <TABLE ALIGN='center' BORDER='0'>
-    <TR><TD>
+    <TR><TD STYLE='vertical-align:top;'>
 <!-- BEGIN coverblock -->
         <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
 <!-- END coverblock -->
