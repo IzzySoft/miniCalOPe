@@ -59,6 +59,8 @@ $relurl  = '/opds/';
 $perpage = 25;
 // Full URL to the Wikipedia to use for author info
 $wikibase= 'http://de.wikipedia.org/wiki/';
+// Enable some ISBN searches (empty array to disable this feature)
+$isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
 
 #============================[ Person Info ]===
 // about you: Name, Homepage, Email
@@ -81,6 +83,7 @@ switch ($use_lang) {
     case 'en':
         $uselangs = array('en');
         $dbfile   = dirname(__FILE__).'/metadata_en.db';
+        $isbnservices = array('Amazon.COM','Google.COM','BookCrossing.COM','EuroBuch.COM');
         break;
     default  :
         $uselangs = array('de');
