@@ -1,6 +1,6 @@
 <?
 #############################################################################
-# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -28,8 +28,15 @@ if (IS_CLI) {
  * @return integer value
  */
 function req_int($name,$default=0) {
-  if ( !isset($_REQUEST[$name]) ) return $default;
-  return (int) $_REQUEST[$name];
+  if ( !isset($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
+    return $default;
+  }
+  $val = (int) $_REQUEST[$name];
+  if ( $val!=$_REQUEST[$name] ) {
+    $GLOBALS['logger']->warn("URLParam '$name' expected to be INT - got '".$_REQUEST[$name]."'",'WEBIF');
+  }
+  return $val;
 }
 /** Verifying words
  * @function req_word
@@ -38,8 +45,14 @@ function req_int($name,$default=0) {
  * @return string value
  */
 function req_word($name,$default='') {
-  if ( !isset($_REQUEST[$name]) ) return $default;
-  if (!preg_match('!^\w*$!',$_REQUEST[$name],$match)) return $default;
+  if ( !isset($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
+    return $default;
+  }
+  if (!preg_match('!^\w*$!',$_REQUEST[$name],$match)) {
+    $GLOBALS['logger']->warn("URLParam '$name' expected to be WORD - got '".$_REQUEST[$name]."'",'WEBIF');
+    return $default;
+  }
   return $_REQUEST[$name];
 }
 /** Verifying alpha-numerical input, e.g. names
@@ -48,8 +61,14 @@ function req_word($name,$default='') {
  * @param optional string default Default value to return in case of mismatch ('')
  */
 function req_alnum($name,$default='') {
-  if ( !isset($_REQUEST[$name]) ) return $default;
-  if ( preg_match('![^\w\s_-\pL]!u',$_REQUEST[$name],$match) ) return $default;
+  if ( !isset($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
+    return $default;
+  }
+  if ( preg_match('![^\w\s_-\pL]!u',$_REQUEST[$name],$match) ) {
+    $GLOBALS['logger']->warn("URLParam '$name' expected to be ALNUM - got '".$_REQUEST[$name]."'",'WEBIF');
+    return $default;
+  }
   return $_REQUEST[$name];
 }
 /** Verifying alpha-numerical input with wildcards, e.g. for search mask
@@ -58,9 +77,12 @@ function req_alnum($name,$default='') {
  * @param optional string default Default value to return in case of mismatch ('')
  */
 function req_alnumwild($name,$default='') {
-  if ( !isset($_REQUEST[$name]) ) return $default;
+  if ( !isset($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
+    return $default;
+  }
   if ( preg_match('![^\w\s\*\%\?_-\pL]!u',$_REQUEST[$name],$match) ) {
-    $GLOBALS['logger']->debug("Rejecting input '".$_REQUEST['name']."' for '$name'",'VERIFY');
+    $GLOBALS['logger']->warn("Rejecting input '".$_REQUEST['name']."' for '$name'",'VERIFY');
     return $default;
   }
   return $_REQUEST[$name];
@@ -71,11 +93,21 @@ function req_alnumwild($name,$default='') {
  * @param optional mixed default Default value to return in case of mismatch (array())
  */
 function req_intarr($name,$default=array()) {
-  if ( !isset($_REQUEST[$name]) ) return $default;
-  if ( !is_array($_REQUEST[$name]) ) return $default;
-  foreach ($_REQUEST[$name] as $val) {
-    if ( !is_numeric($val) ) return $default;
+  if ( !isset($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
+    return $default;
   }
-  return $_REQUEST[$name];
+  if ( !is_array($_REQUEST[$name]) ) {
+    $GLOBALS['logger']->warn("URLParam '$name' expected to be ARRAY - got '".$_REQUEST[$name]."'",'WEBIF');
+    return $default;
+  }
+  $vals = array();
+  foreach ($_REQUEST[$name] as $val) {
+    if ( is_numeric($val) ) $vals[] = $val;
+    else {
+      $globals['logger']->warn("Skipping non-numeric value '$val' in expected INTARR '$name'",'WEBIF');
+    }
+  }
+  return $vals;
 }
 ?>

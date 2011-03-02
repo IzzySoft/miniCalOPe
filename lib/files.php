@@ -14,8 +14,8 @@
 
 require_once(dirname(__FILE__).'/common.php');
 
-/**
- * @function scanDir
+/** Scan a folder in the book location for either sub-directories or book files
+ * @function scanFolder
  * @param string dirname directory to scan
  * @param optional string mode scan for 'dirs' (default) or 'files'
  * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext], [desc], [lastmod] (unixtime)
@@ -120,15 +120,23 @@ function prepare_covers($coverdir) {
  * @param object zip ZIP resource returned by zip_open()
  * @param object zip_entry ZIP_ENTRY resource returned by zip_read
  * @param string target complete name of the file to create
+ * @return boolean success
  */
 function extract_file($zip,$zip_entry,$target) {
+  $success = TRUE;
   if (zip_entry_open($zip, $zip_entry, "r")) {
     if ($fd = @fopen($target, 'wb')) {
       fwrite($fd, zip_entry_read($zip_entry, zip_entry_filesize($zip_entry)));
       fclose($fd);
+    } else {
+      $GLOBALS['logger']->error('! Could not open ZIP target "$target"','SCAN');
+      $success = FALSE;
     }
     zip_entry_close($zip_entry);
+  } else {
+    $success = FALSE;
   }
+  return $success;
 }
 
 /** Extract cover file from *.epub
@@ -142,21 +150,26 @@ function extract_cover($file) {
   if ( file_exists(preg_replace('!jpg$!','png',$cover)) ) return; // already there
 
   $zip = zip_open($file);
-  if (!$zip || is_int($zip)) return;
+  if (!$zip || is_int($zip)) {
+    $GLOBALS['logger']->error('! Could not ZIPopen "$file"','SCAN');
+    return;
+  }
 
+  $zipok = TRUE;
   while ($zip_entry = zip_read($zip)) { // walk the archive contents
     if ( zip_entry_name($zip_entry) == 'content/resources/_cover_.jpg' ) { // Calibre cover
-      extract_file($zip,$zip_entry,$cover);
+      $zipok = extract_file($zip,$zip_entry,$cover);
       break;
     } elseif ( preg_match('!\bcover\.(png|jpg|jpeg)$!i',zip_entry_name($zip_entry),$match) ) { // feedbooks & co
       if ( $match[1]!='jpeg' ) $cover = preg_replace('!jpg$!',$match[1],$cover);
-      extract_file($zip,$zip_entry,$cover);
+      $zipok = extract_file($zip,$zip_entry,$cover);
       break;
     } elseif ( preg_match('!cover-image.jpg$!i',zip_entry_name($zip_entry),$match) ) { // some on Archive.ORG
-      extract_file($zip,$zip_entry,$cover);
+      $zipok = extract_file($zip,$zip_entry,$cover);
       break;
     }
   }
+  if ( !$zipok ) $GLOBALS['logger']->error('! Failed to extract cover from "$file"','SCAN');
 
   zip_close($zip);
 }
