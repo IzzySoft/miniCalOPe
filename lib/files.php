@@ -1,6 +1,6 @@
 <?php
  #############################################################################
- # miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+ # miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
  # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
  # http://www.izzysoft.de/                                                   #
  # ------------------------------------------------------------------------- #
@@ -44,11 +44,17 @@ function scanFolder($dirname,$mode='dirs') {
         elseif ( in_array($ext,$bookdesc_ext) ) $list[$nam]['desc'] = file_get_contents($fullname);
         elseif ( $ext == $GLOBALS['bookmeta_ext'] ) {
           $lines = explode( "\n", file_get_contents($fullname) );
+          $i = 0;
           foreach($lines as $line) {
+            ++$i;
+            $line = trim($line);
+            if ( empty($line) ) continue;
+            if ( substr($line,0,1) == '#' ) continue; // comment
             $tmp = explode('::',$line);
             $tmp[0] = strtolower($tmp[0]);
             if ( in_array($tmp[0],array('author','tag')) ) $list[$nam][$tmp[0]][] = $tmp[1];
             elseif ( in_array($tmp[0],array('series','series_index','rating','publisher','isbn','uri')) ) $list[$nam][$tmp[0]] = $tmp[1];
+            else $GLOBALS['logger']->notice("Cannot find keyword in line $i of file '$fullname' [$line]",'SCAN');
           }
         }
         $lastmod = filemtime($fullname);

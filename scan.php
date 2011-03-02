@@ -1,6 +1,6 @@
 <?
 #############################################################################
-# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -76,28 +76,14 @@ foreach($langs as $lang) {
     }
 }
 sort($allGenres);
-$allGenres = array_unique($allGenres);
-$authors = array_unique($authors);
 
 #======================================================[ Feed the database ]===
 $logger->info('* Updating database','SCAN');
-$logger->info('  + Truncating Tables','SCAN');
 $db->truncAll();
-$logger->info('  + Inserting Tags ('.count($allGenres).')','SCAN');
 $db->make_genres($allGenres);
-if (!empty($publisher)) {
-  $logger->info('  + Inserting Publisher','SCAN');
-  $db->make_publisher($publisher);
-}
-if (!empty($series)) {
-  $logger->info('  + Inserting Series','SCAN');
-  $db->make_series($series);
-}
-$authorcount = count($authors);
-$logger->info("  + Inserting Authors ($authorcount)",'SCAN');
+if (!empty($publisher)) $db->make_publisher($publisher);
+if (!empty($series)) $db->make_series($series);
 $db->make_authors($authors);
-$bookcount = count($books);
-$logger->info("  + Inserting Books ($bookcount)",'SCAN');
 $db->make_books($books);
 
 $logger->info("* Done",'SCAN');

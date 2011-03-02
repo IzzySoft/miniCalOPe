@@ -1,6 +1,6 @@
 <?
  #############################################################################
- # miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+ # miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
  # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
  # http://www.izzysoft.de/                                                   #
  # ------------------------------------------------------------------------- #
@@ -19,8 +19,10 @@ class db extends DB_Sql {
   //==========================================================[ DB Feeding ]===
   /** Truncate all tables. This is done prior to a new import.
    * @function truncAll
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function truncAll() {
+  function truncAll($who='SCAN') {
+    $GLOBALS['logger']->info('  + Truncating Tables',$who);
     $tables = array('comments','books','authors','tags','series','publishers',
                     'books_authors_link','books_publishers_link','books_ratings_link',
                     'books_series_link','books_tags_link','data');
@@ -31,8 +33,11 @@ class db extends DB_Sql {
   /** Feed the genres into the database
    * @function make_genres
    * @param array genres array of strings
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function make_genres($genres) {
+  function make_genres($genres,$who='SCAN') {
+    $genres = array_unique($genres);
+    $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     $i=0;
     foreach($genres AS $genre) {
       $this->query("INSERT INTO tags(id,name) VALUES ($i,'$genre')");
@@ -43,10 +48,12 @@ class db extends DB_Sql {
   /** Feed the publisher into the database
    * @function make_publisher
    * @param array publisher array of strings
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function make_publisher($publisher) {
+  function make_publisher($publisher,$who='SCAN') {
     $i=0;
     $publisher = array_unique($publisher);
+    $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
     foreach($publisher AS $genre) {
       $this->query("INSERT INTO publishers(id,name) VALUES ($i,'$genre')");
       ++$i;
@@ -56,8 +63,11 @@ class db extends DB_Sql {
   /** Feed the authors into the database
    * @function make_authors
    * @param array authors array of strings
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function make_authors($authors) {
+  function make_authors($authors,$who='SCAN') {
+    $authors = array_unique($authors);
+    $GLOBALS['logger']->info('  + Inserting Authors ('.count($authors).')',$who);
     $i=0;
     foreach($authors AS $author) {
       $this->query("INSERT INTO authors(id,name) VALUES ($i,'$author')");
@@ -68,10 +78,12 @@ class db extends DB_Sql {
   /** Feed the series into the database
    * @function make_series
    * @param array series array of strings
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function make_series($series) {
+  function make_series($series,$who='SCAN') {
     $i=0;
     $series = array_unique($series);
+    $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
     foreach($series as $serie) {
       $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
       ++$i;
@@ -82,13 +94,15 @@ class db extends DB_Sql {
    * @function make_books
    * @param array books array[string bookname] w/ props str lang, str genre, array tag, array author,
    *        str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
+   * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
-  function make_books($books) {
+  function make_books($books,$who='SCAN') {
+    $GLOBALS['logger']->info('  + Inserting Books ('.count($books).')',$who);
     $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0;
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !isset($books[$name]['files']) || !is_array($books[$name]['files']) ) {
-        $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no files!','DB');
+        $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no files!',$who);
         continue;
       }
       foreach($books[$name]['files'] as $file) { // cannot address numerical - why?
@@ -108,9 +122,13 @@ class db extends DB_Sql {
       foreach($books[$name]['author'] as $aut) $anames .= ",'".$aut."'";
       $this->query("SELECT id FROM authors WHERE name IN (".substr($anames,1).")");
       while ($this->next_record()) $a_id[] = $this->f('id');
-      foreach($a_id as $aid) {
-          $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$b_id,$aid)");
-          ++$ba_id;
+      if ( is_array($a_id) ) {
+          foreach($a_id as $aid) {
+              $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$b_id,$aid)");
+              ++$ba_id;
+          }
+      } else {
+          $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no author!',$who);
       }
       // relation to tags/genres
       $books[$name]['tag'][] = $books[$name]['genre'];
@@ -119,9 +137,13 @@ class db extends DB_Sql {
       foreach($books[$name]['tag'] as $aut) $tnames .= ",'".$aut."'";
       $this->query("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
       while ($this->next_record()) $t_id[] = $this->f('id');
-      foreach($t_id as $tid)  {
-          $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$b_id,$tid)");
-          ++$bt_id;
+      if ( is_array($t_id) ) {
+          foreach($t_id as $tid)  {
+              $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$b_id,$tid)");
+              ++$bt_id;
+          }
+      } else {
+          $GLOBALS['logger']->error('! No tag IDs found in DB for the book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")!',$who);
       }
       // relation to series
       if ( isset($books[$name]['series']) ) {

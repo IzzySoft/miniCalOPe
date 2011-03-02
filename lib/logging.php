@@ -170,9 +170,11 @@ class logging {
     }
     switch ($level) {
       case EMERGENCY: $llevel = 'EMERGENCY'; break;
+      case ALERT    : $llevel = 'ALERT'; break;
       case CRITICAL : $llevel = 'CRITICAL'; break;
       case ERROR    : $llevel = 'ERROR'; break;
       case WARNING  : $llevel = 'WARNING'; break;
+      case NOTICE   : $llevel = 'NOTICE'; break;
       case INFO     : $llevel = 'INFO'; break;
       case DEBUG    : $llevel = 'DEBUG'; break;
       default       : $llevel = $level; break;
