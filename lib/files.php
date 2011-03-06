@@ -151,7 +151,7 @@ function extract_cover($file) {
 
   $zip = zip_open($file);
   if (!$zip || is_int($zip)) {
-    $GLOBALS['logger']->error('! Could not ZIPopen "$file"','SCAN');
+    $GLOBALS['logger']->error("! Could not ZIPopen '$file'",'SCAN');
     return;
   }
 
@@ -165,6 +165,9 @@ function extract_cover($file) {
       $zipok = extract_file($zip,$zip_entry,$cover);
       break;
     } elseif ( preg_match('!cover-image.jpg$!i',zip_entry_name($zip_entry),$match) ) { // some on Archive.ORG
+      $zipok = extract_file($zip,$zip_entry,$cover);
+      break;
+    } elseif ( preg_match('!cover1.jpeg$!i',zip_entry_name($zip_entry),$match) ) {
       $zipok = extract_file($zip,$zip_entry,$cover);
       break;
     }
