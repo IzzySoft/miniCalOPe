@@ -3,7 +3,7 @@ $Id$
 History for miniCalOPe
 ======================
 
-v1.3.0
+v1.3.0 (06.03.2011)
 -------------------
 ! search template was not committed to repository
 ! pagination was broken in title list and search results
