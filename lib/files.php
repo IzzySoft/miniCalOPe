@@ -56,6 +56,10 @@ function scanFolder($dirname,$mode='dirs') {
             elseif ( in_array($tmp[0],array('series','series_index','rating','publisher','isbn','uri')) ) $list[$nam][$tmp[0]] = $tmp[1];
             else $GLOBALS['logger']->notice("Cannot find keyword in line $i of file '$fullname' [$line]",'SCAN');
           }
+          if ( !empty($list[$nam]['series_index']) && !is_numeric($list[$nam]['series_index']) ) {
+            $GLOBALS['logger']->warn("! series_index must be integer - got '".$list[$nam]['series_index']."' in '$fullname' - ignoring it",'SCAN');
+            unset($list[$nam]['series_index']);
+          }
         }
         $lastmod = filemtime($fullname);
         if ( empty($list[$nam]['lastmod']) || $list[$nam]['lastmod'] < $lastmod ) $list[$nam]['lastmod'] = $lastmod;
