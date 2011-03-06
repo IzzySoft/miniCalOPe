@@ -59,6 +59,7 @@ function scanFolder($dirname,$mode='dirs') {
           if ( !empty($list[$nam]['series_index']) && !is_numeric($list[$nam]['series_index']) ) {
             $GLOBALS['logger']->warn("! series_index must be integer - got '".$list[$nam]['series_index']."' in '$fullname' - ignoring it",'SCAN');
             unset($list[$nam]['series_index']);
+            unset($list[$nam]['series']);
           }
         }
         $lastmod = filemtime($fullname);

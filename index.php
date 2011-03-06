@@ -274,7 +274,7 @@ switch($prefix) {
     case 'ods':
         echo '<?xml version="1.0" encoding="UTF-8"?>'."\n"
            . ' <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'."\n"
-           . "  <ShortName>".trans('book_search_title')."</ShortName>\n"
+           . "  <ShortName>$sitetitle</ShortName>\n"
            . "  <Description>$sitetitle: ".trans('book_search_title')."</Description>\n"
            . "  <Tags>ebooks</Tags>\n"
            . "  <Contact>$email</Contact>\n"
@@ -326,7 +326,7 @@ switch($prefix) {
         } else {
             $sterm = '%'.strtolower($sall).'%';
             $select     .= ',comments c';
-            $where      .= " AND c.book=b.id AND ( lower(c.text) LIKE '$sterm' OR lower(b.title) LIKE '$sterm' OR lower(a.name) LIKE '$term' )";
+            $where      .= " AND c.book=b.id AND ( lower(c.text) LIKE '$sterm' OR lower(b.title) LIKE '$sterm' OR lower(a.name) LIKE '$sterm' )";
             $searchvals .= '&amp;q='.urlencode($sall);
         }
         $select .= ' WHERE b.id=bl.book and a.id=bl.author '.$where;

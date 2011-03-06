@@ -55,6 +55,7 @@ class db extends DB_Sql {
     $publisher = array_unique($publisher);
     $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
     foreach($publisher AS $genre) {
+      $genre = $this->escape($genre);
       $this->query("INSERT INTO publishers(id,name) VALUES ($i,'$genre')");
       ++$i;
     }

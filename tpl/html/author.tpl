@@ -5,6 +5,7 @@
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
     <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?prefix=author_id&amp;query={aid}&amp;offset={offset}&amp;sort_order={sortorder}&amp;lang={lang}&amp;pageformat=opds">
+    <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
 </HEAD><BODY>
 
 <H1>{site_title} - {books_by_whom}</H1>

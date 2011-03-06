@@ -10,6 +10,7 @@ v1.3.0
 * wildcards ("*") in search terms truncated the whole term being treated as "vulnerable"
 + added ISBN-links to HTML version
 + more logging details on scan + webif
++ offering search-plugin to Firefox (so search can be triggered from its search bar)
 
 v1.2.0 (21.02.2011)
 -------------------
