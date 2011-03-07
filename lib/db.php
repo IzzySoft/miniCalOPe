@@ -16,6 +16,20 @@ class db extends DB_Sql {
     $this->Database = $dbfile;
   }
 
+  //==============================================================[ Helper ]===
+  /** Process a query making sure a faulty statement does not halt the engine
+   * @method private query_nohalt
+   * @param string sql SQL-Statement to process
+   * @return mixed QUERY_ID or FALSE
+   */
+  private function query_nohalt($sql) {
+    $halt = $this->Halt_On_Error;
+    $this->Halt_On_Error = 'no';
+    $rc = $this->query($sql);
+    $this->Halt_On_Error = $halt;
+    return $rc;
+  }
+
   //==========================================================[ DB Feeding ]===
   /** Truncate all tables. This is done prior to a new import.
    * @function truncAll
@@ -56,8 +70,14 @@ class db extends DB_Sql {
     $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
     foreach($publisher AS $genre) {
       $genre = $this->escape($genre);
-      $this->query("INSERT INTO publishers(id,name) VALUES ($i,'$genre')");
-      ++$i;
+      if ( $this->query_nohalt("SELECT id FROM publishers WHERE name='$genre'") ) {
+        if ( !$this->next_record() ) {
+          $this->query("INSERT INTO publishers(id,name) VALUES ($i,'$genre')");
+          ++$i;
+        }
+      } else {
+        $GLOBALS['logger']->error("SQL Error for publisher [$genre] (".$this->Error.")",$who);
+      }
     }
   }
 
@@ -157,11 +177,16 @@ class db extends DB_Sql {
       }
       // relation to publisher
       if ( isset($books[$name]['publisher']) ) {
-        $this->query("SELECT id FROM publishers WHERE name='".$books[$name]['publisher']."'");
-        if ( $this->next_record() ) {
-          $p_id = $this->f('id');
-          $this->query("INSERT INTO books_publishers_link(id,book,publisher) VALUES ($bp_id,$b_id,$p_id)");
-          ++$bp_id;
+        $publisher = $this->escape($books[$name]['publisher']);
+        if ( $this->query_nohalt("SELECT id FROM publishers WHERE name='$publisher'") ) {
+          if ( $this->next_record() ) {
+            $p_id = $this->f('id');
+            $this->query("INSERT INTO books_publishers_link(id,book,publisher) VALUES ($bp_id,$b_id,$p_id)");
+            ++$bp_id;
+          }
+        } else {
+          $GLOBALS['logger']->error("! SQL Error for publisher [".$books[$name]['publisher']."] (".$this->Error.")",'SCAN');
+          $GLOBALS['logger']->error("! (book: '$name', author: '".$books[$name]['author'][0].", genre: '".$books[$name]['genre']."')",$who);
         }
       }
       // relation to ratings
