@@ -4,7 +4,7 @@
       xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/">
 
   <id>{baseurl}{id}.opds</id>
-  <title>{title} von {author}</title>
+  <title>{title_by_author}</title>
   <subtitle>miniCalOPe.</subtitle>
   <updated>{pubdate}</updated>
 
@@ -59,13 +59,13 @@
 <!-- END serialblock -->
 
   <entry>
-    <title>{title}</title>
+    <title>{booktitle}</title>
     <id>urn:calibre:{id}</id>
     <updated>{pubdate}</updated>
     <published>{pubdate}</published>
     <!--rights>Gemeinfrei in den USA.</rights-->
     <author>
-      <name>{author}</name>
+      <name>{authorname}</name>
     </author>
     <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">

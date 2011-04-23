@@ -688,12 +688,14 @@ switch($prefix) {
             }
             if ( !empty($book['rating']) ) {
                 $t->set_var('data_name',trans('rating'));
-                $t->set_var('data_data','<IMG SRC="'.$relurl.'tpl/icons/rating_'.$book['rating'].'.gif" ALT="Rating '.$book['rating'].'">');
+                $t->set_var('data_data','<IMG SRC="'.$relurl.'tpl/icons/rating_'.$book['rating'].'.gif" ALT="Rating '.$book['rating'].'"/>');
                 $t->parse('data','datablock',TRUE);
             }
             $t->set_var("field_download",trans('download'));
             $t->set_var('id',$bookid);
             $t->set_var('title_by_author',trans('title_by_author',$book['title'],$author));
+            $t->set_var('booktitle',$book['title']); // used by OPDS only
+            $t->set_var('authorname',$author); // used by OPDS only
             $t->set_var('field_comment',trans('comment'));
             if ( empty($book['comment']) ) {
                 $t->set_var('comment',trans('not_available'));
