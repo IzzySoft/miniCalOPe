@@ -106,8 +106,13 @@ class db extends DB_Sql {
     $series = array_unique($series);
     $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
     foreach($series as $serie) {
-      $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
-      ++$i;
+      $ser = $this->escape($serie);
+      if ( $this->query_nohalt("SELECT id FROM series WHERE name='$ser'") ) {
+        $this->query("INSERT INTO series(id,name) VALUES ($i,'$ser')");
+        ++$i;
+      } else {
+        $GLOBALS['logger']->error("! SQL-Error processing series [$serie]: ".$this->Error);
+      }
     }
   }
 
@@ -136,7 +141,11 @@ class db extends DB_Sql {
         $bf .= ",$fn"; $bv .= ",'".$books[$name][$fn]."'";
       }
       if (isset($books[$name]['series_index'])) { $bf .= ",series_index"; $bv .= ",".$books[$name]['series_index']; }
-      $this->query("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")");
+      if ( !$this->query_nohalt("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")") ) {
+        $GLOBALS['logger']->error('! Error inserting book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")',$who);
+        $GLOBALS['logger']->error('! ('.$this->Error.')');
+        continue;
+      }
       // relation to authors
       $anames = '';
       $books[$name]['author'] = array_unique($books[$name]['author']);
@@ -168,7 +177,7 @@ class db extends DB_Sql {
       }
       // relation to series
       if ( isset($books[$name]['series']) ) {
-        $this->query("SELECT id FROM series WHERE name='".$books[$name]['series']."'");
+        $this->query_nohalt("SELECT id FROM series WHERE name='".$this->escape($books[$name]['series'])."'");
         if ( $this->next_record() ) {
           $s_id = $this->f('id');
           $this->query("INSERT INTO books_series_link(id,book,series) VALUES ($bs_id,$b_id,$s_id)");
