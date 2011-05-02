@@ -8,6 +8,7 @@ v1.4.0
 * some better input handling for DB storage (escaping etc.)
 ! book details page was broken for OPDS
 * scan no longer aborts when a book title failed (just logs the error and skips the book)
++ added simple XML check for description files
 
 v1.3.0 (06.03.2011)
 -------------------

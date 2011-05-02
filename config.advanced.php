@@ -23,6 +23,13 @@ $bookdesc_ext = array('desc');
 // file extension for Metadata
 $bookmeta_ext = 'data';
 
+#===============================[ Checking ]===
+// check for possible XML errors in description files and log them?
+$check_xml = TRUE;
+// as XML errors break OPDS, better skip the broken content.
+// Needs above check to be enabled in order to work.
+$skip_broken_xml = TRUE;
+
 #================================[ Logging ]===
 // Logfile to use. Empty means no logging to file.
 $logfile = './minicalope.log';

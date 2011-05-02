@@ -25,6 +25,7 @@ function scanFolder($dirname,$mode='dirs') {
     GLOBAL $bookformats, $bookdesc_ext;
     $dir = dir("$dirname");
     $list = array();
+    libxml_use_internal_errors(true); // enable error protocol for XML check
     while ( $file=$dir->read() ) {
       if ( in_array($file,array('.','..')) ) continue;
       $fullname = $dirname . DIRECTORY_SEPARATOR . $file;
@@ -41,8 +42,17 @@ function scanFolder($dirname,$mode='dirs') {
         $ext = substr($file,$pos+1);
         $nam = substr($file,0,$pos);
         if ( in_array($ext,$bookformats) ) $list[$nam]['files'][$ext] = $fullname;
-        elseif ( in_array($ext,$bookdesc_ext) ) $list[$nam]['desc'] = file_get_contents($fullname);
-        elseif ( $ext == $GLOBALS['bookmeta_ext'] ) {
+        elseif ( in_array($ext,$bookdesc_ext) ) {
+          $list[$nam]['desc'] = file_get_contents($fullname);
+          if ( $GLOBALS['check_xml'] && !empty($list[$nam]['desc']) ) {
+            $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$list[$nam]['desc']);
+            while ( preg_match_all("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",$foo,$matches) ) $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$foo); // nested?
+            if ( strpos($foo,'<')!==FALSE ) {
+              $GLOBALS['logger']->error("! Errors in '$fullname': Unmatched HTML tags",'SCAN');
+              if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
+            }
+          }
+        } elseif ( $ext == $GLOBALS['bookmeta_ext'] ) {
           $lines = explode( "\n", file_get_contents($fullname) );
           $i = 0;
           foreach($lines as $line) {
