@@ -47,6 +47,7 @@ function scanFolder($dirname,$mode='dirs') {
           if ( $GLOBALS['check_xml'] && !empty($list[$nam]['desc']) ) {
             $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$list[$nam]['desc']);
             while ( preg_match_all("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",$foo,$matches) ) $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$foo); // nested?
+            $foo = preg_replace("!(<([\w]+)[^>]*/>)!ims",'',$foo); // simple <TAG/>s
             if ( strpos($foo,'<')!==FALSE ) {
               $GLOBALS['logger']->error("! Errors in '$fullname': Unmatched HTML tags",'SCAN');
               if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
