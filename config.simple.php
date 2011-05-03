@@ -77,6 +77,5 @@ $email   = 'john@johndoe.com';
 
 #===========================[ stuff ]===
 $uselangs = array(); // empty = all
-$debug = FALSE;
 
 ?>

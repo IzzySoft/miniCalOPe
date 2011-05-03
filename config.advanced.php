@@ -97,7 +97,4 @@ switch ($use_lang) {
         break;
 }
 
-#===========================[ stuff ]===
-$debug = FALSE;
-
 ?>
