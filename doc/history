@@ -3,7 +3,7 @@ $Id$
 History for miniCalOPe
 ======================
 
-v1.4.0
+v1.4.0 (06.05.2011)
 -------------------
 * some better input handling for DB storage (escaping etc.)
 ! book details page was broken for OPDS
