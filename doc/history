@@ -3,6 +3,10 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.5.0
+-------------------
++ make it easy to add more book formats (definitions kept in lib/formats.csv)
+
 v1.4.0 (06.05.2011)
 -------------------
 * some better input handling for DB storage (escaping etc.)

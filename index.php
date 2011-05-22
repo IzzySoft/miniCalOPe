@@ -95,6 +95,7 @@ function get_idbyname($query,$nf,$name) {
 /** Get ISBNSearch URLs
  * @function get_isbnurls
  * @param string isbn ISBN to search for
+ * @return array
  */
 function get_isbnurls($isbn) {
    $csv = new csv(";",'"',TRUE,FALSE);
@@ -105,6 +106,20 @@ function get_isbnurls($isbn) {
      if ( in_array($data['name'],$GLOBALS['isbnservices']) ) {
        $list[] = array('name'=>$data['name'],'url'=>str_replace('{isbn}',$isbn,$data['url']));
      }
+   }
+   return $list;
+}
+
+/** Setup book formats (supported formats with mimetypes etc.)
+ * @function get_formats
+ * @return array formats
+ */
+function get_formats() {
+   $csv = new csv(";",'"',TRUE,FALSE);
+   $csv->import('./lib/formats.csv');
+   $list = array();
+   foreach ($csv->data as $data) {
+     $list[$data['name']] = array('mimetype'=>$data['mimetype'],'ftype_human'=>$data['ftype_human'],'ftitle'=>$data['ftitle']);
    }
    return $list;
 }
@@ -705,20 +720,15 @@ switch($prefix) {
             $t->set_var('pubdate',$book['pubdate']);
             $t->set_var('pubdate_human',$book['pubdate_human']);
             $more = FALSE;
+            $formats = get_formats();
             foreach ($files as $file) {
-                switch($file['format']) {
-                    case 'epub':
-                       $t->set_var('ftype','epub+zip');
-                       $t->set_var('ftype_human','ePub');
-                       $t->set_var('ftitle','EPUB');
-                       break;
-                    case 'mobi':
-                       $t->set_var('ftype','x-mobipocket-ebook');
-                       $t->set_var('ftype_human','MobiPocket');
-                       $t->set_var('ftitle','Kindle');
-                      break;
-                    default: break;
+                if ( empty($formats[$file['format']]) ) {
+                  $logger->error('Unsupported format "'.$file['format'].'" for book "'.$file['name'].'"','DETAILS');
+                  continue;
                 }
+                $t->set_var('ftype',$formats[$file['format']]['mimetype']);
+                $t->set_var('ftype_human',$formats[$file['format']]['ftype_human']);
+                $t->set_var('ftitle',$formats[$file['format']]['ftitle']);
                 $coverimg = $file['path'].DIRECTORY_SEPARATOR.substr($file['name'],0,strrpos($file['name'],'.')).'.jpg';
                 $t->set_var('flength',$file['size']);
                 $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
