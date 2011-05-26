@@ -6,6 +6,7 @@ History for miniCalOPe
 v1.5.0
 -------------------
 + make it easy to add more book formats (definitions kept in lib/formats.csv)
+! if client transmitted "lang=" (w/o specifying any lang), book download sent a different book than requested
 
 v1.4.0 (06.05.2011)
 -------------------

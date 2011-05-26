@@ -80,8 +80,8 @@ $email   = 'john@johndoe.com';
 # the $use_lang variable directly in your scan scripts for command-line use
 # (takes precedence), or pass "?lang=<lang>" in the URL.
 // check what language shall be used
-if ( !isset($use_lang) && isset($_REQUEST['lang']) ) $use_lang = $_REQUEST['lang'];
-elseif ( !isset($use_lang) ) $use_lang = '';
+if ( !isset($use_lang) && isset($_REQUEST['lang']) && !empty($_REQUEST['lang']) ) $use_lang = $_REQUEST['lang'];
+elseif ( empty($use_lang) ) $use_lang = 'de'; // define fallback to default lang
 // define language-specific settings
 switch ($use_lang) {
     case 'cal': // not a lang - but use the Calibre DB
