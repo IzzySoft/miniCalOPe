@@ -752,7 +752,13 @@ switch($prefix) {
             exit;
         // Send the requested book for download
         } elseif (isset($_REQUEST['action']) && $_REQUEST['action']=='getbook') { // bookid=req[book], req[format] = epub/mobi
-            $files = get_filenames($db,req_int('book'),req_word('format'));
+            $bname = req_alnum('name');
+            if ( empty($bname) ) $bookid = req_int('book');
+            else {
+                $sarr = get_idbyname('SELECT id FROM books WHERE','title',$bname);
+                $bookid = (int) $sarr['id'];
+            }
+            $files = get_filenames($db,$bookid,req_word('format'));
             $book  = $files[0]['path'].'/'.$files[0]['name'];
             if ($fd = fopen ($book,"rb")) {
                 if ( empty($dllogfile) ) { // log DL to default log if no special log is set up
@@ -760,10 +766,8 @@ switch($prefix) {
                 } else {
                     $dllogger->info($book,'DOWNLOAD');
                 }
-                switch($files[0]['format']) {
-                    case 'epub': header("Content-type: application/epub+zip"); break;
-                    case 'mobi': header("Content-type: application/x-mobipocket-ebook"); break;
-                }
+                $fformats = get_formats();
+                header("Content-type: ".$fformats[$files[0]['format']]['mimetype']);
                 header("Content-Disposition: attachment; filename=\"".$files[0]['name']."\"");
                 header("Content-length: ".$files[0]['size']);
                 fpassthru($fd);

@@ -7,6 +7,8 @@ v1.5.0
 -------------------
 + make it easy to add more book formats (definitions kept in lib/formats.csv)
 ! if client transmitted "lang=" (w/o specifying any lang), book download sent a different book than requested
+! PDF was using wrong mimetype on download
+! download did not consider the "name" url parameter
 
 v1.4.0 (06.05.2011)
 -------------------
