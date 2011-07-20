@@ -1,5 +1,5 @@
 "name";"url";"comment"
-"Amazon.DE";"http://www.willamovius.de/perl/isbn-search.pl?isbn={isbn}";""
+"Amazon.DE";"http://www.amazon.de/s/url=search-alias=aps&field-keywords={isbn}";""
 "Amazon.COM";"http://www.amazon.com/s/url=search-alias=aps&field-keywords={isbn}";""
 "Bookzilla.DE";"http://www.bookzilla.de/shop/action/quickSearch?searchString={isbn}";""
 "Buchhandel.DE";"http://vlb-public.bvdep.com/?caller=vlbPublic&strFrame=titelsuche&isbn={isbn}";"All books available in German book trade"
