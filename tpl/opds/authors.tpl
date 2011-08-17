@@ -28,6 +28,9 @@
   <link rel="search"
         type="application/opensearchdescription+xml"
         href="{baseurl}?lang={lang}&amp;prefix=ods"/>
+  <link rel="search"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
 
 
   <title>{author_list}</title>

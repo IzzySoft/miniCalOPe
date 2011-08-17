@@ -15,13 +15,15 @@
     <email>{email}</email>
   </author>
 
-  <!--link rel="search" type="application/opensearchdescription+xml" title="Catalog Search" href="{baseurl}osd-authors.xml"/-->
   <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?prefix=titels&amp;sort_order={sortorder}&amp;offset={offset}"/>
   <link rel="search"
         type="application/opensearchdescription+xml"
         href="{baseurl}?lang={lang}&amp;prefix=ods"/>
+  <link rel="search"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
 <!-- BEGIN prevblock -->
   <link rel="first" title="{first_page}" type="application/atom+xml" href="{baseurl}?prefix={prefix}{searchvals}&amp;sort_order={sortorder}&amp;offset=0"/>
   <link rel="previous" title="{prev_page}" type="application/atom+xml" href="{baseurl}?prefix={prefix}{searchvals}&amp;sort_order={sortorder}&amp;offset={poffset}"/>

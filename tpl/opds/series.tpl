@@ -15,7 +15,6 @@
     <email>{email}</email>
   </author>
 
-  <!--link rel="search" type="application/opensearchdescription+xml" title="Catalog Search" href="{baseurl}osd-tags.xml"/-->
   <link rel="self" title="{this_page}"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?prefix=series&amp;sort_order=downloads&amp;lang={lang}"/>
@@ -35,6 +34,9 @@
   <link rel="search"
         type="application/opensearchdescription+xml"
         href="{baseurl}?lang={lang}&amp;prefix=ods"/>
+  <link rel="search"
+        type="application/atom+xml;profile=opds-catalog"
+        href="{baseurl}?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
   <link rel="alternate" title="{sort_alpha}" type="application/atom+xml" href="{baseurl}?prefix=series&amp;sort_order=title&amp;lang={lang}"/>
   <link rel="http://opds-spec.org/sort/numerous" title="{sort_bookcount}" type="application/atom+xml" href="{baseurl}?prefix=series&amp;sort_order=books&amp;lang={lang}"/>
 
