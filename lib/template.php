@@ -307,7 +307,9 @@ class Template {
   function finish($str) {
     switch ($this->unknowns) {
       case "keep": break;
-      case "remove": $str = preg_replace('/{[^ \t\r\n}]+}/', "", $str);
+      case "remove": $str = str_replace('{searchTerms}','[[[searchTerms]]]',$str);
+                     $str = preg_replace('/{[^ \t\r\n}]+}/', "", $str);
+                     $str = str_replace('[[[searchTerms]]]','{searchTerms}',$str);
                      break;
       case "comment": $str = preg_replace('/{([^ \t\r\n}]+)}/', "<!-- Template $handle: Variable \\1 undefined -->", $str);
                      break;
