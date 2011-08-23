@@ -104,7 +104,11 @@ function get_isbnurls($isbn) {
    $isbn = preg_replace('![^0-9]!','',$isbn);
    foreach ($csv->data as $data) {
      if ( in_array($data['name'],$GLOBALS['isbnservices']) ) {
-       $list[] = array('name'=>$data['name'],'url'=>str_replace('{isbn}',$isbn,$data['url']));
+       $url = str_replace('{isbn}',$isbn,$data['url']);
+       if (preg_match('!^http://www\.amazon\.!i',$data['url'])) {
+         $url = str_replace('{amazonID}',$GLOBALS['amazonID'],$url);
+       }
+       $list[] = array('name'=>$data['name'],'url'=>$url);
      }
    }
    return $list;

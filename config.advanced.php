@@ -70,10 +70,11 @@ $wikibase= 'http://de.wikipedia.org/wiki/';
 $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
 
 #============================[ Person Info ]===
-// about you: Name, Homepage, Email
+// about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)
 $owner   = 'John Doe';
 $homepage= 'http://www.johndoe.com/';
 $email   = 'john@johndoe.com';
+$amazonID='';
 
 #=========================[ Language dependent stuff ]===
 # Here we make use of the language-specific directories. You either can set

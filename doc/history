@@ -3,6 +3,10 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.6.0
+-------------------
++ Support for Amazon Partner-ID in ISBN-Links
+
 v1.5.0
 -------------------
 + make it easy to add more book formats (definitions kept in lib/formats.csv)
