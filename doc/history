@@ -6,6 +6,7 @@ History for miniCalOPe
 v1.6.0
 -------------------
 + Support for Amazon Partner-ID in ISBN-Links
++ added check for unencoded '&' in HREFs (when check_xml enabled)
 
 v1.5.0
 -------------------

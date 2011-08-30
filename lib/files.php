@@ -45,12 +45,18 @@ function scanFolder($dirname,$mode='dirs') {
         elseif ( in_array($ext,$bookdesc_ext) ) {
           $list[$nam]['desc'] = file_get_contents($fullname);
           if ( $GLOBALS['check_xml'] && !empty($list[$nam]['desc']) ) {
+            // check for unmatched HTML tags
             $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$list[$nam]['desc']);
             while ( preg_match_all("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",$foo,$matches) ) $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$foo); // nested?
             $foo = preg_replace("!(<([\w]+)[^>]*/>)!ims",'',$foo); // simple <TAG/>s
             if ( strpos($foo,'<')!==FALSE ) {
               $GLOBALS['logger']->error("! Errors in '$fullname': Unmatched HTML tags",'SCAN');
               if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
+            }
+            // check for unencoded '&' in HREFs
+            preg_match_all('!href=(["\'])([^\1]+)\1!ims',$list[$nam]['desc'],$matches);
+            foreach ($matches[2] as $match) if ( preg_match('@\&(?!amp;)@',$match) ) {
+              $GLOBALS['logger']->error("! Errors in '$fullname': unencoded '&' in URL",'SCAN');
             }
           }
         } elseif ( $ext == $GLOBALS['bookmeta_ext'] ) {
