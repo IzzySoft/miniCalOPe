@@ -54,7 +54,7 @@ function scanFolder($dirname,$mode='dirs') {
               if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
             }
             // check for unencoded '&' in HREFs
-            preg_match_all('!href=(["\'])([^\1]+)\1!ims',$list[$nam]['desc'],$matches);
+            preg_match_all('!href=(["\'])([^\1]+?)\1!ims',$list[$nam]['desc'],$matches);
             foreach ($matches[2] as $match) if ( preg_match('@\&(?!amp;)@',$match) ) {
               $GLOBALS['logger']->error("! Errors in '$fullname': unencoded '&' in URL",'SCAN');
             }
