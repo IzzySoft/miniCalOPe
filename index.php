@@ -666,6 +666,7 @@ switch($prefix) {
             $t->set_block('template','datablock','data');
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
+            $t->set_block('template','fakecoverblock','fakecover');
             set_basics($t);
             $t->set_var('back_to_authors',trans('back_to_authors'));
             $t->set_var('data_name',trans('title'));
@@ -713,8 +714,8 @@ switch($prefix) {
             $t->set_var("field_download",trans('download'));
             $t->set_var('id',$bookid);
             $t->set_var('title_by_author',trans('title_by_author',$book['title'],$author));
-            $t->set_var('booktitle',$book['title']); // used by OPDS only
-            $t->set_var('authorname',$author); // used by OPDS only
+            $t->set_var('booktitle',$book['title']); // used by OPDS only + fakecover
+            $t->set_var('authorname',$author); // used by OPDS only + fakecover
             $t->set_var('field_comment',trans('comment'));
             if ( empty($book['comment']) ) {
                 $t->set_var('comment',trans('not_available'));
@@ -751,6 +752,8 @@ switch($prefix) {
                 $t->set_var('cover_src',$coverimg);
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');
+            } elseif ($cover_fake_fallback) {
+                $t->parse('fakecover','fakecoverblock');
             }
             $t->pparse("out","template");
             exit;

@@ -7,6 +7,7 @@ v1.6.0
 -------------------
 + Support for Amazon Partner-ID in ISBN-Links
 + added check for unencoded '&' in HREFs (when check_xml enabled)
++ optionally generating fake covers if no cover image available (HTML only)
 
 v1.5.0
 -------------------

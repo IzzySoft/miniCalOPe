@@ -24,6 +24,12 @@
 <!-- BEGIN coverblock -->
         <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
 <!-- END coverblock -->
+<!-- BEGIN fakecoverblock -->
+        <DIV CLASS='CoverBlank'><DIV CLASS='innerBorder'><DIV CLASS='BookTitle'>
+            {booktitle}
+            <DIV CLASS='Author'>{authorname}</DIV>
+        </DIV></DIV></DIV>
+<!-- END fakecoverblock -->
         </TD><TD>
 <!-- BEGIN datablock -->
         <p><b>{data_name}:</b> {data_data}</p>

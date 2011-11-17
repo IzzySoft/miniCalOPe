@@ -83,6 +83,9 @@
     <link type="image/{cover_type}" href="{baseurl}{cover_src}" rel="http://opds-spec.org/cover" />
     <link type="image/{cover_type}" href="{baseurl}{cover_src}" rel="http://opds-spec.org/image" />
 <!-- END coverblock -->
+<!-- BEGIN fakecoverblock -->
+
+<!-- END fakecoverblock -->
     <link type="image/png" href="{relurl}tpl/icons/book.png" rel="http://opds-spec.org/image/thumbnail"/>
 <!-- BEGIN itemblock -->
     <link type="application/{ftype}" rel="http://opds-spec.org/acquisition" title="{ftitle}" length="{flength}" href="{baseurl}?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}"/>
