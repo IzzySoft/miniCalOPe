@@ -52,6 +52,8 @@ $cover_mode = 'off';
 $cover_width = '200px';
 // where to place the cover img links
 $cover_base = 'covers';
+// generate fake-covers when no real img available (HTML only)?
+$cover_fake_fallback = TRUE;
 
 #============================[ Web Service ]===
 // Timezone

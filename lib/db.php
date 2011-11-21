@@ -119,7 +119,7 @@ class db extends DB_Sql {
   /** Feed the books into the database
    * @function make_books
    * @param array books array[string bookname] w/ props str lang, str genre, array tag, array author,
-   *        str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
+   *        str title, str series, str series_index, str rating, str publisher, str isbn, array files[str type]=str filename
    * @param optional string who Calling mod (for logging) - defaults to SCAN
    */
   function make_books($books,$who='SCAN') {
@@ -141,7 +141,9 @@ class db extends DB_Sql {
         $bf .= ",$fn"; $bv .= ",'".$books[$name][$fn]."'";
       }
       if (isset($books[$name]['series_index'])) { $bf .= ",series_index"; $bv .= ",".$books[$name]['series_index']; }
-      if ( !$this->query_nohalt("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$name','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")") ) {
+      if ( empty($books[$name]['title']) ) $btitle = $name;
+      else $btitle = $books[$name]['title'];
+      if ( !$this->query_nohalt("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$btitle','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")") ) {
         $GLOBALS['logger']->error('! Error inserting book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")',$who);
         $GLOBALS['logger']->error('! ('.$this->Error.')');
         continue;

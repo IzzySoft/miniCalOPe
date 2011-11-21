@@ -71,6 +71,7 @@ function scanFolder($dirname,$mode='dirs') {
             $tmp[0] = strtolower($tmp[0]);
             if ( in_array($tmp[0],array('author','tag')) ) $list[$nam][$tmp[0]][] = $tmp[1];
             elseif ( in_array($tmp[0],array('series','series_index','rating','publisher','isbn','uri')) ) $list[$nam][$tmp[0]] = $tmp[1];
+            elseif ( in_array($tmp[0],array('title','titel')) ) $list[$nam]['title'] = $tmp[1];
             else $GLOBALS['logger']->notice("Cannot find keyword in line $i of file '$fullname' [$line]",'SCAN');
           }
           if ( !empty($list[$nam]['series_index']) && !is_numeric($list[$nam]['series_index']) ) {
