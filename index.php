@@ -101,10 +101,37 @@ function get_isbnurls($isbn) {
    $csv = new csv(";",'"',TRUE,FALSE);
    $csv->import('./lib/isbnsearch.csv');
    $list = array();
-   $isbn = preg_replace('![^0-9]!','',$isbn);
+   $isbn = preg_replace('![^0-9X]!','',$isbn);
    foreach ($csv->data as $data) {
      if ( in_array($data['name'],$GLOBALS['isbnservices']) ) {
        $url = str_replace('{isbn}',$isbn,$data['url']);
+       if (preg_match('!^http://www\.amazon\.!i',$data['url'])) {
+         $url = str_replace('{amazonID}',$GLOBALS['amazonID'],$url);
+       }
+       $list[] = array('name'=>$data['name'],'url'=>$url);
+     }
+   }
+   return $list;
+}
+
+/** Get BookSearch URLs
+ * @function get_booksearchurls
+ * @param string auth author to search for
+ * @param string titl title to search for
+ * @return array
+ */
+function get_booksearchurls($auth,$titl) {
+   $csv = new csv(";",'"',TRUE,FALSE);
+   $csv->import('./lib/booksearch.csv');
+   $list = array();
+   $full = urlencode("${auth} ${titl}");
+   $auth = urlencode($auth);
+   $titl = urlencode($titl);
+   foreach ($csv->data as $data) {
+     if ( in_array($data['name'],$GLOBALS['booksearchservices']) ) {
+       $url = str_replace('{author}',$auth,$data['url']);
+       $url = str_replace('{title}',$titl,$url);
+       $url = str_replace('{fulltext}',$full,$url);
        if (preg_match('!^http://www\.amazon\.!i',$data['url'])) {
          $url = str_replace('{amazonID}',$GLOBALS['amazonID'],$url);
        }
@@ -687,6 +714,15 @@ switch($prefix) {
                 $more = TRUE;
             }
             foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
+                if ($field=='tags' && $pageformat=='html') { // this should follow the ISBNs
+                  $iurls = get_booksearchurls(str_replace(',',' ',$author),$book['title']);
+                  $text  = "<SPAN ID='booksearch'>";
+                  foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
+                  $text .= "</SPAN>";
+                  $t->set_var('data_name',trans('title_websearch'));
+                  $t->set_var('data_data',$text);
+                  $t->parse('data','datablock',TRUE);
+                }
                 if ( empty($book[$field]) ) continue;
                 if ($field=='series') $t->set_var('data_name',trans('serie'));
                 else $t->set_var('data_name',trans($field));

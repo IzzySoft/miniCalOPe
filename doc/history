@@ -9,6 +9,7 @@ v1.6.0
 + added check for unencoded '&' in HREFs (when check_xml enabled)
 + optionally generating fake covers if no cover image available (HTML only)
 + added "title" attribute to *.data files to specify books title (if differing from file name)
++ added title search links to HTML view (to search for the selected book by author + title)
 
 v1.5.0
 -------------------
