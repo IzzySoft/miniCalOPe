@@ -10,6 +10,7 @@ v1.6.0
 + optionally generating fake covers if no cover image available (HTML only)
 + added "title" attribute to *.data files to specify books title (if differing from file name)
 + added title search links to HTML view (to search for the selected book by author + title)
++ added check (and "auto-repair") for unescaped & in descriptions (to prevent trouble with XML)
 
 v1.5.0
 -------------------

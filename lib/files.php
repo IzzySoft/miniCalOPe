@@ -53,7 +53,12 @@ function scanFolder($dirname,$mode='dirs') {
               $GLOBALS['logger']->error("! Errors in '$fullname': Unmatched HTML tags",'SCAN');
               if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
             }
-            // check for unencoded '&' in HREFs
+            // Check for unencoded '&' and fix them up
+            if ( preg_match('@\&(?!amp;)@m',$list[$nam]['desc']) ) {
+              $GLOBALS['logger']->debug("! fixing unescaped & in '$fullname'",'SCAN');
+              $list[$nam]['desc'] = preg_replace('@\&(?!amp;)@ms','&amp;',$list[$nam]['desc']);
+            }
+            // check for unencoded '&' in HREFs -- obsoleted by previous step?
             preg_match_all('!href=(["\'])([^\1]+?)\1!ims',$list[$nam]['desc'],$matches);
             foreach ($matches[2] as $match) if ( preg_match('@\&(?!amp;)@',$match) ) {
               $GLOBALS['logger']->error("! Errors in '$fullname': unencoded '&' in URL",'SCAN');
@@ -78,6 +83,10 @@ function scanFolder($dirname,$mode='dirs') {
             $GLOBALS['logger']->warn("! series_index must be integer - got '".$list[$nam]['series_index']."' in '$fullname' - ignoring it",'SCAN');
             unset($list[$nam]['series_index']);
             unset($list[$nam]['series']);
+          }
+          if ( !empty($list[$nam]['publisher']) && preg_match('@\&(?!amp;)@m',$list[$nam]['publisher']) ) { // unescaped & cause trouble in XML
+            $GLOBALS['logger']->debug("! unescaped & for publisher (".$list[$nam]['publisher'].") in '$fullname', trying to auto-fix",'SCAN');
+            $list[$nam]['publisher'] = preg_replace('@\&(?!amp;)@ms','&amp;',$list[$nam]['publisher']);
           }
         }
         $lastmod = filemtime($fullname);
