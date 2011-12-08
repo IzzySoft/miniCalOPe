@@ -70,4 +70,6 @@ img { border:0; vertical-align:middle; }
   padding:8px 4px 0;
   font-size:12px;
   font-weight: normal;
+  position:absolute;
+  bottom: 0;
 }
