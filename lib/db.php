@@ -141,8 +141,8 @@ class db extends DB_Sql {
         $bf .= ",$fn"; $bv .= ",'".$books[$name][$fn]."'";
       }
       if (isset($books[$name]['series_index'])) { $bf .= ",series_index"; $bv .= ",".$books[$name]['series_index']; }
-      if ( empty($books[$name]['title']) ) $btitle = $name;
-      else $btitle = $books[$name]['title'];
+      if ( empty($books[$name]['title']) ) $btitle = $this->escape($name);
+      else $btitle = $this->escape($books[$name]['title']);
       if ( !$this->query_nohalt("INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$btitle','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")") ) {
         $GLOBALS['logger']->error('! Error inserting book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")',$who);
         $GLOBALS['logger']->error('! ('.$this->Error.')');

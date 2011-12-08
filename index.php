@@ -743,11 +743,11 @@ switch($prefix) {
             }
             if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
             $cover_type = 'jpeg';
-            if ( !file_exists($coverimg) ) {
+            if ( !empty($coverimg) && !file_exists($coverimg) ) {
               $coverimg = preg_replace('!jpg$!','png',$coverimg);
               $cover_type = 'png';
             }
-            if ( file_exists($coverimg) && is_readable($coverimg) ) {
+            if ( !empty($coverimg) && file_exists($coverimg) && is_readable($coverimg) ) {
                 $t->set_var('cover_type',$cover_type);
                 $t->set_var('cover_src',$coverimg);
                 $t->set_var('cover_width',$cover_width);

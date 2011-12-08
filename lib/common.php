@@ -82,7 +82,7 @@ function req_alnumwild($name,$default='') {
     return $default;
   }
   if ( preg_match('![^\w\s\*\%\?_-\pL]!u',$_REQUEST[$name],$match) ) {
-    $GLOBALS['logger']->warn("Rejecting input '".$_REQUEST['name']."' for '$name'",'VERIFY');
+    $GLOBALS['logger']->warn("Rejecting input '".$_REQUEST[$name]."' for '$name'",'VERIFY');
     return $default;
   }
   return $_REQUEST[$name];
