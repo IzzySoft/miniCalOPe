@@ -70,6 +70,9 @@ $perpage = 25;
 $wikibase= 'http://de.wikipedia.org/wiki/';
 // Enable some ISBN searches (empty array to disable this feature)
 $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
+// Enable some book search services (search by author and title of the selected book;
+// empty array to disable this feature)
+$booksearchservices = array('Amazon.DE','Bookzilla.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
 
 #============================[ Person Info ]===
 // about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)
