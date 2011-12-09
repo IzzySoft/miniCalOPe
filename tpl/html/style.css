@@ -63,7 +63,6 @@ img { border:0; vertical-align:middle; }
   font-size: 14px;
   font-weight: bold;
   color:#333;
-  text-align:center;
 }
 .CoverBlank .Author {
   color:#666;
@@ -73,5 +72,5 @@ img { border:0; vertical-align:middle; }
   font-weight: normal;
   position:absolute;
   bottom: 0;
-  text-align:center;
+  width:100%;
 }
