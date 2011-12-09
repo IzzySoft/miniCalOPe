@@ -124,7 +124,7 @@ class db extends DB_Sql {
    */
   function make_books($books,$who='SCAN') {
     $GLOBALS['logger']->info('  + Inserting Books ('.count($books).')',$who);
-    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0;
+    $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0; $d_id=0;
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !isset($books[$name]['files']) || !is_array($books[$name]['files']) ) {
@@ -147,6 +147,11 @@ class db extends DB_Sql {
         $GLOBALS['logger']->error('! Error inserting book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")',$who);
         $GLOBALS['logger']->error('! ('.$this->Error.')');
         continue;
+      }
+      // ebook files
+      foreach($books[$name]['files'] as $var=>$val) {
+        $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES ($d_id,$b_id,'$var',".filesize($val).",'$name')");
+        ++$d_id;
       }
       // relation to authors
       $anames = '';
@@ -212,6 +217,7 @@ class db extends DB_Sql {
       }
       ++$b_id;
     }
+    $GLOBALS['logger']->info("    (Inserted $d_id eBook files along)",$who);
   }
 
 }
