@@ -16,7 +16,7 @@
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix={prefix}&amp;sort_order=name{searchvals}'><IMG ALT='alpha' SRC='{relurl}tpl/icons/authors.png'> {sort_author}</A></TD></TR>
     <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix={prefix}&amp;sort_order=time{searchvals}'><IMG ALT='alpha' SRC='{relurl}tpl/icons/date.png'> {sort_date}</A></TD></TR>
 <!-- BEGIN itemblock -->
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;action=bookdetails&amp;book={bid}'><IMG ALT='book' SRC='{cover_thumb}'> {title}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;action=bookdetails&amp;book={bid}'><IMG ALT='book' SRC='{relurl}tpl/icons/book.png'> {title}</A></TD></TR>
 <!-- END itemblock -->
     <TR><TD COLSPAN='2'>&nbsp;</TD></TR>
     <TR><TD>

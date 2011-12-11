@@ -7,6 +7,7 @@ v1.7.0
 -------------------
 ! the alternate "title" (from *.data) broke the download, as title was used to check the filename
 ! last change of get_filenames() broke eBook download (extension was lost)
+* in places where lists could be ordered by date/time, inverted the order to show newest entries first
 
 v1.6.0 (08.12.2011)
 -------------------

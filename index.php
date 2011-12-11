@@ -341,7 +341,7 @@ switch($prefix) {
         switch($sortorder) {
             case 'title': $order = ' ORDER BY b.title'; $sortorder='title'; break;
             case 'name' : $order = ' ORDER BY a.name'; $sortorder='name'; break;
-            case 'time' : $order = ' ORDER BY b.timestamp'; $sortorder='time'; break;
+            case 'time' : $order = ' ORDER BY b.timestamp DESC'; $sortorder='time'; break;
             default     : $order = ''; $sortorder=''; break;
         }
         $select = 'SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a';
@@ -445,7 +445,7 @@ switch($prefix) {
         $sortorder = req_word('sort_order');
         switch($sortorder) {
             case 'title': $order = ' ORDER BY title'; $sortorder='title'; break;
-            case 'date' : $order = ' ORDER BY timestamp'; $sortorder='date'; break;
+            case 'date' : $order = ' ORDER BY timestamp DESC'; $sortorder='date'; break;
             default     : $order = '';
         }
         $all = $db->lim_query('SELECT id,title,isbn,timestamp FROM books WHERE id IN (SELECT book FROM books_authors_link WHERE author='.$aid.')'.$order, $offset, $perpage);
@@ -468,7 +468,7 @@ switch($prefix) {
         switch($sortorder) {
             case 'title': $order = ' ORDER BY b.title'; $sortorder='title'; break;
             case 'name' : $order = ' ORDER BY a.name'; $sortorder='name'; break;
-            case 'time' : $order = ' ORDER BY b.timestamp'; $sortorder='time'; break;
+            case 'time' : $order = ' ORDER BY b.timestamp DESC'; $sortorder='time'; break;
             default     : $order = ''; $sortorder=''; break;
         }
         $all = $db->lim_query('SELECT b.id,b.title,b.isbn,a.name,b.timestamp FROM books b,books_authors_link bl,authors a WHERE b.id=bl.book and a.id=bl.author '.$order, $offset, $perpage);
