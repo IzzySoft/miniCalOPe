@@ -798,7 +798,7 @@ switch($prefix) {
                 $bookid = (int) $sarr['id'];
             }
             $files = get_filenames($db,$bookid,req_word('format'));
-            $book  = $files[0]['path'].'/'.$files[0]['name'];
+            $book  = $files[0]['path'].'/'.$files[0]['name'].'.'.strtolower($files[0]['format']);
             if ($fd = fopen ($book,"rb")) {
                 if ( empty($dllogfile) ) { // log DL to default log if no special log is set up
                     $logger->info($book,'DOWNLOAD');
