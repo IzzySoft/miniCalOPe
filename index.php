@@ -766,7 +766,7 @@ switch($prefix) {
                 $t->set_var('ftype',$formats[$file['format']]['mimetype']);
                 $t->set_var('ftype_human',$formats[$file['format']]['ftype_human']);
                 $t->set_var('ftitle',$formats[$file['format']]['ftitle']);
-                $coverimg = $file['path'].DIRECTORY_SEPARATOR.substr($file['name'],0,strrpos($file['name'],'.')).'.jpg';
+                $coverimg = $file['path'].DIRECTORY_SEPARATOR.$file['name'].'.jpg';
                 $t->set_var('flength',$file['size']);
                 $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
                 $t->set_var('format',$file['format']);

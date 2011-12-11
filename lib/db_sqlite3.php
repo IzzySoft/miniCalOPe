@@ -251,7 +251,7 @@ class DB_Sql {
   function p($Name) {
     print $this->Record[$Name];
   }
-  
+
   function halt($msg) {
     if ("no" == $this->Halt_On_Error)
       return;
@@ -265,6 +265,13 @@ class DB_Sql {
   function haltmsg($msg) {
     printf("<p><b>Database error:</b> %s<br>\n", $msg);
     printf("<b>SQLite3 Error</b> %s</p>\n", $this->Error);
+    $bt = debug_backtrace();
+    $btl = count($bt);
+    echo("<P><b>Backtrace:</b></P><pre>");
+    for ($i=2;$i<=$btl;++$i) { // 0=here, 1=query which is already reported above
+      echo "  [".$bt[$i]['file'].":".$bt[$i]['line']."] in function '".$bt[$i]['function']."()'\n";
+    }
+    echo "</pre>\n";
   }
 
   /** Retrieve all table names

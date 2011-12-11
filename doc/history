@@ -6,6 +6,7 @@ History for miniCalOPe
 v1.7.0
 -------------------
 ! the alternate "title" (from *.data) broke the download, as title was used to check the filename
+! last change of get_filenames() broke eBook download (extension was lost)
 
 v1.6.0 (08.12.2011)
 -------------------
