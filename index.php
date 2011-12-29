@@ -807,8 +807,8 @@ switch($prefix) {
                 }
                 $fformats = get_formats();
                 header("Content-type: ".$fformats[$files[0]['format']]['mimetype']);
-                header("Content-Disposition: attachment; filename=\"".$files[0]['name']."\"");
-                header("Content-length: ".$files[0]['size']);
+                header("Content-Disposition: attachment; filename=\"".$files[0]['name'].'.'.strtolower($files[0]['format']."\""));
+                header("Content-length: ".filesize($book));
                 fpassthru($fd);
                 fclose($fd);
                 exit;
