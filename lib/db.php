@@ -150,7 +150,7 @@ class db extends DB_Sql {
       }
       // ebook files
       foreach($books[$name]['files'] as $var=>$val) {
-        $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES ($d_id,$b_id,'$var',".filesize($val).",'$name')");
+        $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES ($d_id,$b_id,'$var',".filesize($val).",'".$books[$name]['fbasename']."')");
         ++$d_id;
       }
       // relation to authors
