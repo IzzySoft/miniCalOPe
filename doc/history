@@ -9,6 +9,7 @@ v1.7.0
   database not (yet) updated, as Content-Length (from database) did no longer match.
   To prevent this (admittedly rare cases), for Content-Length we revert to filesize()
 ! if multiple books had the same filename, scan only got the last one
++ SCAN: placing inserts into transactions (speedup inserts by factor 20!)
 
 v1.6.3 (19.12.2011)
 -------------------

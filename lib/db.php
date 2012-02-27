@@ -53,10 +53,12 @@ class db extends DB_Sql {
     $genres = array_unique($genres);
     $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     $i=0;
+    $this->query('BEGIN TRANSACTION');
     foreach($genres AS $genre) {
       $this->query("INSERT INTO tags(id,name) VALUES ($i,'$genre')");
       ++$i;
     }
+    $this->query('COMMIT TRANSACTION');
   }
 
   /** Feed the publisher into the database
@@ -68,6 +70,7 @@ class db extends DB_Sql {
     $i=0;
     $publisher = array_unique($publisher);
     $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
+    $this->query('BEGIN TRANSACTION');
     foreach($publisher AS $genre) {
       $genre = $this->escape($genre);
       if ( $this->query_nohalt("SELECT id FROM publishers WHERE name='$genre'") ) {
@@ -79,6 +82,7 @@ class db extends DB_Sql {
         $GLOBALS['logger']->error("SQL Error for publisher [$genre] (".$this->Error.")",$who);
       }
     }
+    $this->query('COMMIT TRANSACTION');
   }
 
   /** Feed the authors into the database
@@ -90,10 +94,12 @@ class db extends DB_Sql {
     $authors = array_unique($authors);
     $GLOBALS['logger']->info('  + Inserting Authors ('.count($authors).')',$who);
     $i=0;
+    $this->query('BEGIN TRANSACTION');
     foreach($authors AS $author) {
       $this->query("INSERT INTO authors(id,name) VALUES ($i,'$author')");
       ++$i;
     }
+    $this->query('COMMIT TRANSACTION');
   }
 
   /** Feed the series into the database
@@ -105,6 +111,7 @@ class db extends DB_Sql {
     $i=0;
     $series = array_unique($series);
     $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
+    $this->query('BEGIN TRANSACTION');
     foreach($series as $serie) {
       $ser = $this->escape($serie);
       if ( $this->query_nohalt("SELECT id FROM series WHERE name='$ser'") ) {
@@ -114,6 +121,7 @@ class db extends DB_Sql {
         $GLOBALS['logger']->error("! SQL-Error processing series [$serie]: ".$this->Error);
       }
     }
+    $this->query('COMMIT TRANSACTION');
   }
 
   /** Feed the books into the database
@@ -125,6 +133,7 @@ class db extends DB_Sql {
   function make_books($books,$who='SCAN') {
     $GLOBALS['logger']->info('  + Inserting Books ('.count($books).')',$who);
     $b_id=0; $ba_id=0; $bt_id=0; $bs_id=0; $bp_id=0; $br_id=0; $c_id=0; $d_id=0;
+    $this->query('BEGIN TRANSACTION');
     foreach($books as $name=>$dummy) {
       $a_id=array(); $t_id=array();
       if ( !isset($books[$name]['files']) || !is_array($books[$name]['files']) ) {
@@ -217,6 +226,7 @@ class db extends DB_Sql {
       }
       ++$b_id;
     }
+    $this->query('COMMIT TRANSACTION');
     $GLOBALS['logger']->info("    (Inserted $d_id eBook files along)",$who);
   }
 
