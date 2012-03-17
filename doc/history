@@ -10,6 +10,10 @@ v1.7.0
   To prevent this (admittedly rare cases), for Content-Length we revert to filesize()
 ! if multiple books had the same filename, scan only got the last one
 + SCAN: placing inserts into transactions (speedup inserts by factor 20!)
++ SCAN: added 'merge' mode (still experimental). Using this the scan process tries
+  to figure out what has changed, and merge in these changes - as opposed to the
+  'rebuild' (as used up to now) which simply drops all information and builds all
+  up from the scratch
 
 v1.6.3 (19.12.2011)
 -------------------

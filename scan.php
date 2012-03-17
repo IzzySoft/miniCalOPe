@@ -34,7 +34,7 @@ $publisher = array();
 
 #===========================================================[ Collect data ]===
 // Go for the languages available
-$logger->info("Scanning $bookroot",'SCAN');
+$logger->info("Scanning $bookroot [MODE=$scan_dbmode]",'SCAN');
 $logger->debug("use_lang: $use_lang",'SCAN');
 $logger->debug("Languages: ".implode(', ',$uselangs),'SCAN');
 $logger->debug("DBFile: $dbfile",'SCAN');

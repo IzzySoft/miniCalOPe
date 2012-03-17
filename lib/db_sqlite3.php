@@ -104,6 +104,7 @@ class DB_Sql {
        */
       return 0;
     $this->connect();
+    //$this->qlog .= "$Query_String;\n";
     if ($this->AdjustQuotes) $Query_String = str_replace("\\'","''",str_replace('\\"','""',$Query_String));
     if (strpos(strtolower(trim($Query_String)),"select")===0)
       $this->Query_ID = sqlite3_query($this->Link_ID,$Query_String);
@@ -205,7 +206,7 @@ class DB_Sql {
    * @return integer affected rows
    */
   function affected_rows() {
-    return sqlite3_changes();
+    return sqlite3_changes($this->Link_ID);
   }
 
   /** Evaluate the result for SELECT operation (row count)
@@ -263,6 +264,7 @@ class DB_Sql {
   }
 
   function haltmsg($msg) {
+    //file_put_contents('qlog.err',$this->qlog);
     printf("<p><b>Database error:</b> %s<br>\n", $msg);
     printf("<b>SQLite3 Error</b> %s</p>\n", $this->Error);
     $bt = debug_backtrace();
