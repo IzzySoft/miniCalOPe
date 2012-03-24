@@ -119,6 +119,65 @@ class DB_Sql {
     return $this->Query_ID;
   }
 
+  /** Execute a query (SELECT only!) and return all results as array[0..n] of assoc_array
+   *  This emulates sqlite_array_query(dblink,query,SQLITE_ASSOC)
+   * @method query_array
+   * @param string query The SQL-Query to run
+   * @return array results
+   */
+  function query_array($Query_String) {
+    $ret = array();
+    if ( $this->query($Query_String) ) {
+      while ( $this->next_record() ) $ret[] = $this->Record;
+    }
+    return $ret;
+  }
+
+  /** Execute a query (SELECT only!) and return the first row of the result as an associative array.
+   *  This emulates sqlite_single_query(dblink,query,TRUE)
+   * @method query_single_row
+   * @param string query The SQL-Query to run
+   * @return array results
+   */
+  function query_single_row($Query_String) {
+    if ( $this->query($Query_String) ) {
+      $this->next_record();
+      return $this->Record;
+    } else {
+      return array();
+    }
+  }
+
+  /** Execute a query (SELECT only!) and return an array[0..n] of the first affected column.
+   *  This emulates sqlite_single_query(dblink,query,FALSE)
+   * @method query_single_column
+   * @param string query The SQL-Query to run
+   * @return array results (empty array if no results or if an error occures)
+   */
+  function query_single_column($Query_String) {
+    if ( $this->query($Query_String) ) {
+      $ret = array();
+      while ( $this->next_record() ) {
+        foreach ( $this->Record as $rec ) $ret[] = $rec;
+      }
+      return $ret;
+    } else {
+      return array();
+    }
+  }
+
+  /** Retrieve a single value with one call.
+   *  Intended for things like 'SELECT count(*)' or 'SELECT name .. WHERE id='
+   * @method query_single_value
+   * @param string query The SQL-Query to run
+   * @return mixed result either the retrieved value or FALSE on error
+   */
+  function query_single_value($Query_String) {
+    if ( !$this->query($Query_String) ) return FALSE;
+    if ( !$this->next_record() ) return FALSE;
+    foreach ( $this->Record as $val ) return $val;
+  }
+
   /** Walk result set
    * @class DB_Sql
    * @method next_record

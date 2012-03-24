@@ -59,17 +59,13 @@ class db extends DB_Sql {
     $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     $i=0;
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
-      $this->query("SELECT name FROM tags");
-      $dbcats = array();
-      while ( $this->next_record() ) $dbcats[] = $this->f('name');
+      $dbcats = $this->query_single_column("SELECT name FROM tags");
       $delcats = array_diff($dbcats,$genres); // in DB, but not in files
       $list = implode("','",$delcats);
       if ( !empty($list) ) $this->query("DELETE FROM tags WHERE name IN ('$list')");
       $delcats = array_diff($genres,$dbcats); // in files, but not in DB
       $genres = $delcats; // those are left for insert
-      $this->query("SELECT MAX(id)+1 AS nextid FROM tags");
-      $this->next_record();
-      $i = $this->f('nextid');
+      $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM tags");
     }
     $this->query('BEGIN TRANSACTION');
     foreach($genres AS $genre) {
@@ -102,9 +98,7 @@ class db extends DB_Sql {
       if ( !empty($list) ) $this->query("DELETE FROM publishers WHERE name IN ('$list')");
       $delcats = array_diff($publisher,$dbcats); // in files, but not in DB
       $publisher = $delcats; // those are left for insert
-      $this->query("SELECT MAX(id)+1 AS nextid FROM publishers");
-      $this->next_record();
-      $i = $this->f('nextid');
+      $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM publishers");
     }
     foreach($publisher AS $genre) {
       if ( $this->query_nohalt("SELECT id FROM publishers WHERE name='$genre'") ) {
@@ -130,17 +124,13 @@ class db extends DB_Sql {
     $i=0;
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
-      $this->query("SELECT name FROM authors");
-      $dbcats = array();
-      while ( $this->next_record() ) $dbcats[] = $this->f('name');
+      $dbcats = $this->query_single_column("SELECT name FROM authors");
       $delcats = array_diff($dbcats,$authors); // in DB, but not in files
       $list = implode(',',$delcats);
       if ( !empty($list) ) $this->query("DELETE FROM authors WHERE name IN ('$list')");
       $delcats = array_diff($authors,$dbcats); // in files, but not in DB
       $authors = $delcats; // those are left for insert
-      $this->query("SELECT MAX(id)+1 AS nextid FROM authors");
-      $this->next_record();
-      $i = $this->f('nextid');
+      $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM authors");
     }
     foreach($authors AS $author) {
       $this->query("INSERT INTO authors(id,name) VALUES ($i,'$author')");
@@ -164,17 +154,13 @@ class db extends DB_Sql {
     $series = array_unique($ser);
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
-      $this->query("SELECT name FROM series");
-      $dbcats = array();
-      while ( $this->next_record() ) $dbcats[] = $this->f('name');
+      $dbcats = $this->query_single_column("SELECT name FROM series");
       $delcats = array_diff($dbcats,$series); // in DB, but not in files
       $list = implode(',',$delcats);
       if ( !empty($list) ) $this->query("DELETE FROM series WHERE name IN ('$list')");
       $delcats = array_diff($series,$dbcats); // in files, but not in DB
       $series = $delcats; // those are left for insert
-      $this->query("SELECT MAX(id)+1 AS nextid FROM series");
-      $this->next_record();
-      $i = $this->f('nextid');
+      $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM series");
     }
     foreach($series as $serie) {
       $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
@@ -193,12 +179,8 @@ class db extends DB_Sql {
     $mode = strtolower($GLOBALS['scan_dbmode']);
     if ( $mode=='merge' ) {
       $deleted = $this->removed_books($books);
-      $this->query("SELECT MAX(id)+1 AS nextid FROM books");
-      $this->next_record();
-      $b_id  = $this->f('nextid');
-      $this->query("SELECT MAX(id)+1 AS nextid FROM data");
-      $this->next_record();
-      $d_id  = $this->f('nextid');
+      $b_id = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM books");
+      $d_id = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM data");
       $GLOBALS['logger']->info('  + Merging Books ('.count($books).')',$who);
     } else {
       $b_id=0;
@@ -290,13 +272,12 @@ class db extends DB_Sql {
       $anames = '';
       $books[$name]['author'] = array_unique($books[$name]['author']);
       foreach($books[$name]['author'] as $aut) $anames .= ",'".$aut."'";
-      $this->query("SELECT id FROM authors WHERE name IN (".substr($anames,1).")");
-      while ($this->next_record()) $a_id[] = $this->f('id');
-      if ( is_array($a_id) ) {
-          foreach($a_id as $aid) {
-              $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$ebookid,$aid)");
-              ++$ba_id;
-          }
+      $a_id = $this->query_single_column("SELECT id FROM authors WHERE name IN (".substr($anames,1).")");
+      if ( is_array($a_id) && !empty($a_id) ) {
+        foreach($a_id as $aid) {
+          $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$ebookid,$aid)");
+          ++$ba_id;
+        }
       } else {
           $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no author!',$who);
       }
@@ -306,13 +287,12 @@ class db extends DB_Sql {
       $books[$name]['tag'] = array_unique($books[$name]['tag']);
       $tnames = '';
       foreach($books[$name]['tag'] as $aut) $tnames .= ",'".$aut."'";
-      $this->query("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
-      while ($this->next_record()) $t_id[] = $this->f('id');
-      if ( is_array($t_id) ) {
-          foreach($t_id as $tid)  {
-              $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$ebookid,$tid)");
-              ++$bt_id;
-          }
+      $t_id = $this->query_single_column("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
+      if ( is_array($t_id) && !empty($t_id) ) {
+        foreach($t_id as $tid)  {
+          $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$ebookid,$tid)");
+          ++$bt_id;
+        }
       } else {
           $GLOBALS['logger']->error('! No tag IDs found in DB for the book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")!',$who);
       }
