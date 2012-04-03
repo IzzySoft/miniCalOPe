@@ -3,7 +3,9 @@ $Id$
 History for miniCalOPe
 ======================
 
-v1.7.0
+! SCAN: Merge crashed when started with empty DB
+
+v1.7.0 (24.03.2012)
 -------------------
 ! last change of get_filenames() broke eBook download when book file was replaced but
   database not (yet) updated, as Content-Length (from database) did no longer match.

@@ -56,9 +56,9 @@ class db extends DB_Sql {
    */
   function make_genres($genres,$who='SCAN') {
     $genres = array_unique($genres);
-    $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     $i=0;
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
+      $GLOBALS['logger']->info('  + Merging Tags ('.count($genres).')',$who);
       $dbcats = $this->query_single_column("SELECT name FROM tags");
       $delcats = array_diff($dbcats,$genres); // in DB, but not in files
       $list = implode("','",$delcats);
@@ -66,6 +66,8 @@ class db extends DB_Sql {
       $delcats = array_diff($genres,$dbcats); // in files, but not in DB
       $genres = $delcats; // those are left for insert
       $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM tags");
+    } else {
+      $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     }
     $this->query('BEGIN TRANSACTION');
     foreach($genres AS $genre) {
@@ -82,7 +84,6 @@ class db extends DB_Sql {
    */
   function make_publisher($publisher,$who='SCAN') {
     $publisher = array_unique($publisher);
-    $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
     // preparation: Escape strings
     $pub = array();
     foreach($publisher AS $genre) $pub[] = $this->escape($genre);
@@ -90,6 +91,7 @@ class db extends DB_Sql {
     $i=0;
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
+      $GLOBALS['logger']->info('  + Merging Publisher ('.count($publisher).')',$who);
       $this->query("SELECT name FROM publishers");
       $dbcats = array();
       while ( $this->next_record() ) $dbcats[] = $this->escape($this->f('name'));
@@ -99,6 +101,9 @@ class db extends DB_Sql {
       $delcats = array_diff($publisher,$dbcats); // in files, but not in DB
       $publisher = $delcats; // those are left for insert
       $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM publishers");
+      if ("$i"=="") $i = 0; // empty table
+    } else {
+      $GLOBALS['logger']->info('  + Inserting Publisher ('.count($publisher).')',$who);
     }
     foreach($publisher AS $genre) {
       if ( $this->query_nohalt("SELECT id FROM publishers WHERE name='$genre'") ) {
@@ -120,10 +125,10 @@ class db extends DB_Sql {
    */
   function make_authors($authors,$who='SCAN') {
     $authors = array_unique($authors);
-    $GLOBALS['logger']->info('  + Inserting Authors ('.count($authors).')',$who);
     $i=0;
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
+      $GLOBALS['logger']->info('  + Merging Authors ('.count($authors).')',$who);
       $dbcats = $this->query_single_column("SELECT name FROM authors");
       $delcats = array_diff($dbcats,$authors); // in DB, but not in files
       $list = implode(',',$delcats);
@@ -131,6 +136,9 @@ class db extends DB_Sql {
       $delcats = array_diff($authors,$dbcats); // in files, but not in DB
       $authors = $delcats; // those are left for insert
       $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM authors");
+      if ("$i"=="") $i = 0; // empty table
+    } else {
+      $GLOBALS['logger']->info('  + Inserting Authors ('.count($authors).')',$who);
     }
     foreach($authors AS $author) {
       $this->query("INSERT INTO authors(id,name) VALUES ($i,'$author')");
@@ -146,7 +154,6 @@ class db extends DB_Sql {
    */
   function make_series($series,$who='SCAN') {
     $series = array_unique($series);
-    $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
     $i=0;
     // preparation: escape strings
     $ser = array();
@@ -154,6 +161,7 @@ class db extends DB_Sql {
     $series = array_unique($ser);
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
+      $GLOBALS['logger']->info('  + Merging Series ('.count($series).')',$who);
       $dbcats = $this->query_single_column("SELECT name FROM series");
       $delcats = array_diff($dbcats,$series); // in DB, but not in files
       $list = implode(',',$delcats);
@@ -161,6 +169,9 @@ class db extends DB_Sql {
       $delcats = array_diff($series,$dbcats); // in files, but not in DB
       $series = $delcats; // those are left for insert
       $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM series");
+      if ("$i"=="") $i = 0; // empty table
+    } else {
+      $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
     }
     foreach($series as $serie) {
       $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
@@ -181,6 +192,8 @@ class db extends DB_Sql {
       $deleted = $this->removed_books($books);
       $b_id = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM books");
       $d_id = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM data");
+      if ("$b_id"=="") $b_id = 0; // empty table
+      if ("$d_id"=="") $d_id = 0; // empty table
       $GLOBALS['logger']->info('  + Merging Books ('.count($books).')',$who);
     } else {
       $b_id=0;
