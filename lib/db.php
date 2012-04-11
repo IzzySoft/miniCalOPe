@@ -156,15 +156,15 @@ class db extends DB_Sql {
     $series = array_unique($series);
     $i=0;
     // preparation: escape strings
-    $ser = array();
-    foreach($series as $serie) $ser[] = $this->escape($serie);
-    $series = array_unique($ser);
+    $series = array_unique($series);
     $this->query('BEGIN TRANSACTION');
     if ( strtolower($GLOBALS['scan_dbmode'])=='merge' ) {
       $GLOBALS['logger']->info('  + Merging Series ('.count($series).')',$who);
       $dbcats = $this->query_single_column("SELECT name FROM series");
       $delcats = array_diff($dbcats,$series); // in DB, but not in files
-      $list = implode(',',$delcats);
+      $ser = array();
+      foreach($delcats as $serie) $ser[] = $this->escape($serie);
+      $list = implode(',',$ser);
       if ( !empty($list) ) $this->query("DELETE FROM series WHERE name IN ('$list')");
       $delcats = array_diff($series,$dbcats); // in files, but not in DB
       $series = $delcats; // those are left for insert

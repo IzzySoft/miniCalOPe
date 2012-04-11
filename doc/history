@@ -4,6 +4,8 @@ History for miniCalOPe
 ======================
 
 ! SCAN: Merge crashed when started with empty DB
+! fix some logic in merging series
+* make alphabetical ordering default for tags
 
 v1.7.0 (24.03.2012)
 -------------------

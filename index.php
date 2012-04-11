@@ -478,9 +478,9 @@ switch($prefix) {
     case 'tags':
         $sortorder = req_word('sort_order');
         switch($sortorder) {
-            case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
             case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
-            default     : $order = '';
+            case 'title':
+            default     : $order = ' ORDER BY name'; $sortorder='title'; break;
         }
         $all = $db->lim_query('SELECT t.id id,t.name name, count(b.id) num FROM tags t,books_tags_link bt, books b WHERE bt.book=b.id and bt.tag = t.id GROUP BY t.id'.$order, $offset, $perpage);
         $t->set_file(array("template"=>"tags.tpl"));
