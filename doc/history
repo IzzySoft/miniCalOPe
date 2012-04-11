@@ -3,9 +3,13 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.8.0
+-------------------
 ! SCAN: Merge crashed when started with empty DB
 ! fix some logic in merging series
 * make alphabetical ordering default for tags
+* added viewport-meta to all (HTML) pages, so they should be readable on mobile devices
+  without zooming now
 
 v1.7.0 (24.03.2012)
 -------------------
