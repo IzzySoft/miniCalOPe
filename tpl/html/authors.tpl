@@ -6,7 +6,7 @@
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
     <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?prefix=authors&amp;sort_order={sortorder}&amp;lang={lang}&amp;offset={offset}&amp;pageformat=opds">
     <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
-    <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
 </HEAD><BODY>
 
 <H1>{site_title} - {author_list}</H1>
