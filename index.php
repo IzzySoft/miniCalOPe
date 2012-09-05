@@ -395,9 +395,9 @@ switch($prefix) {
         $t->set_var('offset',$offset);
         $sortorder = req_word('sort_order');
         switch($sortorder) {
-            case 'title': $order = ' ORDER BY name'; $sortorder='title'; break;
             case 'books': $order = ' ORDER BY num DESC'; $sortorder='books'; break;
-            default     : $order = '';
+            case 'title':
+            default     : $order = ' ORDER BY name'; $sortorder='title'; break;
         }
         if ($num_authors>0) {
             $all = $db->lim_query('SELECT a.id id,a.name name,COUNT(b.id) num FROM authors a,books_authors_link ba, books b WHERE a.id=ba.author AND b.id=ba.book group by a.id'.$order, $offset, $perpage);
