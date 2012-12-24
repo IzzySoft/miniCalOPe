@@ -1,4 +1,4 @@
 "name";"mimetype";"ftype_human";"ftitle"
-"epub";"epub+zip";"ePub";"EPUB"
-"mobi";"x-mobipocket-ebook";"MobiPocket";"Kindle"
+"epub";"application/epub+zip";"ePub";"EPUB"
+"mobi";"application/x-mobipocket-ebook";"MobiPocket";"Kindle"
 "pdf";"application/pdf";"PDF";"PDF"

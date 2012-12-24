@@ -88,7 +88,7 @@
 <!-- END fakecoverblock -->
     <link type="image/png" href="{relurl}tpl/icons/book.png" rel="http://opds-spec.org/image/thumbnail"/>
 <!-- BEGIN itemblock -->
-    <link type="application/{ftype}" rel="http://opds-spec.org/acquisition" title="{ftitle}" length="{flength}" href="{baseurl}?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}"/>
+    <link type="{ftype}" rel="http://opds-spec.org/acquisition" title="{ftitle}" length="{flength}" href="{baseurl}?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}"/>
 <!-- END itemblock -->
   </entry>
 

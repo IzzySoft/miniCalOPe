@@ -11,6 +11,7 @@ v1.8.0
 * added viewport-meta to all (HTML) pages, so they should be readable on mobile devices
   without zooming now
 * have authors ordered by name per default
+! fixed mime of book download links in OPDS
 
 v1.7.0 (24.03.2012)
 -------------------
