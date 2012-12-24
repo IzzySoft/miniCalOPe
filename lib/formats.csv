@@ -2,3 +2,4 @@
 "epub";"application/epub+zip";"ePub";"EPUB"
 "mobi";"application/x-mobipocket-ebook";"MobiPocket";"Kindle"
 "pdf";"application/pdf";"PDF";"PDF"
+"fb2";"application/fb2+zip";"FB2";"FictionBook"

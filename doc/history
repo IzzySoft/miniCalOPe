@@ -12,6 +12,7 @@ v1.8.0
   without zooming now
 * have authors ordered by name per default
 ! fixed mime of book download links in OPDS
++ added FB2 to formats list
 
 v1.7.0 (24.03.2012)
 -------------------
