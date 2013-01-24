@@ -1,4 +1,4 @@
-<?
+<?php
 #############################################################################
 # miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
