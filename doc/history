@@ -3,7 +3,7 @@ $Id$
 History for miniCalOPe
 ======================
 
-v1.8.0
+v1.8.0 (16.02.2013)
 -------------------
 ! SCAN: Merge crashed when started with empty DB
 ! fix some logic in merging series
@@ -13,6 +13,8 @@ v1.8.0
 * have authors ordered by name per default
 ! fixed mime of book download links in OPDS
 + added FB2 to formats list
+* replacing "PHP short_tags" with "full tags"
+* several updates to the db classes (a.o. to make it work with PHP5/SQLite3 again without additional modules)
 
 v1.7.0 (24.03.2012)
 -------------------

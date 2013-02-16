@@ -48,6 +48,8 @@ $fileloglevel = INFO;
 $screenloglevel = NOLOG;
 // Screen output when running from command line
 $screenloglevel_cli = INFO;
+// Report New/Moved/Deleted on Scan
+$scan_report_changes = FALSE;
 
 #============================[ Book Covers ]===
 // Where to get the covers: calibre, simple, or off (none)

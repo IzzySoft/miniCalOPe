@@ -1,4 +1,4 @@
-<?
+<?php
  #############################################################################
  # miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
  # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
@@ -174,7 +174,7 @@ class db extends DB_Sql {
       $GLOBALS['logger']->info('  + Inserting Series ('.count($series).')',$who);
     }
     foreach($series as $serie) {
-      $this->query("INSERT INTO series(id,name) VALUES ($i,'$serie')");
+      $this->query("INSERT INTO series(id,name) VALUES ($i,'".$this->escape($serie)."')");
       ++$i;
     }
     if ( !$this->query_nohalt('COMMIT TRANSACTION') ) $this->query_nohalt('COMMIT TRANSACTION'); // hick-ups
@@ -240,6 +240,7 @@ class db extends DB_Sql {
             if ( $btitle==$del['title'] || $tbasename==$del['basename'] ) { // title or filename match
               $bookid = $del['id'];
               $ebookid = $del['id'];
+              if ($GLOBALS['scan_report_changes']) echo "Moved: '$path' '$btitle'\n";
               $query = "INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($ebookid,'$btitle','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")";
               ++$count['moved'];
               $found = TRUE;
@@ -249,6 +250,7 @@ class db extends DB_Sql {
           if ( !$found ) {
             $bookid = -1;
             $ebookid = $b_id;
+            if ($GLOBALS['scan_report_changes']) echo "New: '$path' '$btitle'\n";
             $query = "INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$btitle','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")";
             ++$count['added'];
           }
@@ -288,8 +290,11 @@ class db extends DB_Sql {
       $a_id = $this->query_single_column("SELECT id FROM authors WHERE name IN (".substr($anames,1).")");
       if ( is_array($a_id) && !empty($a_id) ) {
         foreach($a_id as $aid) {
-          $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$ebookid,$aid)");
-          ++$ba_id;
+          $have_link = $this->query_single_value("SELECT count(id) FROM books_authors_link WHERE book=$ebookid and author=$aid");
+          if (!$have_link) {
+            $this->query("INSERT INTO books_authors_link (id,book,author) VALUES ($ba_id,$ebookid,$aid)");
+            ++$ba_id;
+          }
         }
       } else {
           $GLOBALS['logger']->error('! The book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'") seems to have no author!',$who);
@@ -303,8 +308,11 @@ class db extends DB_Sql {
       $t_id = $this->query_single_column("SELECT id FROM tags WHERE name IN (".substr($tnames,1).")");
       if ( is_array($t_id) && !empty($t_id) ) {
         foreach($t_id as $tid)  {
-          $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$ebookid,$tid)");
-          ++$bt_id;
+          $have_link = $this->query_single_value("SELECT count(id) FROM books_tags_link WHERE book=$ebookid and tag=$tid");
+          if (!$have_link) {
+            $this->query("INSERT INTO books_tags_link(id,book,tag) VALUES($bt_id,$ebookid,$tid)");
+            ++$bt_id;
+          }
         }
       } else {
           $GLOBALS['logger']->error('! No tag IDs found in DB for the book "'.$name.'" (author: "'.$books[$name]['author'][0].'", genre "'.$books[$name]['genre'].'")!',$who);

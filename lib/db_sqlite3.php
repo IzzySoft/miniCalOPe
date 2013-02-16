@@ -10,7 +10,7 @@
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
  */ 
-class DB_Sql {
+class DB_Sql extends SQLite3 {
   var $Host     = ""; // Dummy for compatibility
   var $Database = ""; // Filename of the database file
   var $User     = ""; // Dummy for compatibility
@@ -29,15 +29,16 @@ class DB_Sql {
 
   var $Halt_On_Error = "yes"; ## "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore error, but spit a warning)
 
-  var $Auto_Free = 0;     
+  var $Auto_Free = 0;
   var $PConnect  = 0;     // Dummy for compatibility
+  var $Connected = FALSE;
 
   /** Initialization
    * @package Api
    * @constructor DB_Sql
    * @param optional string query query to run
    */
-  function DB_Sql($query = "") {
+  function __construct($query = "") {
     if($query) {
       $this->query($query);
     }
@@ -49,7 +50,7 @@ class DB_Sql {
    * @return string escaped
    */
   function escape($str) {
-    return sqlite_escape_string($str);
+    return $this->escapeString($str);
   }
 
   /** Connect to database
@@ -58,12 +59,12 @@ class DB_Sql {
    * @return integer Link_ID on success, 0 otherwise
    */
   function connect() {
-    if ( 0 == $this->Link_ID ) {
-      $this->Link_ID = sqlite3_open($this->Database);
-      if (!$this->Link_ID) {
-        $this->halt("connect ($this->Database) failed");
-      }
+    if ( $this->Connected ) return;
+    if ( empty($this->Database) ) {
+      $this->halt("connect failed: no database specified");
     }
+    $this->open($this->Database);
+    $this->Connected = TRUE;
   }
 
   /** Disconnect from database
@@ -71,8 +72,9 @@ class DB_Sql {
    * @method disconnect
    */
   function disconnect() {
-    sqlite3_close($this->Link_ID);
-    $this->Link_ID = 0;
+    if ( !$this->Connected ) return;
+    $this->close();
+    $this->Connected = FALSE;
   }
 
   /** Perform a query using the LIMIT clause
@@ -106,17 +108,9 @@ class DB_Sql {
     $this->connect();
     //$this->qlog .= "$Query_String;\n";
     if ($this->AdjustQuotes) $Query_String = str_replace("\\'","''",str_replace('\\"','""',$Query_String));
-    if (strpos(strtolower(trim($Query_String)),"select")===0)
-      $this->Query_ID = sqlite3_query($this->Link_ID,$Query_String);
-    else
-      $this->Query_ID = sqlite3_exec($this->Link_ID,$Query_String);
+    $this->Result = parent::query($Query_String);
     $this->Row   = 0;
-    if (!$this->Query_ID) {
-      $this->Error = sqlite3_error($this->Link_ID);
-      $this->halt("Invalid SQL: ".$Query_String);
-    }
-
-    return $this->Query_ID;
+    return $this->Result;
   }
 
   /** Execute a query (SELECT only!) and return all results as array[0..n] of assoc_array
@@ -173,9 +167,7 @@ class DB_Sql {
    * @return mixed result either the retrieved value or FALSE on error
    */
   function query_single_value($Query_String) {
-    if ( !$this->query($Query_String) ) return FALSE;
-    if ( !$this->next_record() ) return FALSE;
-    foreach ( $this->Record as $val ) return $val;
+    return $this->querySingle($Query_String);
   }
 
   /** Walk result set
@@ -184,7 +176,7 @@ class DB_Sql {
    * @return boolean success
    */
   function next_record() {
-    $this->Record = sqlite3_fetch_array($this->Query_ID);
+    $this->Record = $this->Result->fetchArray();
     $this->Row   += 1;
     $stat = is_array($this->Record);
     return $stat;
@@ -256,7 +248,7 @@ class DB_Sql {
    * @method free
    */
   function free() {
-    sqlite3_query_close($this->Query_ID);
+    $this->Result->finalize();
   }
 
   /** Evaluate the result for DML operation
@@ -265,7 +257,7 @@ class DB_Sql {
    * @return integer affected rows
    */
   function affected_rows() {
-    return sqlite3_changes($this->Link_ID);
+    return $this->changes();
   }
 
   /** Evaluate the result for SELECT operation (row count)
@@ -278,7 +270,7 @@ class DB_Sql {
     if (!$this->NumRowsEmulate) return FALSE;
     $i = 0;
     while ($this->next_record()) ++$i;
-    sqlite3_exec($this->Link_ID,''); // no other way to reset the result set
+    $this->Result->reset();
     return $i;
   }
 
@@ -288,7 +280,7 @@ class DB_Sql {
    * @return integer number of columns in result set
    */
   function num_fields() {
-    return sqlite3_column_count($this->Query_ID);
+    return $this->Result->numColumns();
   }
 
   function nf() {
