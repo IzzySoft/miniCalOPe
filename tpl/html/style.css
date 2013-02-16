@@ -27,10 +27,11 @@ A:visited { color: #f50; }
 
 .error { color: #f00; }
 
-h1, div.updated, div.appsig { text-align:center; }
+h1, div.updated, div.appsig, div.offers { text-align:center; }
 h1 { font-size:110%; }
 div.appsig { font-size:70%; }
 div.updated, div.appsig { margin-top: 10px; }
+div.offers { margin:1em; }
 span.count { font-size:85%; }
 img { border:0; vertical-align:middle; }
 

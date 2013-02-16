@@ -690,6 +690,7 @@ switch($prefix) {
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
             $t->set_block('template','fakecoverblock','fakecover');
+            $t->set_block('template','adblock','ads');
             set_basics($t);
             $t->set_var('back_to_authors',trans('back_to_authors'));
             $t->set_var('data_name',trans('title'));
@@ -773,6 +774,7 @@ switch($prefix) {
                 $t->parse('item','itemblock',$more);
                 $more = TRUE;
             }
+            // book cover
             if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
             $cover_type = 'jpeg';
             if ( !empty($coverimg) && !file_exists($coverimg) ) {
@@ -787,6 +789,19 @@ switch($prefix) {
             } elseif ($cover_fake_fallback) {
                 $t->parse('fakecover','fakecoverblock');
             }
+            // Ads (if wanted)
+            if ( $ads_bookdetails ) {
+                $t->set_var('amazonID',$amazonID);
+                $t->set_var('amazon_bordercolor',$ads_bordercolor);
+                $t->set_var('amazon_logocolor',$ads_logocolor);
+                $t->set_var('booktitle_urlenc',urlencode($book['title'])); // used for Amazon ads
+                $t->set_var('authorname_urlenc',urlencode($author)); // used for Amazon ads
+                $t->set_var('booktags_urlenc',urlencode(str_replace(', ',';',$book['tags']))); // used for Amazon ads
+                $t->parse('ads','adblock');
+            } else {
+                $t->set_var('ads','');
+            }
+            // end ads
             $t->pparse("out","template");
             exit;
         // Send the requested book for download

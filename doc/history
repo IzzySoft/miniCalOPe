@@ -3,6 +3,10 @@ $Id$
 History for miniCalOPe
 ======================
 
+v1.9.0
+-------------------
++ added optional Amazon ads (decent!) to book details page
+
 v1.8.0 (16.02.2013)
 -------------------
 ! SCAN: Merge crashed when started with empty DB
