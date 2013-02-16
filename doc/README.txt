@@ -1,5 +1,5 @@
 ===============================================================================
-miniCalOPe                 (c) 2010-2011 by Itzchak Rehberg (devel@izzysoft.de)
+miniCalOPe                 (c) 2010-2013 by Itzchak Rehberg (devel@izzysoft.de)
 -------------------------------------------------------------------------------
 $Id$
 -------------------------------------------------------------------------------
@@ -32,9 +32,9 @@ contents of this archive may only be distributed all together.
 2) Requirements
 ---------------
 
-miniCalOPe requires a web server powered by PHP with SQLite to present its data.
+miniCalOPe requires a web server powered by PHP 5.3+ with SQLite3 to present its data.
 For data collection and preparation, you will either need Calibre, or the PHP
-CLI (again with SQLite support).
+CLI (again with SQLite3 support).
 
 ===============================================================================
 
