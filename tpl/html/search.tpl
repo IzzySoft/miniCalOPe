@@ -14,8 +14,8 @@
 <FORM NAME='search' ACTION='{baseurl}{form_action}' METHOD='post'>
 <TABLE ALIGN='center' BORDER='0'>
     <TR><TD><B>{author_title}:</B></TD><TD><INPUT TYPE='text' NAME='author'></TD>
-        <TD ROWSPAN='3'>&nbsp;&nbsp;&nbsp;<B>{tags_title}:</B></TD>
-        <TD ROWSPAN='3'><SELECT NAME='tags[]' MULTIPLE='MULTIPLE' SIZE='4'>
+        <TD ROWSPAN='4'>&nbsp;&nbsp;&nbsp;<B>{tags_title}:</B></TD>
+        <TD ROWSPAN='4'><SELECT NAME='tags[]' MULTIPLE='MULTIPLE' SIZE='5'>
 <!-- BEGIN tagselblock -->
                 <OPTION VALUE='{optval}'>{optname}</OPTION>
 <!-- END tagselblock -->
@@ -23,6 +23,7 @@
         </TD></TR>
     <TR><TD><B>{book_title}:</B></TD><TD><INPUT TYPE='text' NAME='title'></TD></TR>
     <TR><TD><B>{series_title}:</B></TD><TD><INPUT TYPE='text' NAME='series'></TD></TR>
+    <TR><TD><B>{desc_title}:</B></TD><TD><INPUT TYPE='text' NAME='desc'></TD></TR>
     <TR><TD COLSPAN='4' ALIGN='center' STYLE='padding:1em;'><INPUT TYPE='submit' NAME='do_search' VALUE='{submit_title}'></TD></TR>
 </TABLE>
 </FORM>

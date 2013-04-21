@@ -297,6 +297,7 @@ switch($prefix) {
         $t->set_var('book_title',trans('book'));
         $t->set_var('series_title',trans('serie'));
         $t->set_var('tags_title',trans('tags'));
+        $t->set_var('desc_title',trans('comment'));
         $t->set_var('submit_title',trans('search_do'));
         $t->set_var('num_allbooks',$allbookcount);
         if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
@@ -334,8 +335,9 @@ switch($prefix) {
         $saut = str_replace('*','%',req_alnumwild('author'));
         $stit = str_replace('*','%',req_alnumwild('title'));
         $sser = str_replace('*','%',req_alnumwild('series'));
+        $stxt = str_replace('*','%',req_alnumwild('desc'));
         $stag = req_intarr('tags');
-        $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;tags=".implode(',',$stag),'SEARCH');
+        $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;desc=$stxt;tags=".implode(',',$stag),'SEARCH');
 
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -364,6 +366,11 @@ switch($prefix) {
               $select .= ',books_series_link bs,series s';
               $where  .= " AND bs.book=b.id AND bs.series=s.id AND lower(s.name) LIKE '%".strtolower($sser)."%'";
               $searchvals .= '&amp;series='.urlencode($sser);
+            }
+            if ( !empty($stxt) ) {
+              $select .= ',comments c';
+              $where  .= " AND c.book=b.id AND lower(c.text) LIKE '%".strtolower($stxt)."%'";
+              $searchvals .= '&amp;desc='.urlencode($stxt);
             }
         } else {
             $sterm = '%'.strtolower($sall).'%';
