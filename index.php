@@ -718,7 +718,7 @@ switch($prefix) {
                 $more = TRUE;
             }
             foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
-                if ($field=='tags' && $pageformat=='html') { // this should follow the ISBNs
+                if ($field=='tags' && $pageformat=='html' && !empty($booksearchservices)) { // book-search; this should follow the ISBNs
                   $iurls = get_booksearchurls(str_replace(',',' ',$author),$book['title']);
                   $text  = "<SPAN ID='booksearch'>";
                   foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
