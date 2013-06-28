@@ -20,7 +20,7 @@
     <TR><TD><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=series_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/bookseries.png'> {series_page}</A></TD></TR>
 <!-- END serialblock -->
 <!-- BEGIN flattrblock -->
-    <TR><TD><SCRIPT ID='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid={flattrID}&button=compact&url='+encodeURIComponent(document.URL);f.title='{title_by_author}';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</SCRIPT></TD></TR>
+    <TR><TD><SCRIPT ID='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid={flattrID}&button=compact&url='+encodeURIComponent(document.URL);f.title='{title_by_author}';f.tags='eBooks';f.category='text';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</SCRIPT></TD></TR>
 <!-- END flattrblock -->
 </TABLE>
 <TABLE ALIGN='center' BORDER='0'>
