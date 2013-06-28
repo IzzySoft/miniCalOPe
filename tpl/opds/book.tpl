@@ -60,7 +60,9 @@
     <updated>{pubdate}</updated>
   </entry>
 <!-- END serialblock -->
+<!-- BEGIN flattrblock -->
 
+<!-- END flattrblock -->
   <entry>
     <title>{booktitle}</title>
     <id>urn:calibre:{id}</id>

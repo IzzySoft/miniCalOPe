@@ -693,6 +693,7 @@ switch($prefix) {
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','authorblock','author');
             $t->set_block('template','serialblock','serial');
+            $t->set_block('template','flattrblock','flattr');
             $t->set_block('template','datablock','data');
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
@@ -703,6 +704,13 @@ switch($prefix) {
             $t->set_var('data_name',trans('title'));
             $t->set_var('data_data',$book['title']);
             $t->parse('data','datablock');
+            // Do the FlattR
+            if ( empty($GLOBALS['flattrID']) ) {
+              $t->set_var('flattr','');
+            } else {
+              $t->set_var('flattrID',$GLOBALS['flattrID']);
+              $t->parse('flattr','flattrblock');
+            }
             $more = FALSE;
             foreach ($authors as $aut) {
                 $t->set_var('aid',$aut['id']);

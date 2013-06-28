@@ -79,17 +79,26 @@ $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Bu
 // Enable some book search services (search by author and title of the selected book;
 // empty array to disable this feature)
 $booksearchservices = array('Amazon.DE','Bookzilla.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
-// Amazon ad content for book details page? (needs AmazonID, see Personal Info)
-$ads_bookdetails = FALSE;
-$ads_bordercolor = '4D9DFC';
-$ads_logocolor   = 'AA4400';
 
 #============================[ Person Info ]===
 // about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)
 $owner   = 'John Doe';
 $homepage= 'http://www.johndoe.com/';
 $email   = 'john@johndoe.com';
+
+#=========================[ Monetarization ]===
+// While our content is served for free, we won't object to any donations :)
+// -=[ Flattr ]=-
+// Setting your FlattrID here will enable the FlattR button
+$flattrID = '';
+// -=[ Amazon ]=-
+// Your AmazonID will be used for Amazon ads (see below) as well as for the ISBN
+// and book-search services (see above)
 $amazonID='';
+// Amazon ad content for book details page? (needs AmazonID, see Personal Info)
+$ads_bookdetails = TRUE;
+$ads_bordercolor = '4D9DFC';
+$ads_logocolor   = 'AA4400';
 
 #=========================[ Language dependent stuff ]===
 # Here we make use of the language-specific directories. You either can set
