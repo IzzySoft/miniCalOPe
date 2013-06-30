@@ -709,6 +709,7 @@ switch($prefix) {
               $t->set_var('flattr','');
             } else {
               $t->set_var('flattrID',$GLOBALS['flattrID']);
+              $t->set_var('flattred_url',urlencode($GLOBALS['baseurl'].'?lang='.$GLOBALS['use_lang'].'pageformat=html&action=bookdetails&book='.$bookid));
               $t->parse('flattr','flattrblock');
             }
             $more = FALSE;
@@ -768,7 +769,12 @@ switch($prefix) {
             if ( empty($book['comment']) ) {
                 $t->set_var('comment',trans('not_available'));
             } else {
-                $t->set_var('comment',nl2br(html_entity_decode($book['comment'])));
+                $comm = html_entity_decode($book['comment']);
+                if ( $pageformat=='opds' ) {
+                  $comm = preg_replace("/(<\/?\w+)(.*?>)/e", "strtolower('\\1') . '\\2'", $comm); // OPDS/XML wants tags lower-case!
+                  $comm = preg_replace("/ (CLASS|ID|SRC|HREF|ALT)=/e", "' ' . strtolower('\\1') . '='", $comm);     // Same for attributes
+                }
+                $t->set_var('comment',nl2br($comm));
             }
             $t->set_var('pubdate',$book['pubdate']);
             $t->set_var('pubdate_human',$book['pubdate_human']);

@@ -29,6 +29,11 @@
   <link rel="search"
         type="application/atom+xml;profile=opds-catalog"
         href="{baseurl}?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
+<!-- BEGIN flattrblock -->
+  <link rel="payment"
+        type="text/html"
+        href="https://flattr.com/submit/auto?url={flattred_url}&amp;user_id={flattrID}"/>
+<!-- END flattrblock -->
 
   <entry>
     <title>{start_page}</title>
@@ -60,9 +65,7 @@
     <updated>{pubdate}</updated>
   </entry>
 <!-- END serialblock -->
-<!-- BEGIN flattrblock -->
 
-<!-- END flattrblock -->
   <entry>
     <title>{booktitle}</title>
     <id>urn:calibre:{id}</id>
