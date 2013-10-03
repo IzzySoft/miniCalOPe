@@ -24,7 +24,7 @@
   </author>
 
   <entry>
-    <title>Autoren</title>
+    <title>{author_list}</title>
     <id>{baseurl}?prefix=authors&amp;lang={lang}</id>
     <content type="text">{author_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=authors&amp;lang={lang}"/>
@@ -33,7 +33,7 @@
   </entry>
 
   <entry>
-    <title>Titel</title>
+    <title>{title_list}</title>
     <id>{baseurl}?prefix=titles&amp;lang={lang}</id>
     <content type="text">{title_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=titles&amp;lang={lang}"/>
@@ -42,7 +42,7 @@
   </entry>
 
   <entry>
-    <title>Themen</title>
+    <title>{tags_list}</title>
     <id>{baseurl}?prefix=subjects&amp;lang={lang}</id>
     <content type="text">{tags_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=tags&amp;lang={lang}"/>
@@ -51,7 +51,7 @@
   </entry>
 
   <entry>
-    <title>Reihen</title>
+    <title>{series_list}</title>
     <id>{baseurl}?prefix=series&amp;lang={lang}</id>
     <content type="text">{series_list}</content>
     <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=series&amp;lang={lang}"/>

@@ -11,6 +11,7 @@ v1.9.0
 ! in global booklist and search results, language was hardcoded ("book von author")
 + adding support for Flattr (see http://flattr.com/)
 * XML/OPDS requires tags in XHTML content divs to be all lower-case. Taking care for that now.
+! some terms in tpl/opds/index.tpl have been hardcoded instead of using placeholders for translated terms (Mateusz)
 
 v1.8.0 (16.02.2013)
 -------------------
