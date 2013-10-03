@@ -258,7 +258,7 @@ class db extends DB_Sql {
       } else { // fresh run (no merge)
         $bookid = -1;
         $ebookid = $b_id;
-        $query = "INSERT INTO books(id,title,path,timestamp".$bf.") VALUES ($b_id,'$btitle','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")";
+        $query = "INSERT INTO books(id,title,path,timestamp".$bf.") VALUES (" . $b_id . ",'" . $btitle . "','$path','".date('Y-m-d H:i:s',$books[$name]['lastmod'])."'".$bv.")";
         ++$count['added'];
       }
       if ( !$this->query_nohalt($query) ) {
@@ -276,9 +276,9 @@ class db extends DB_Sql {
       }
       foreach($books[$name]['files'] as $var=>$val) {
         if ( isset($tfiles[$var]) ) { // re-use ID
-          $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES (".$tfiles[$var].",$ebookid,'$var',".filesize($val).",'".$books[$name]['fbasename']."')");
+          $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES (".$tfiles[$var].",$ebookid,'$var',".filesize($val).",'". parent::escape($books[$name]['fbasename']) ."')"); 
         } else {
-          $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES ($d_id,$ebookid,'$var',".filesize($val).",'".$books[$name]['fbasename']."')");
+          $this->query("INSERT INTO data(id,book,format,uncompressed_size,name) VALUES ($d_id,$ebookid,'$var',".filesize($val).",'". parent::escape($books[$name]['fbasename']) ."')"); 
           ++$d_id;
         }
       }
