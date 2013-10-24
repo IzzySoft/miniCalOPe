@@ -331,11 +331,11 @@ switch($prefix) {
         exit;
     //--------------------------------------[ search result list requested ]---
     case 'searchresults':
-        $sall = str_replace('*','%',req_alnumwild('q'));
-        $saut = str_replace('*','%',req_alnumwild('author'));
-        $stit = str_replace('*','%',req_alnumwild('title'));
-        $sser = str_replace('*','%',req_alnumwild('series'));
-        $stxt = str_replace('*','%',req_alnumwild('desc'));
+        $sall = req_alnumwild('q');
+        $saut = req_alnumwild('author');
+        $stit = req_alnumwild('title');
+        $sser = req_alnumwild('series');
+        $stxt = req_alnumwild('desc');
         $stag = req_intarr('tags');
         $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;desc=$stxt;tags=".implode(',',$stag),'SEARCH');
 

@@ -71,7 +71,8 @@ function req_alnum($name,$default='') {
   }
   return $_REQUEST[$name];
 }
-/** Verifying alpha-numerical input with wildcards, e.g. for search mask
+/** Verifying alpha-numerical input with wildcards (e.g. user-input from search
+ *  mask), replacing all occurences of ",.:*?" by "%" for SQL wildcard (LIKE) search
  * @function rel_alnumwild
  * @param string in varname Name of the _REQUEST variable
  * @param optional string default Default value to return in case of mismatch ('')
@@ -81,11 +82,12 @@ function req_alnumwild($name,$default='') {
     $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
     return $default;
   }
-  if ( preg_match('![^\w\s\*\%\?_-\pL]!u',$_REQUEST[$name],$match) ) {
+  $output = preg_replace('![,.:*?]!ims','%',$_REQUEST[$name]);
+  if ( preg_match('![^\w\s\%_-\pL]!u',$output,$match) ) {
     $GLOBALS['logger']->warn("Rejecting input '".$_REQUEST[$name]."' for '$name'",'VERIFY');
     return $default;
   }
-  return $_REQUEST[$name];
+  return $output;
 }
 /** Verifying array of integer (HTML multi-select form element)
  * @function req_intarr
