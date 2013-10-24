@@ -67,7 +67,7 @@ $timezone = '+01:00';
 // Site Title
 $sitetitle = 'Book Server';
 // Full URL to miniCalOPe
-$baseurl = 'http://localhost/opds/';
+$baseurl = 'http://'.$_SERVER['SERVER_NAME'].'/opds/';
 // Path relative to the web servers DOCUMENT_ROOT
 $relurl  = '/opds/';
 // how many items per page
