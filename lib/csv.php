@@ -80,6 +80,7 @@
      $fields = explode($this->sep,$line);
      $fc = count($fields);
      for ($i=0;$i<$fc;++$i) {
+       $this->field[$i] = new stdClass();
        if (substr($fields[$i],0,1)==$this->txt) {
          $name = substr($fields[$i],1,strlen($fields[$i])-2);
          $this->field[$i]->txt  = TRUE;
