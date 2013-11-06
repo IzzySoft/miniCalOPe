@@ -16,19 +16,19 @@
 
   <link rel="self" title="{this_page}"
         type="application/atom+xml;type=entry;profile=opds-catalog"
-        href="{baseurl}?action=bookdetails&amp;book={id}&amp;lang={lang}"/>
+        href="{baseurl}index.php?action=bookdetails&amp;book={id}&amp;lang={lang}"/>
   <link rel="http://opds-spec.org/sort/start" title="{start_page}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?lang={lang}"/>
+        href="{baseurl}index.php?lang={lang}"/>
   <link rel="up" title="{back_to_authors}"
         type="application/atom+xml;profile=opds-catalog"
-        href="{relurl}?prefix=authors&amp;lang={lang}"/>
+        href="{relurl}index.php?prefix=authors&amp;lang={lang}"/>
   <link rel="search"
         type="application/opensearchdescription+xml"
-        href="{baseurl}?lang={lang}&amp;prefix=ods"/>
+        href="{baseurl}index.php?lang={lang}&amp;prefix=ods"/>
   <link rel="search"
         type="application/atom+xml;profile=opds-catalog"
-        href="{baseurl}?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
+        href="{baseurl}index.php?lang={lang}&amp;pageformat=opds&amp;prefix=searchresults&amp;q={searchTerms}"/>
 <!-- BEGIN flattrblock -->
   <link rel="payment"
         type="text/html"
@@ -37,9 +37,9 @@
 
   <entry>
     <title>{start_page}</title>
-    <id>{baseurl}?lang={lang}</id>
+    <id>{baseurl}index.php?lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}index.php?lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/home.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
@@ -47,9 +47,9 @@
 <!-- BEGIN authorblock -->
   <entry>
     <title>{authors_page}</title>
-    <id>{baseurl}?prefix=author_id&amp;query={aid}&amp;lang={lang}</id>
+    <id>{baseurl}index.php?prefix=author_id&amp;query={aid}&amp;lang={lang}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?prefix=author_id&amp;query={aid}&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}index.php?prefix=author_id&amp;query={aid}&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/author.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
@@ -58,9 +58,9 @@
 <!-- BEGIN serialblock -->
   <entry>
     <title>{series_page}</title>
-    <id>{baseurl}?lang={lang}&amp;prefix=series_id&amp;query={id}</id>
+    <id>{baseurl}index.php?lang={lang}&amp;prefix=series_id&amp;query={id}</id>
     <content type="text"></content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}?lang={lang}&amp;prefix=series_id&amp;query={id}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{baseurl}index.php?lang={lang}&amp;prefix=series_id&amp;query={id}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookseries.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
@@ -93,7 +93,7 @@
 <!-- END fakecoverblock -->
     <link type="image/png" href="{relurl}tpl/icons/book.png" rel="http://opds-spec.org/image/thumbnail"/>
 <!-- BEGIN itemblock -->
-    <link type="{ftype}" rel="http://opds-spec.org/acquisition" title="{ftitle}" length="{flength}" href="{baseurl}?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}"/>
+    <link type="{ftype}" rel="http://opds-spec.org/acquisition" title="{ftitle}" length="{flength}" href="{baseurl}index.php?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}"/>
 <!-- END itemblock -->
   </entry>
 

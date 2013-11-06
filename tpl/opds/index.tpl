@@ -25,36 +25,36 @@
 
   <entry>
     <title>{author_list}</title>
-    <id>{baseurl}?prefix=authors&amp;lang={lang}</id>
+    <id>{baseurl}index.php?prefix=authors&amp;lang={lang}</id>
     <content type="text">{author_list}</content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=authors&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}index.php?prefix=authors&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/authors.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <entry>
     <title>{title_list}</title>
-    <id>{baseurl}?prefix=titles&amp;lang={lang}</id>
+    <id>{baseurl}index.php?prefix=titles&amp;lang={lang}</id>
     <content type="text">{title_list}</content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=titles&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}index.php?prefix=titles&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookcase.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <entry>
     <title>{tags_list}</title>
-    <id>{baseurl}?prefix=subjects&amp;lang={lang}</id>
+    <id>{baseurl}index.php?prefix=subjects&amp;lang={lang}</id>
     <content type="text">{tags_list}</content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=tags&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}index.php?prefix=tags&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/tags.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>
 
   <entry>
     <title>{series_list}</title>
-    <id>{baseurl}?prefix=series&amp;lang={lang}</id>
+    <id>{baseurl}index.php?prefix=series&amp;lang={lang}</id>
     <content type="text">{series_list}</content>
-    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}?prefix=series&amp;lang={lang}"/>
+    <link type="application/atom+xml;profile=opds-catalog" href="{relurl}index.php?prefix=series&amp;lang={lang}"/>
     <link type="image/png" href="{relurl}tpl/icons/bookseries.png" rel="http://opds-spec.org/image/thumbnail"/>
     <updated>{pubdate}</updated>
   </entry>

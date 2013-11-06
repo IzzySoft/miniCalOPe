@@ -4,19 +4,19 @@
     <META NAME="GENERATOR" CONTENT="miniCalOPe">
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
-    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?prefix=series&amp;lang={lang}&amp;sort_order={sortorder}&amp;offset={offset}&amp;pageformat=opds">
-    <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
+    <LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}index.php?prefix=series&amp;lang={lang}&amp;sort_order={sortorder}&amp;offset={offset}&amp;pageformat=opds">
+    <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}index.php?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
     <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
 </HEAD><BODY>
 
 <H1>{site_title} - {series_list}</H1>
 
 <TABLE ALIGN='center' BORDER='0' CLASS='list'>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> {start_page}</A></TD></TR>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=series&amp;sort_order=title'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> {sort_alpha}</A></TD></TR>
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=series&amp;sort_order=books'><IMG ALT='home' SRC='{relurl}tpl/icons/bookcase.png'> {sort_bookcount}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}index.php?lang={lang}&amp;pageformat=html'><IMG ALT='home' SRC='{relurl}tpl/icons/home.png'> {start_page}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}index.php?lang={lang}&amp;pageformat=html&amp;prefix=series&amp;sort_order=title'><IMG ALT='home' SRC='{relurl}tpl/icons/alpha.png'> {sort_alpha}</A></TD></TR>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}index.php?lang={lang}&amp;pageformat=html&amp;prefix=series&amp;sort_order=books'><IMG ALT='home' SRC='{relurl}tpl/icons/bookcase.png'> {sort_bookcount}</A></TD></TR>
 <!-- BEGIN itemblock -->
-    <TR><TD COLSPAN='2'><A HREF='{relurl}?lang={lang}&amp;pageformat=html&amp;prefix=series_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/bookseries.png'> {name}</A>
+    <TR><TD COLSPAN='2'><A HREF='{relurl}index.php?lang={lang}&amp;pageformat=html&amp;prefix=series_id&amp;query={id}'><IMG ALT='home' SRC='{relurl}tpl/icons/bookseries.png'> {name}</A>
             <SPAN CLASS='count'>({num_books} {books})</SPAN></TD></TR>
 <!-- END itemblock -->
     <TR><TD COLSPAN='2'>&nbsp;</TD></TR>

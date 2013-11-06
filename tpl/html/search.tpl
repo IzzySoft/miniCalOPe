@@ -4,8 +4,8 @@
     <META NAME="GENERATOR" CONTENT="miniCalOPe">
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <LINK REL="stylesheet" TYPE="text/css" HREF="{relurl}tpl/html/style.css">
-    <!--LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}?lang={lang}&amp;pageformat=opds"-->
-    <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
+    <!--LINK REL="alternate" TYPE="application/atom+xml;profile=opds-catalog" HREF="{baseurl}index.php?lang={lang}&amp;pageformat=opds"-->
+    <LINK REL="search" TYPE="application/opensearchdescription+xml" TITLE="{site_title}" HREF="{baseurl}index.php?lang={lang}&amp;prefix=ods&amp;pageformat=html"/>
     <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
 </HEAD><BODY>
 
