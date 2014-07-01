@@ -665,7 +665,11 @@ switch($prefix) {
             }
             $author = substr($author,2);
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
-            $db->next_record();
+            if ( !$db->next_record() ) { // we don't have a book with this ID
+              header("HTTP/1.0 404 Not Found");
+              echo "<P>Sorry, this book does not exist here.</P>\n";
+              exit;
+            }
             $book = array(
               'title'=>$db->f('title'), 'isbn'=>$db->f('isbn'), 'tags'=>'', 'series_index'=>$db->f('series_index'),
               'uri'=>$db->f('uri'), 'author'=>$author,
