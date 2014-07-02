@@ -667,8 +667,10 @@ switch($prefix) {
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
             if ( !$db->next_record() ) { // we don't have a book with this ID
               header("HTTP/1.0 404 Not Found");
-              echo "<P>Sorry, this book does not exist here.</P>\n";
-              exit;
+              $book = array('title'=>trans('not_available'),'isbn'=>'','tags'=>'','series'=>'','series_index'=>'','uri'=>'','author'=>trans('not_available'),
+                      'pubdate'=>'1970-01-01T00:00:00','pubdate_human'=>'01-01-1970 00:00','publisher'=>'','comment'=>'','rating'=>0);
+              $files = $authors = array();
+              goto Parse;
             }
             $book = array(
               'title'=>$db->f('title'), 'isbn'=>$db->f('isbn'), 'tags'=>'', 'series_index'=>$db->f('series_index'),
@@ -694,6 +696,7 @@ switch($prefix) {
             $db->query("SELECT r.rating FROM ratings r, books_ratings_link br WHERE br.book=$bookid AND r.id=br.rating");
             if ( $db->next_record() ) $book['rating'] = $db->f('rating'); else $book['rating'] = 0;
             $files = get_filenames($db,$bookid);
+            Parse:
             $t->set_file(array("template"=>"book.tpl"));
             $t->set_block('template','authorblock','author');
             $t->set_block('template','serialblock','serial');
@@ -709,7 +712,7 @@ switch($prefix) {
             $t->set_var('data_data',$book['title']);
             $t->parse('data','datablock');
             // Do the FlattR
-            if ( empty($GLOBALS['flattrID']) ) {
+            if ( empty($GLOBALS['flattrID']) || empty($authors) ) {
               $t->set_var('flattr','');
             } else {
               $t->set_var('flattrID',$GLOBALS['flattrID']);
@@ -731,7 +734,7 @@ switch($prefix) {
                 $more = TRUE;
             }
             foreach (array('author','isbn','tags','series','publisher','uri','rating') as $field) {
-                if ($field=='tags' && $pageformat=='html' && !empty($booksearchservices)) { // book-search; this should follow the ISBNs
+                if ($field=='tags' && $pageformat=='html' && !empty($booksearchservices) && !empty($authors)) { // book-search; this should follow the ISBNs
                   $iurls = get_booksearchurls(str_replace(',',' ',$author),$book['title']);
                   $text  = "<SPAN ID='booksearch'>";
                   foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
