@@ -9,6 +9,7 @@ v2.0.0
   to speed up processing by avoiding unnecessary Apache subrequests
 ! last_update in title lists was wrongly set to that of the last book in list
 * catch "non-existing book ID exception" to display a clean page pointing this out
+! if bookdetails where requested via "name", and no matching book was found, do not show #0 but a correct error page
 
 v1.9.0 (27.10.2013)
 -------------------

@@ -657,6 +657,10 @@ switch($prefix) {
                 $sarr = get_idbyname('SELECT id FROM books WHERE','title',$bname);
                 $bookid = (int) $sarr['id'];
             }
+            if ( $sarr['match'] == 'none' ) {
+              $author = trans('not_available');
+              goto NoSuchBook;
+            }
             $db->query("SELECT id,name FROM authors WHERE id IN (SELECT author FROM books_authors_link WHERE book=$bookid)");
             $author = '';
             while ( $db->next_record() ) {
@@ -666,9 +670,10 @@ switch($prefix) {
             $author = substr($author,2);
             $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
             if ( !$db->next_record() ) { // we don't have a book with this ID
+              NoSuchBook:
               header("HTTP/1.0 404 Not Found");
               $book = array('title'=>trans('not_available'),'isbn'=>'','tags'=>'','series'=>'','series_index'=>'','uri'=>'','author'=>trans('not_available'),
-                      'pubdate'=>'1970-01-01T00:00:00','pubdate_human'=>'01-01-1970 00:00','publisher'=>'','comment'=>'','rating'=>0);
+                      'pubdate'=>'1970-01-01T00:00:00','pubdate_human'=>'01-01-1970 00:00','publisher'=>'','comment'=>trans('no_such_book'),'rating'=>0);
               $files = $authors = array();
               goto Parse;
             }
