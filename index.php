@@ -657,7 +657,7 @@ switch($prefix) {
                 $sarr = get_idbyname('SELECT id FROM books WHERE','title',$bname);
                 $bookid = (int) $sarr['id'];
             }
-            if ( $sarr['match'] == 'none' ) {
+            if ( isset($sarr) && $sarr['match'] == 'none' ) {
               $author = trans('not_available');
               goto NoSuchBook;
             }
