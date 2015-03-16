@@ -743,7 +743,7 @@ switch($prefix) {
                 if ($field=='tags' && $pageformat=='html' && !empty($booksearchservices) && !empty($authors)) { // book-search; this should follow the ISBNs
                   $iurls = get_booksearchurls(str_replace(',',' ',$author),$book['title']);
                   $text  = "<SPAN ID='booksearch'>";
-                  foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
+                  foreach ($iurls as $iurl) $text .= " <A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
                   $text .= "</SPAN>";
                   $t->set_var('data_name',trans('title_websearch'));
                   $t->set_var('data_data',$text);
@@ -753,18 +753,25 @@ switch($prefix) {
                 if ($field=='series') $t->set_var('data_name',trans('serie'));
                 else $t->set_var('data_name',trans($field));
                 switch ($field) {
-                  case 'uri' : $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>"); break;
+                  case 'uri' :
+                    $t->set_var('data_data',"<A HREF='".$book[$field]."'>".$book[$field]."</A>");
+                    $t->set_var('dataclass'," STYLE='line-height:1.6em;'");
+                    break;
                   case 'isbn':
                     $iurls = get_isbnurls($book[$field]);
                     $text  = $book[$field];
                     if ($pageformat=='html') {
                       $text .= "<SPAN ID='isbnsearch'>";
-                      foreach ($iurls as $iurl) $text .= "&nbsp;<A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
+                      foreach ($iurls as $iurl) $text .= " <A HREF='".$iurl['url']."'>".$iurl['name']."</A>";
                       $text .= "</SPAN>";
                     }
                     $t->set_var('data_data',$text);
+                    $t->set_var('dataclass'," STYLE='line-height:1.6em;'");
                     break;
-                  default    : $t->set_var('data_data',$book[$field]); break;
+                  default    :
+                    $t->set_var('data_data',$book[$field]);
+                    $t->set_var('dataclass','');
+                    break;
                 }
                 $t->parse('data','datablock',TRUE);
             }

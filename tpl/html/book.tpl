@@ -23,8 +23,8 @@
     <TR><TD><SCRIPT TYPE="text/javascript" ID='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid={flattrID}&button=compact&url='+encodeURIComponent(document.URL);f.title='{title_by_author}';f.tags='eBooks';f.category='text';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</SCRIPT></TD></TR>
 <!-- END flattrblock -->
 </TABLE>
-<TABLE ALIGN='center' BORDER='0'>
-    <TR><TD STYLE='vertical-align:top;'>
+<TABLE ALIGN='center' BORDER='0' ID='booktable'>
+    <TR><TD STYLE='vertical-align:top;' CLASS='bookcover'>
 <!-- BEGIN coverblock -->
         <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
 <!-- END coverblock -->
@@ -36,7 +36,7 @@
 <!-- END fakecoverblock -->
         </TD><TD>
 <!-- BEGIN datablock -->
-        <p><b>{data_name}:</b> {data_data}</p>
+        <p{dataclass}><b>{data_name}:</b> {data_data}</p>
 <!-- END datablock -->
         <p><b>{field_comment}:</b><br/>{comment}</p>
         <p><b>{field_download}:</b>

@@ -75,3 +75,10 @@ img { border:0; vertical-align:middle; }
   bottom: 0;
   width:100%;
 }
+
+/* Adjustments for mobile devices in portait mode */
+@media (max-width: 600px) {
+  #booktable tr { display:inline; }
+  #booktable .bookcover { display:table; margin-left:auto; margin-right:auto; }
+  #booktable td p.buttons { line-height: 1.7em; }
+}
