@@ -54,8 +54,8 @@ $scan_report_changes = FALSE;
 #============================[ Book Covers ]===
 // Where to get the covers: calibre, simple, or off (none)
 $cover_mode = 'off';
-// maximum width to display them
-$cover_width = '200px';
+// maximum width (in px) to display them
+$cover_width = '200';
 // where to place the cover img links
 $cover_base = 'covers';
 // generate fake-covers when no real img available (HTML only)?
