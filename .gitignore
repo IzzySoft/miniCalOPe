@@ -20,5 +20,6 @@ scan_[A-z][A-z].php
 !scan_en.php
 
 # Ignore local additions:
+books
 gutenwork
 sync
