@@ -337,7 +337,8 @@ switch($prefix) {
         $sser = req_alnumwild('series');
         $stxt = req_alnumwild('desc');
         $stag = req_intarr('tags');
-        $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;desc=$stxt;tags=".implode(',',$stag),'SEARCH');
+        $logger->debug("q=$sall;author=$saut;title=$stit;series=$sser;desc=$stxt;tags=".implode(',',$stag).";offset=$offset",'SEARCH');
+        $searchreq = "q=$sall&amp;author=$saut&amp;title=$stit&amp;series=$sser&amp;desc=$stxt&amp;tags=".implode(',',$stag);
 
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -382,7 +383,7 @@ switch($prefix) {
 
         $logger->debug($select.$order,'SEARCH');
         $all = $db->lim_query($select.$order, $offset, $perpage);
-        parse_titles($t,$db,$offset,$all,'?prefix=searchresults&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder,'searchresults',$searchvals);
+        parse_titles($t,$db,$offset,$all,'?prefix=searchresults&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;'.$searchreq,'searchresults',$searchvals);
         exit;
         break;
     //-----------------------------------------[ list of authors requested ]---
