@@ -824,7 +824,7 @@ switch($prefix) {
             }
             if ( !empty($coverimg) && file_exists($coverimg) && is_readable($coverimg) ) {
                 $t->set_var('cover_type',$cover_type);
-                $t->set_var('cover_src',$coverimg);
+                $t->set_var('cover_src',str_replace(' ','%20',$coverimg));
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');
             } elseif ($cover_fake_fallback) {

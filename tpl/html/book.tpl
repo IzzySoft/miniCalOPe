@@ -24,9 +24,9 @@
 <!-- END flattrblock -->
 </TABLE>
 <TABLE ALIGN='center' BORDER='0' ID='booktable'>
-    <TR><TD STYLE='vertical-align:top;' CLASS='bookcover'>
+    <TR><TD STYLE='vertical-align:top;text-align:center;' CLASS='bookcover'>
 <!-- BEGIN coverblock -->
-        <IMG ALIGN='center' ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
+        <IMG ALT='cover' SRC='{baseurl}{cover_src}' WIDTH='{cover_width}' STYLE='margin-right:15px;margin-left:5px;'>
 <!-- END coverblock -->
 <!-- BEGIN fakecoverblock -->
         <DIV CLASS='CoverBlank'><DIV CLASS='innerBorder'><DIV CLASS='BookTitle'>
