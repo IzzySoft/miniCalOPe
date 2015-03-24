@@ -61,6 +61,12 @@ $cover_base = 'covers';
 // generate fake-covers when no real img available (HTML only)?
 $cover_fake_fallback = TRUE;
 
+#==========================[ Scan Specials ]===
+// when found in .data files, what shall override definitions collected from the
+// directory structure? If not named here, it will be "merged". Currently
+// supported: author
+$data_overrides = array('author');
+
 #============================[ Web Service ]===
 // Timezone
 $timezone = '+01:00';

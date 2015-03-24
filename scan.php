@@ -54,7 +54,6 @@ foreach($langs as $lang) {
     foreach($genres[$lang] as $genre) {
         $logger->info("  + Scanning genre '$genre'",'SCAN');
         $tauthors = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre);
-        $authors = array_merge( $authors, $tauthors);
 
         // Guess what - they wrote books!
         foreach($tauthors as $author) {
@@ -64,8 +63,16 @@ foreach($langs as $lang) {
             foreach($tbooks as $book=>$dummy) {
               $tbooks[$book]['lang']   = $lang;
               $tbooks[$book]['genre']  = $genre;
-              if ( !empty($tbooks[$book]['author']) ) $authors = array_merge($authors,$tbooks[$book]['author']); // from *.data file
-              if ( !isset($tbooks[$book]['author']) || !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
+              if ( empty($tbooks[$book]['author']) ) { // no author defined in .data
+                $authors = array_merge($authors,array($author));
+                $tbooks[$book]['author'][] = $author;
+              } else {
+                $authors = array_merge($authors,$tbooks[$book]['author']);
+                if ( !in_array('author',$data_overrides) ) { // in no-override mode, merge in author from dirname
+                  $authors = array_merge($authors,$author);
+                  if ( !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
+                }
+              }
               if ( isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
               if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
               if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];                      // from *.data file

@@ -13,6 +13,7 @@ v2.0.0
 ! search results were not paging correctly (search terms were lost on page switch)
 * w3c fix: unescaped entities in booksearch/isbnsearch URLs (and some more)
 + book page: style improvements for mobile devices
++ Let the metadata 'author' tag overwrite the author name taken from the directory name
 
 v1.9.0 (27.10.2013)
 -------------------
