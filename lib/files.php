@@ -27,7 +27,7 @@ function scanFolder($dirname,$mode='dirs') {
     $list = array();
     libxml_use_internal_errors(true); // enable error protocol for XML check
     while ( $file=$dir->read() ) {
-      if ( in_array($file,array('.','..')) ) continue;
+      if ( substr($file,0,1) == '.' ) continue; // ignore ".", "..", and ".hidden files"
       $fullname = $dirname . DIRECTORY_SEPARATOR . $file;
 
       // directories

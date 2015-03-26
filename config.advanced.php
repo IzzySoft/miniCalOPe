@@ -66,6 +66,12 @@ $cover_fake_fallback = TRUE;
 // directory structure? If not named here, it will be "merged". Currently
 // supported: author
 $data_overrides = array('author');
+// As it's advisable to use 7-bit ASCII only for directory and file names,
+// one might wish to get the "correct spelling" into the Metadata by other means.
+// You can place ".name" files to have the directory name "replaced". Keep in
+// mind, however, that non-ASCII characters might cause issues with sorting.
+// Also remember to keep the .name and the "tag::"/"author::" in sync with .data files :)
+$dotname_overrides = array('author','genre');
 
 #============================[ Web Service ]===
 // Timezone

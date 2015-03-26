@@ -48,17 +48,27 @@ foreach($langs as $lang) {
     }
     $logger->info("* Scanning langDir '$lang'",'SCAN');
     $genres[$lang] = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
-    $allGenres     = array_merge($allGenres,$genres[$lang]);
 
     // Now come the authors
-    foreach($genres[$lang] as $genre) {
-        $logger->info("  + Scanning genre '$genre'",'SCAN');
-        $tauthors = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre);
+    foreach($genres[$lang] as $gidx => $genre) {
+        $logger->info("  + Scanning genre dir '$genre'",'SCAN');
+        $gdir = $genre;
+        if ( in_array('genre',$dotname_overrides) && file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . '.name') ) {
+          $genre = trim(file_get_contents($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . '.name'));
+          $genres[$lang][$gidx] = $genre;
+        }
+        $allGenres = array_merge($allGenres,array($genre));
+        $tauthors = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir);
 
         // Guess what - they wrote books!
-        foreach($tauthors as $author) {
-            $logger->debug("    - Scanning author '$author'",'SCAN');
-            $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . $author, 'files');
+        foreach($tauthors as $aidx => $author) {
+            $logger->debug("    - Scanning author dir '$author'",'SCAN');
+            $adir = $author;
+            if ( in_array('author',$dotname_overrides) && file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir . DIRECTORY_SEPARATOR . '.name') ) {
+              $author = trim(file_get_contents($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir . DIRECTORY_SEPARATOR . '.name'));
+              $tauthors[$aidx] = $author;
+            }
+            $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files');
             //array[name] with [files][ext], [desc] ([series],[series_index],[rating],[publisher],[isbn], [author],[tag]
             foreach($tbooks as $book=>$dummy) {
               $tbooks[$book]['lang']   = $lang;
