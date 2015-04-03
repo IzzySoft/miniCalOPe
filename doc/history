@@ -1,9 +1,7 @@
-$Id$
-
 History for miniCalOPe
 ======================
 
-v2.0.0
+v2.0.0 (03.04.2015)
 -------------------
 * removing lazyness (replacing "{base}/?args" by full "{base}/index.php?args")
   to speed up processing by avoiding unnecessary Apache subrequests
