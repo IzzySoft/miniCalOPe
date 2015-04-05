@@ -23,11 +23,13 @@
     <TR><TD>
 <!-- BEGIN prevblock -->
         {link1_open}<IMG ALT='{first_page}' SRC='{rel_url}tpl/icons/{icon1}'>{link_close}
+        {linkx_open}<IMG ALT='skip' SRC='{rel_url}tpl/icons/{iconx}'>{link_close}
         {link2_open}<IMG ALT='{prev_page}' SRC='{rel_url}tpl/icons/{icon2}'>{link_close}
 <!-- END prevblock -->
         </TD><TD ALIGN='right'>
 <!-- BEGIN nextblock -->
         {link1_open}<IMG ALT='{next_page}' SRC='{rel_url}tpl/icons/{icon1}'>{link_close}
+        {linkx_open}<IMG ALT='skip' SRC='{rel_url}tpl/icons/{iconx}'>{link_close}
         {link2_open}<IMG ALT='{last_page}' SRC='{rel_url}tpl/icons/{icon2}'>{link_close}
 <!-- END nextblock -->
         </TD></TR>

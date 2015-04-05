@@ -160,32 +160,42 @@ function get_formats() {
 function paginate($url,$offset,$all) {
   $tpl = $GLOBALS['t'];
   $perpage = $GLOBALS['perpage'];
+  $curpage = floor(($offset + $perpage) / $perpage); // floor in case of "manual override per URL"
+  $pagecount = floor($all/$perpage);
   $tpl->set_var('offset',$offset);
   $tpl->set_var('start',$offset +1);
   $tpl->set_var('total',$all);
   $tpl->set_var('per_page',$perpage);
   if ($offset==0) { // first page
-      $tpl->set_var('icon1','2left_grey.png');
+      $tpl->set_var('icon1','3left_grey.png');
+      $tpl->set_var('iconx','2left_grey.png'); // HTML only
       $tpl->set_var('icon2','1left_grey.png');
       $tpl->set_var('link1_open','');
+      $tpl->set_var('linkx_open',''); // HTML only
       $tpl->set_var('link2_open','');
       $tpl->set_var('link_close','');
       $tpl->set_var('poffset','0'); // OPDS only
       $tpl->parse('prev','prevblock');
   } else { // somewhere after
-      $tpl->set_var('icon1','2left.png');
+      $tpl->set_var('icon1','3left.png');
+      $tpl->set_var('iconx','2left.png');
       $tpl->set_var('icon2','1left.png');
       $poff = max(0,$offset - $perpage);
       $tpl->set_var('poffset',$poff); // OPDS only
-      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset=0">');
-      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$poff.'">');
+      $loffset = ($curpage < 6) ? 0 : ($curpage -6) * $perpage; // offset is at lower bound of perpage
+      $skiptitle = ($loffset == 0) ? '' : '-5';
+      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset=0" TITLE="'.trans('first_page').'">');
+      $tpl->set_var('linkx_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$loffset.'" TITLE="'.$skiptitle.'">');
+      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$poff.'" TITLE="'.trans('prev_page').'">');
       $tpl->set_var('link_close','</A>');
       $tpl->parse('prev','prevblock');
   }
   if ($all <= $offset + $perpage) { // last page
       $tpl->set_var('icon1','1right_grey.png');
-      $tpl->set_var('icon2','2right_grey.png');
+      $tpl->set_var('iconx','2right_grey.png');
+      $tpl->set_var('icon2','3right_grey.png');
       $tpl->set_var('link1_open','');
+      $tpl->set_var('linkx_open','');
       $tpl->set_var('link2_open','');
       $tpl->set_var('link_close','');
       $noff = $loff = floor($all/$perpage)*$perpage;
@@ -194,12 +204,16 @@ function paginate($url,$offset,$all) {
       $tpl->parse('next','nextblock');
   } else { // somewhere before
       $tpl->set_var('icon1','1right.png');
-      $tpl->set_var('icon2','2right.png');
+      $tpl->set_var('iconx','2right.png');
+      $tpl->set_var('icon2','3right.png');
       $noff = $offset + $perpage; $loff = floor($all/$perpage)*$perpage;
       $tpl->set_var('noffset',$noff); // OPDS only
       $tpl->set_var('loffset',$loff); // OPDS only
-      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$noff.'">');
-      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$loff.'">');
+      $roffset = ($pagecount - $curpage < 6) ? $pagecount * $perpage : ($curpage + 4) * $perpage; // offset is at lower bound of perpage
+      $skiptitle = ($pagecount - $curpage < 6) ? '' : '+5';
+      $tpl->set_var('link1_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$noff.'" TITLE="'.trans('next_page').'">');
+      $tpl->set_var('linkx_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$roffset.'" TITLE="'.$skiptitle.'">');
+      $tpl->set_var('link2_open','<A HREF="'.$GLOBALS['relurl'].$url.'&amp;offset='.$loff.'" TITLE="'.trans('last_page').'">');
       $tpl->set_var('link_close','</A>');
       $tpl->parse('next','nextblock');
   }
