@@ -26,6 +26,12 @@ function scanFolder($dirname,$mode='dirs') {
     $dir = dir("$dirname");
     $list = array();
     libxml_use_internal_errors(true); // enable error protocol for XML check
+    // block-level elements in HTML – add no BR here (https://developer.mozilla.org/de/docs/Web/HTML/Block-level_elemente)
+    $nobrtags = array('li','ol','ul','div','br','p','pre','blockquote','h\d','table','tr','th','td','hr','dd','dl','dt');
+    $nobrregs = '';
+    foreach($nobrtags as $x) $nobrregs .= "|\<\/$x\>|\<$x\>|\<$x\/\>";
+    $nobrregs = substr($nobrregs,1);
+    // end block-level definitions (used below on each description file)
     while ( $file=$dir->read() ) {
       if ( substr($file,0,1) == '.' ) continue; // ignore ".", "..", and ".hidden files"
       $fullname = $dirname . DIRECTORY_SEPARATOR . $file;
@@ -45,12 +51,16 @@ function scanFolder($dirname,$mode='dirs') {
         $list[$nam]['fbasename'] = $bnam;
         if ( in_array($ext,$bookformats) ) $list[$nam]['files'][$ext] = $fullname;
         elseif ( in_array($ext,$bookdesc_ext) ) {
-          $list[$nam]['desc'] = file_get_contents($fullname);
+          $list[$nam]['desc'] = trim(file_get_contents($fullname));
+          // take care for formatting (e.g. line breaks)
+          $list[$nam]['desc'] = preg_replace('!(\r\n?|\n){2}!',"\n<br/>\n",$list[$nam]['desc']); // nl2br for empty lines
+          $list[$nam]['desc'] = preg_replace('/(?<!'.$nobrregs.')\s*([\n\r])/i',"<br/>\n",$list[$nam]['desc']); // nl2br except after block-level elements
+          // XML validation
           if ( $GLOBALS['check_xml'] && !empty($list[$nam]['desc']) ) {
-            // check for unmatched HTML tags
-            $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',preg_replace('![\n\r]!ms','',$list[$nam]['desc']));
+            // check for unmatched HTML tags. ATTENTION: this currently does NOT catch wrong nestings like "<b><i></b></i>" !!!
+            $foo = preg_replace("!(<([\w]+)[^>]*/>)!ims",'',$list[$nam]['desc']); // simple <TAG/>s
+            $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',preg_replace('![\n\r]!ms','',$foo));
             while ( preg_match_all("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",$foo,$matches) ) $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$foo); // nested?
-            $foo = preg_replace("!(<([\w]+)[^>]*/>)!ims",'',$foo); // simple <TAG/>s
             if ( strpos($foo,'<')!==FALSE ) {
               $GLOBALS['logger']->error("! Errors in '$fullname': Unmatched HTML tags",'SCAN');
               if ($GLOBALS['skip_broken_xml']) $list[$nam]['desc'] = '';
