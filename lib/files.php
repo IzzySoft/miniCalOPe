@@ -18,14 +18,20 @@ require_once(dirname(__FILE__).'/common.php');
  * @function scanFolder
  * @param string dirname directory to scan
  * @param optional string mode scan for 'dirs' (default) or 'files'
+ * @param optional int markdown Whether to interprete .desc files as Markdown (1) or not (0, default). Only relevant when mode='files'.
  * @return array list mode=dirs: array of dirnames (1-level); else: array[name] with [files][ext], [desc], [lastmod] (unixtime), [title], [fbasename]
  *               plus optionally arrays [author] + [tag], strings [rating], [series], [series_index], [publisher], [isbn], [uri]
  */
-function scanFolder($dirname,$mode='dirs') {
+function scanFolder($dirname,$mode='dirs',$markdown=0) {
     GLOBAL $bookformats, $bookdesc_ext;
     $dir = dir("$dirname");
     $list = array();
     libxml_use_internal_errors(true); // enable error protocol for XML check
+    // initialize Markdown library if needed
+    if ($markdown) {
+      require_once('Michelf/MarkdownExtra.inc.php');
+      $parser = new Michelf\MarkdownExtra();
+    }
     // block-level elements in HTML – add no BR here (https://developer.mozilla.org/de/docs/Web/HTML/Block-level_elemente)
     $nobrtags = array('li','ol','ul','div','br','p','pre','blockquote','h\d','table','tr','th','td','hr','dd','dl','dt');
     $nobrregs = '';
@@ -53,8 +59,12 @@ function scanFolder($dirname,$mode='dirs') {
         elseif ( in_array($ext,$bookdesc_ext) ) {
           $list[$nam]['desc'] = trim(file_get_contents($fullname));
           // take care for formatting (e.g. line breaks)
-          $list[$nam]['desc'] = preg_replace('!(\r\n?|\n){2}!',"\n<br/>\n",$list[$nam]['desc']); // nl2br for empty lines
-          $list[$nam]['desc'] = preg_replace('/(?<!'.$nobrregs.')\s*([\n\r])/i',"<br/>\n",$list[$nam]['desc']); // nl2br except after block-level elements
+          if ($markdown) {
+            $list[$nam]['desc'] = $parser->transform($list[$nam]['desc']);
+          } else {
+            $list[$nam]['desc'] = preg_replace('!(\r\n?|\n){2}!',"\n<br/>\n",$list[$nam]['desc']); // nl2br for empty lines
+            $list[$nam]['desc'] = preg_replace('/(?<!'.$nobrregs.')\s*([\n\r])/i',"<br/>\n",$list[$nam]['desc']); // nl2br except after block-level elements
+          }
           // XML validation
           if ( $GLOBALS['check_xml'] && !empty($list[$nam]['desc']) ) {
             // check for unmatched HTML tags. ATTENTION: this currently does NOT catch wrong nestings like "<b><i></b></i>" !!!

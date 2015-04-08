@@ -72,6 +72,10 @@ $data_overrides = array('author');
 // mind, however, that non-ASCII characters might cause issues with sorting.
 // Also remember to keep the .name and the "tag::"/"author::" in sync with .data files :)
 $dotname_overrides = array('author','genre');
+// Whether to interprete content of .desc files as Markdown (1) or not (0).
+// This is the global switch. If enabled (1), you can override it per-genre
+// and/or per author by placing a file named .nomarkdown in their directory.
+$use_markdown = 0;
 
 #============================[ Web Service ]===
 // Timezone
