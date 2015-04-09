@@ -38,7 +38,7 @@
 <!-- BEGIN datablock -->
         <p{dataclass}><b>{data_name}:</b> {data_data}</p>
 <!-- END datablock -->
-        <div><b>{field_comment}:</b><br/>{comment}</div>
+        <div id='bookdesc'>{comment}</div>
         <p><b>{field_download}:</b>
 <!-- BEGIN itemblock -->
           <A HREF='{baseurl}index.php?action=getbook&amp;book={id}&amp;format={format}&amp;lang={lang}'>{ftype_human}</A> ({flength_human})&nbsp;
