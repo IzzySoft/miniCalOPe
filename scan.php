@@ -42,6 +42,7 @@ $langs = scanFolder($bookroot);
 
 // Now collect the genres
 foreach($langs as $lang) {
+    GLOBAL $use_markdown;
     if ( !empty($uselangs) && !in_array($lang,$uselangs) ) {
         $logger->debug("* Skipping langDir '$lang'",'SCAN');
         continue;
@@ -53,6 +54,8 @@ foreach($langs as $lang) {
     foreach($genres[$lang] as $gidx => $genre) {
         $logger->info("  + Scanning genre dir '$genre'",'SCAN');
         $gdir = $genre;
+        if ( $use_markdown && !file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . '.nomarkdown') ) $gmarkdown = 1;
+        else $gmarkdown = 0;
         if ( in_array('genre',$dotname_overrides) && file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . '.name') ) {
           $genre = trim(file_get_contents($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $genre . DIRECTORY_SEPARATOR . '.name'));
           $genres[$lang][$gidx] = $genre;
@@ -68,7 +71,11 @@ foreach($langs as $lang) {
               $author = trim(file_get_contents($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir . DIRECTORY_SEPARATOR . '.name'));
               $tauthors[$aidx] = $author;
             }
-            $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files');
+            if ( $gmarkdown && !file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir . DIRECTORY_SEPARATOR . '.nomarkdown') ) {
+              $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', $gmarkdown);
+            } else {
+              $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', 0);
+            }
             //array[name] with [files][ext], [desc] ([series],[series_index],[rating],[publisher],[isbn], [author],[tag]
             foreach($tbooks as $book=>$dummy) {
               $tbooks[$book]['lang']   = $lang;

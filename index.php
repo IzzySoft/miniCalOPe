@@ -805,10 +805,11 @@ switch($prefix) {
             } else {
                 $comm = html_entity_decode($book['comment']);
                 if ( $pageformat=='opds' ) {
-                  $comm = preg_replace("/(<\/?\w+)(.*?>)/e", "strtolower('\\1') . '\\2'", $comm); // OPDS/XML wants tags lower-case!
+                  $comm = preg_replace('!(</?\w+)(.*?>)!e', 'strtolower("\\1") . "\\2"', $comm); // OPDS/XML wants tags lower-case!
                   $comm = preg_replace("/ (CLASS|ID|SRC|HREF|ALT)=/e", "' ' . strtolower('\\1') . '='", $comm);     // Same for attributes
+                  $comm = stripslashes($comm);
                 }
-                $t->set_var('comment',nl2br($comm));
+                $t->set_var('comment',$comm);
             }
             $t->set_var('pubdate',$book['pubdate']);
             $t->set_var('pubdate_human',$book['pubdate_human']);

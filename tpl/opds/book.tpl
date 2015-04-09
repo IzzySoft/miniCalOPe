@@ -80,7 +80,7 @@
 <!-- BEGIN datablock -->
         <p><b>{data_name}:</b> {data_data}</p>
 <!-- END datablock -->
-        <p><b>{field_comment}:</b><br/>{comment}</p>
+        <div><b>{field_comment}:</b><br/>{comment}</div>
       </div>
     </content>
 

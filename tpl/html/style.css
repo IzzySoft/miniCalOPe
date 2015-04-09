@@ -1,8 +1,8 @@
-BODY,P,TD,TH {
-  font-family: sans-serif;
+body,p,td,th,div {
+  font-family: "DejaVu Sans", Verdana, sans-serif;
   font-size:10pt;
 }
-BODY {
+body {
   margin-top: 10px;
   margin-right: 0px;
   margin-left: 0px;
@@ -10,20 +10,22 @@ BODY {
   color: #00e;
 }
 
-A { text-decoration:none; }
-A:link { color: #b00; }
-A:visited { color: #f50; }
-.list TD A:link, .list TD A:visited, #isbnsearch A:link, #isbnsearch A:visited, #booksearch A:link, #booksearch A:visited { color: #00e; }
-.list TD:hover A, #isbnsearch A:hover { color:#ffffff; }
-.list TD:hover, #isbnsearch A:hover { background-color:#4d9dfc; }
-#isbnsearch A, #booksearch A {
+p { text-align:justify; }
+
+a { text-decoration:none; }
+a:link { color: #b00; }
+a:visited { color: #f50; }
+.list td a:link, .list td a:visited, #isbnsearch a:link, #isbnsearch a:visited, #booksearch a:link, #booksearch a:visited { color: #00e; }
+.list td:hover a, #isbnsearch a:hover { color:#ffffff; }
+.list td:hover, #isbnsearch a:hover { background-color:#4d9dfc; }
+#isbnsearch a, #booksearch a {
   border: 1px solid #4d9dfc;
   padding-left: 2px;
   padding-right: 2px;
 }
-#booksearch A { background-color: #dff; }
-#isbnsearch A { background-color: #ddd; }
-#isbnsearch A:hover, #booksearch A:hover { border-color: yellow; }
+#booksearch a { background-color: #dff; }
+#isbnsearch a { background-color: #ddd; }
+#isbnsearch a:hover, #booksearch a:hover { border-color: yellow; }
 
 .error { color: #f00; }
 
@@ -76,9 +78,17 @@ img { border:0; vertical-align:middle; }
   width:100%;
 }
 
+#bookdesc {
+  background-color:#ffc;
+  color:#00a;
+  padding:.3em 1em;
+  box-shadow: 0 0 20px rgba(222,222,222,.95);
+}
+
 /* Adjustments for mobile devices in portait mode */
 @media (max-width: 600px) {
   #booktable tr { display:inline; }
   #booktable .bookcover { display:table; margin-left:auto; margin-right:auto; }
   #booktable td p.buttons { line-height: 1.7em; }
+  #bookdesc { padding:.15em .5em; }
 }
