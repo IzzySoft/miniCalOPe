@@ -82,6 +82,7 @@ img { border:0; vertical-align:middle; }
   background-color:#ffc;
   color:#00a;
   padding:.3em 1em;
+  margin-right:1em;
   box-shadow: 0 0 20px rgba(222,222,222,.95);
 }
 
@@ -90,5 +91,5 @@ img { border:0; vertical-align:middle; }
   #booktable tr { display:inline; }
   #booktable .bookcover { display:table; margin-left:auto; margin-right:auto; }
   #booktable td p.buttons { line-height: 1.7em; }
-  #bookdesc { padding:.15em .5em; }
+  #bookdesc { padding:.15em .5em; margin-right:.5em; }
 }
