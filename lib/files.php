@@ -118,6 +118,7 @@ function scanFolder($dirname,$mode='dirs',$markdown=0) {
       }
 
     }
+    if ($mode=='dirs') sort($list);
     return $list;
 }
 
