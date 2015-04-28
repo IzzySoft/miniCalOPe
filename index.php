@@ -801,7 +801,8 @@ switch($prefix) {
             $t->set_var('authorname',$author); // used by OPDS only + fakecover
             $t->set_var('field_comment',trans('comment'));
             if ( empty($book['comment']) ) {
-                $t->set_var('comment',trans('not_available'));
+                if ( $pageformat == 'opds' ) $t->set_var('comment',trans('not_available'));
+                else  $t->set_var('comment',trans('comment').' '.trans('not_available'));
             } else {
                 $comm = html_entity_decode($book['comment']);
                 if ( $pageformat=='opds' ) {
