@@ -7,6 +7,7 @@ v2.1.0
 ! Scan: check_xml didn't handle tags spread across multiple lines
 + adding Markdown support
 * re-styling the book description area
++ adding classes to deal with metadata in .epub files directly, and a script to extract those
 
 v2.0.0 (03.04.2015)
 -------------------

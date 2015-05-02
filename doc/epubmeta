@@ -1,0 +1,18 @@
+#!/usr/bin/php
+<?php
+
+// Include the class files
+require(__DIR__.'/../lib/class.epubdesc.php');
+
+// Check cmd line parameters
+if (!empty($argv[1])) $epubfile = $argv[1];
+else die('Syntax: '.$argv[0].' <epubfile>');
+
+// Initialize metadata
+$epubname = pathinfo($epubfile)['filename'];
+$book = new epubdesc($epubfile);
+
+// Write .desc, .data, and cover files
+$book->writeFiles($epubname);
+
+?>
