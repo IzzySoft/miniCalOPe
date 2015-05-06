@@ -39,6 +39,13 @@ class epubdesc extends epub {
     protected $data;
 
     /**
+     * How many TOC levels to include? 0 = no TOC at all
+     * @protected int tocLevels default 2
+     * @see setTOCLevels()
+     */
+    protected $tocLevels = 2;
+
+    /**
      * Our "dictionary" for text output. For setting up yours, see setDict()
      * @protected array terms
      */
@@ -46,6 +53,7 @@ class epubdesc extends epub {
       'author' => 'Autor',
       'bookproducer' => 'eBook Ersteller',
       'collaborator' => 'Mitarbeiter',
+      'content' => 'Inhalt',
       'copyright' => 'Copyright',
       'date' => 'Datum',
       'editor' => 'Bearbeitung',
@@ -73,6 +81,17 @@ class epubdesc extends epub {
       $this->desc = '';
       $this->data = '';
       $this->_getMeta();
+    }
+
+    /**
+     * Set how much of the TOC should be included with the description
+     * @param int levels 0..3 (0 to not include TOC at all)
+     */
+    public function setTOCLevels($levels) {
+      if ( is_numeric($levels) && $levels < 4 ) $this->tocLevels = $levels;
+      else {
+        trigger_error('TOC level needs to be 0..3 (given: '.$levels.')',E_USER_WARNING);
+      }
     }
 
     /**
@@ -130,7 +149,6 @@ class epubdesc extends epub {
      * @param str line
      */
     protected function addDescHead($line) {
-//echo "Adding line to desc: '$line'\n";
       if ( empty($this->desc) ) $this->desc = $line;
       else {
         if ( $this->type == 'html' ) $this->desc .= "\n${line}";
@@ -153,8 +171,6 @@ class epubdesc extends epub {
      * @brief used for dc:creator & dc:contributor
      */
     protected function parsePerson($item) { // used for dc:creator & dc:contributor
-//echo "parsePerson\n";
-//print_r($item);
       if ( is_array($item) && !empty($item) ) foreach($item as $it) {
         if ( !isset($it['role']) ) { $this->addDescHead("Autor: ${it['value']}"); continue; }
         switch ($it['role']) {
@@ -235,10 +251,29 @@ class epubdesc extends epub {
       // Description & TOC
       $item = $this->getDcItem('description');
       if ( !empty($item) ) $this->addDescRaw("\n\n${item}");
-      $item = $this->getTOC();
-      if ( !empty($item) ) {
-        $this->addDescRaw("\n\n");
-        foreach($item as $it) $this->addDescRaw("* ".$it['naam']."\n");
+      if ( $this->tocLevels > 0 ) {
+        $item = $this->getTOC();
+        if ( !empty($item) ) {
+          $this->addDescRaw("\n\n<u>".$this->terms['content']."</u>\n\n");
+          if ( $this->type == 'html' ) $this->addDescRaw("<ul>\n");
+          foreach($item as $it) $this->_mkTocList($it,1);
+          if ( $this->type == 'html' ) $this->addDescRaw("</ul>\n");
+        }
+      }
+    }
+
+    /**
+     * convert a TOC item to a list item
+     */
+    protected function _mkTocList($item,$level) {
+      $indent = str_repeat(' ',($level -1) * 4);
+      if ( $this->type == 'md' ) $line = '* '.$item['naam'];
+      else $line = '<li>'.$item['naam'].'</li>';
+      $this->addDescRaw($indent.$line."\n");
+      if ( $level < $this->tocLevels && !empty($item['subtoc']) ) {
+          if ( $this->type == 'html' ) $this->addDescRaw($indent."<ul>\n");
+          foreach ($item['subtoc'] as $it) $this->_mkTocList($it,$level +1);
+          if ( $this->type == 'html' ) $this->addDescRaw($indent."</ul>\n");
       }
     }
 
