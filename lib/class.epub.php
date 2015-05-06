@@ -30,6 +30,11 @@ class epub {
      */
     var $zip;
     /**
+     * Whether this class instance was initialized successfully
+     * @var bool initOK
+     */
+    var $initOK = FALSE;
+    /**
      * Holds the (relative to $ebookDir) path to the OPF file
      * @var string Location + name of OPF file
      */
@@ -63,15 +68,16 @@ class epub {
     var $manifest;
     /**
      * Holds all the spin data
-     * @var array Spine data
+     * @var array Spine data (array of strings)
+     * @see getSpine()
      */
-    var $spine;
+    protected $spine = NULL;
     /**
      * Holds the ToC data
      * @var array Array with ToC items
      * @see getTOC()
      */
-    var $toc;
+    protected $toc = NULL;
     /**
      * cover data
      * @var protected cover
@@ -81,41 +87,46 @@ class epub {
 
     /**
      * Constructor
-     * @param optional ebookDir the *.epub file to analyze
+     * @param ebookDir the *.epub file to analyze
      */
-    public function __construct($ebookDir='') {
-      if ( !empty($ebookDir) ) $this->init($ebookDir);
+    public function __construct($ebookDir) {
+      if ( empty($ebookDir) ) {
+        trigger_error("eBook file name cannot be empty!", E_USER_WARNING);
+        return;
+      }
+      $this->init($ebookDir);
     }
 
     /**
      * Destructor
      */
     function __destruct() {
+        $this->zip->close();
     }
 
     /**
      * Analyze an *.epub file and fill the class variables
      * @param string ebookDir *.epub file to analyze
+     * @return bool success of initialization
      */
     public function init($ebookDir) {
         if ( !file_exists($ebookDir) ) {
           trigger_error("eBook '$ebookDir' not found", E_USER_WARNING);
+          $this->initOK = FALSE;
           return;
         }
 
         $this->ebookDir = $ebookDir;
         $this->zip = new ZipArchive();
-        $this->zip->open($this->ebookDir);
+        $this->zip->open($this->ebookDir); // gets closed in this::__destruct()
 
         $this->_getOPF();
         $this->opfContents = simplexml_load_string($this->getZipFile($this->opfFile));
 
         $this->_getDcData();
         $this->_getManifest();
-        $this->_getSpine();
-        $this->_getTOC();
 
-        $this->zip->close();
+        $this->initOK = TRUE;
 
         //$this->debug();
     }
@@ -192,7 +203,7 @@ class epub {
     /**
      * Get the specified manifest by type
      * @param string $type The manifest type
-     * @return string/boolean String when manifest item exists, otherwise false
+     * @return mixed Array when manifest items exists, otherwise false
      */
     public function getManifestByType($type) {
         foreach($this->manifest AS $manifestID => $manifest) {
@@ -208,7 +219,7 @@ class epub {
     /**
      * Get the specified manifest by type
      * @param string $type The manifest type RegEx
-     * @return string/boolean String when manifest item exists, otherwise false
+     * @return mixed items Array when manifest item exists, otherwise false
      */
     public function getManifestByTypeMatch($type) {
         $return = array();
@@ -254,10 +265,20 @@ class epub {
     }
 
     /**
+     * Retrieve the spine
+     * @return array spine (array of strings defining the reading order)
+     */
+    public function getSpine() {
+      if ( $this->spine === NULL ) $this->_getSpine();
+      return $this->spine;
+    }
+
+    /**
      * Retrieve the ToC
      * @return array Array with ToC Data
      */
     public function getTOC() {
+        if ( $this->toc === NULL ) $this->_getTOC();
         return $this->toc;
     }
 
