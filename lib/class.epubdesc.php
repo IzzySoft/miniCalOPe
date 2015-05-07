@@ -30,13 +30,13 @@ class epubdesc extends epub {
      * Holds the description. Obtain via getDesc().
      * @protected str desc
      */
-    protected $desc;
+    protected $desc = FALSE;
 
     /**
      * Holds the .data content. Obtain with getData().
      * @protected str data
      */
-    protected $data;
+    protected $data = FALSE;
 
     /**
      * How many TOC levels to include? 0 = no TOC at all
@@ -78,9 +78,6 @@ class epubdesc extends epub {
       $type = strtolower($type);
       if ( !in_array($type,array('md','html')) ) $type = 'md'; // safeguard
       $this->type = $type;
-      $this->desc = '';
-      $this->data = '';
-      $this->_getMeta();
     }
 
     /**
@@ -149,6 +146,7 @@ class epubdesc extends epub {
      * @return str data
      */
     public function getData() {
+      if ( $this->data === NULL ) $this->_getMeta();
       return $this->data;
     }
 
@@ -165,6 +163,7 @@ class epubdesc extends epub {
      * @return str desc
      */
     public function getDesc() {
+      if ( $this->desc === NULL ) $this->_getMeta();
       return $this->desc;
     }
 
@@ -225,6 +224,10 @@ class epubdesc extends epub {
      * Obtain the metadata and setup data + desc
      */
     protected function _getMeta() {
+      // init strings
+      $this->desc = '';
+      $this->data = '';
+
       // Book Title
       $title = $this->getDcItem('title');
       if ( empty($title) ) $title = $epubname;
