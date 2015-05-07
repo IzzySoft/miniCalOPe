@@ -106,18 +106,42 @@ class epubdesc extends epub {
     }
 
     /**
-     * Write the .data, .desc, and cover files
+     * Write the .desc file
      * @param str basename Basename of the file - without extension, but with (optional) full path
      */
-    public function writeFiles($basename) {
+    public function writeDesc($basename) {
       file_put_contents("${basename}.desc", $this->getDesc());
+    }
+
+    /**
+     * Write the .data file
+     * @param str basename Basename of the file - without extension, but with (optional) full path
+     */
+    public function writeData($basename) {
       file_put_contents("${basename}.data", $this->getData());
+    }
+
+    /**
+     * Write the cover image file
+     * @param str basename Basename of the file - without extension, but with (optional) full path
+     */
+    public function writeCover($basename) {
       $item = $this->getCover();
       if ( !empty($item) ) {
         $ext = preg_replace('!.*\.([^\.]+)$!','$1',$item['href']);
         if ( $ext == 'jpeg' ) $ext = 'jpg';
         $this->extract_file($this->ebookDir, $item['href'], $basename .'.'. $ext);
       }
+    }
+
+    /**
+     * Write the .data, .desc, and cover files
+     * @param str basename Basename of the file - without extension, but with (optional) full path
+     */
+    public function writeFiles($basename) {
+      $this->writeDesc($basename);
+      $this->writeData($basename);
+      $this->writeCover($basename);
     }
 
     /**
