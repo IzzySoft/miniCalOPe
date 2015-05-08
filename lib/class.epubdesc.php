@@ -30,13 +30,13 @@ class epubdesc extends epub {
      * Holds the description. Obtain via getDesc().
      * @protected str desc
      */
-    protected $desc = FALSE;
+    protected $desc = NULL;
 
     /**
      * Holds the .data content. Obtain with getData().
      * @protected str data
      */
-    protected $data = FALSE;
+    protected $data = NULL;
 
     /**
      * How many TOC levels to include? 0 = no TOC at all
