@@ -248,7 +248,7 @@ class epub {
           return $this->cover;
         } else { // some epubs have the cover image undeclared
           $imgs = $this->getManifestByTypeMatch('!^image/!');
-          $names = array('_cover_','cover','cover-image','cover1','titel');
+          $names = array('_cover_','cover','cover-image','cover1','cover-page','titel');
           if (!empty($imgs)) foreach($names as $name) {
             foreach($imgs as $img) {
               if ( preg_match('!'.$name.'\.(jpg|jpeg|png|gif)$!',$img['href']) ) {
@@ -364,20 +364,24 @@ class epub {
     /**
      * get a single toc item and recurse into sub-items
      * @param object navpoint
+     * @brief used by this::_getTOC()
      *
      */
-    private function _getTocItem($navPoint) {
+    protected function _getTocItem($navPoint) {
         $navPointData = $navPoint->attributes();
-        $toc[(string)$navPointData['playOrder']]['id'] = (string)$navPointData['id'];
-        $toc[(string)$navPointData['playOrder']]['naam'] = (string)$navPoint->navLabel->text;
-        $toc[(string)$navPointData['playOrder']]['src'] = (string)$navPoint->content->attributes();
+        $po = (int)$navPointData['playOrder'];
+        $toc = [];
+        if ( array_key_exists($po,$toc) ) $po = max(array_values(array_keys($toc))) +1; // work-around broken values; some EPUBs have playOrder always 0
+        $toc[$po]['id'] = (string)$navPointData['id'];
+        $toc[$po]['naam'] = (string)$navPoint->navLabel->text;
+        $toc[$po]['src'] = (string)$navPoint->content->attributes();
         if ( property_exists($navPoint,'navPoint') ) {
           foreach ($navPoint->navPoint as $subNav) {
             $subNavData = $subNav->attributes();
-            $toc[(string)$navPointData['playOrder']]['subtoc'][(string)$subNavData['playOrder']] = $this->_getTocItem($subNav)[(string)$subNavData['playOrder']];
+            $toc[$po]['subtoc'][(int)$subNavData['playOrder']] = $this->_getTocItem($subNav)[(int)$subNavData['playOrder']];
           }
         } else {
-          $toc[(string)$navPointData['playOrder']]['subtoc'] = FALSE;
+          $toc[$po]['subtoc'] = FALSE;
         }
         return $toc;
     }
@@ -385,7 +389,7 @@ class epub {
     /**
      * Build an array with the TOC
      */
-    private function _getTOC() {
+    protected function _getTOC() {
         $tocFile = $this->getManifest('ncx');
         if ( empty($tocFile) ) $tocFile = $this->getManifest('toc_ncx'); // malformatted epub?
         if ( empty($tocFile) ) {
@@ -398,7 +402,9 @@ class epub {
         $toc = array();
         foreach($tocContents->navMap->navPoint AS $navPoint) {
             $navPointData = $navPoint->attributes();
-            $toc[(string)$navPointData['playOrder']] = $this->_getTocItem($navPoint)[(string)$navPointData['playOrder']];
+            $po = (int)$navPointData['playOrder'];
+            if ( array_key_exists($po,$toc) ) $po = max(array_values(array_keys($toc))) +1; // work-around broken values; some EPUBs have playOrder always 0
+            $toc[$po] = $this->_getTocItem($navPoint)[(string)$navPointData['playOrder']];
         }
 
         $this->toc = $toc;
