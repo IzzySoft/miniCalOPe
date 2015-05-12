@@ -59,6 +59,7 @@ class epubdesc extends epub {
       'editor' => 'Bearbeitung',
       'ebookPublished' => 'eBook veröffentlicht',
       'ebookCreated' => 'eBook erstellt',
+      'firstpublished' => 'Erstveröffentlichung',
       'illustrator' => 'Illustrator',
       'modification' => 'Änderung',
       'published' => 'Veröffentlicht',
@@ -245,9 +246,10 @@ class epubdesc extends epub {
       // Dates
       $item = $this->getDcItemFull('date');
       if ( is_array($item) && !empty($item) ) foreach($item as $it) {
-        if ( !isset($it['event']) )    $this->addDescHead($this->terms['date'].": ${it['value']}"); continue;
+        if ( !isset($it['event']) )  { $this->addDescHead($this->terms['date'].": ${it['value']}"); continue; }
         switch ($it['event']) {
-          case 'original-publication': $this->addDescHead($this->terms['published'].": ${it['value']}"); break;
+          case 'publication'         : $this->addDescHead($this->terms['published'].": ${it['value']}"); break;
+          case 'original-publication': $this->addDescHead($this->terms['firstpublished'].": ${it['value']}"); break;
           case 'ops-publication'     : $this->addDescHead($this->terms['ebookPublished'].": ${it['value']}"); break;
           case 'creation'            : $this->addDescHead($this->terms['ebookCreated'].": ${it['value']}"); break;
           case 'modification'        : $this->addDescHead($this->terms['modification'].": ${it['value']}"); break;
