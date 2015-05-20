@@ -76,6 +76,14 @@ $dotname_overrides = array('author','genre');
 // This is the global switch. If enabled (1), you can override it per-genre
 // and/or per author by placing a file named .nomarkdown in their directory.
 $use_markdown = 0;
+#------------------------[ data extraction ]---
+// we can extract some details from EPUB files. Define here whether we shall do
+// so, and what to extract.
+// Main switch to toggle it on/off:
+$autoExtract = FALSE;
+// Shall we extract covers? 0=no, 1=extract, 2=extract&resize (2 not yet implemented)
+// Covers will only be extracted if there is no cover image already.
+$extractCover = 0;
 
 #============================[ Web Service ]===
 // Timezone

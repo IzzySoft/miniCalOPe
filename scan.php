@@ -90,7 +90,9 @@ foreach($langs as $lang) {
                   if ( !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
                 }
               }
-              if ( isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
+              if ( $GLOBALS['autoExtract'] ) {
+                if ( $GLOBALS['extractCover'] > 0 && isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
+              }
               if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
               if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];                      // from *.data file
               if ( !empty($tbooks[$book]['publisher']) ) $publisher[] = $tbooks[$book]['publisher'];             // from *.data file
