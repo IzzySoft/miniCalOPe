@@ -241,7 +241,13 @@ class epub {
      */
     public function getCover() {
       if ( $this->cover === NULL ) {
-        $cover = $this->getManifest('cover');
+        $cover = $this->getManifest('cover-image'); // some epubs use this, and point 'cover' to the page
+        if ( $cover !== FALSE ) {
+          $this->cover = $cover;
+          $this->cover['trueCover'] = TRUE;
+          return $this->cover;
+        }
+        $cover = $this->getManifest('cover'); // this usually is the cover image, unless 'cover-image' was used (see above)
         if ( $cover !== FALSE ) {
           $this->cover = $cover;
           $this->cover['trueCover'] = TRUE;
