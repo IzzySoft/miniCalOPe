@@ -201,9 +201,8 @@ function extract_file($zip,$zip_entry,$target) {
  */
 function extract_cover($file) {
   if ( !file_exists($file) ) return; // no input
-  $cover = substr($file,0,strrpos($file,'.')).'.jpg'; // name of the target cover image file
-  if ( file_exists($cover) ) return; // already there
-  if ( file_exists(preg_replace('!jpg$!','png',$cover)) ) return; // already there
+  $cover = coverPath($substr($file,0,strrpos($file,'.')));
+  if ( !empty($cover) ) return; // cover already there
 
   $zip = zip_open($file);
   if (!$zip || is_int($zip)) {
@@ -231,6 +230,20 @@ function extract_cover($file) {
   if ( !$zipok ) $GLOBALS['logger']->error('! Failed to extract cover from "$file"','SCAN');
 
   zip_close($zip);
+}
+
+/** Check if we already have a cover image and return its name
+ * @function coverPath
+ * @param string bookpath full path and name to the ebook file w/o file ext
+ * @return filename path and name of the cover image file
+ * @brief used by scan and web to make sure both ends share the same file mask
+ */
+function coverPath($bookpath) {
+  $covers = glob($bookpath."\.*"); $coverimg = '';
+  foreach ($covers as $c) if ( preg_match('!\.(jpg|jpeg|png|gif)$!',$c) ) {
+    $coverimg = $c; break;
+  }
+  return $coverimg;
 }
 
 ?>

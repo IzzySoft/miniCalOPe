@@ -824,7 +824,7 @@ switch($prefix) {
                 $t->set_var('ftype',$formats[$file['format']]['mimetype']);
                 $t->set_var('ftype_human',$formats[$file['format']]['ftype_human']);
                 $t->set_var('ftitle',$formats[$file['format']]['ftitle']);
-                $coverimg = $file['path'].DIRECTORY_SEPARATOR.$file['name'].'.jpg';
+                $covername = $file['path'].DIRECTORY_SEPARATOR.$file['name']; // file w/o ext
                 $t->set_var('flength',$file['size']);
                 $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
                 $t->set_var('format',$file['format']);
@@ -832,14 +832,11 @@ switch($prefix) {
                 $more = TRUE;
             }
             // book cover
-            if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
-            $cover_type = 'jpeg';
-            if ( !empty($coverimg) && !file_exists($coverimg) ) {
-              $coverimg = preg_replace('!jpg$!','png',$coverimg);
-              $cover_type = 'png';
-            }
+            if ($use_lang=='cal') $covername = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid;
+            $coverimg = coverPath($covername);
             if ( !empty($coverimg) && file_exists($coverimg) && is_readable($coverimg) ) {
-                $t->set_var('cover_type',$cover_type);
+                $cover_type = pathinfo($coverimg)['extension']; if ( $cover_type == 'jpg' ) $cover_type = 'jpeg';
+                $t->set_var('cover_type',$cover_type); // MimeType (opds only)
                 $t->set_var('cover_src',str_replace(' ','%20',$coverimg));
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');
