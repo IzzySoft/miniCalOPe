@@ -18,6 +18,7 @@ require_once('./lib/files.php');
 require_once('./lib/db_sqlite3.php');
 require_once('./lib/db.php');
 require_once('./lib/template.php');
+if ( $autoExtract ) require_once('./lib/class.epubdesc.php');
 
 $tpl = new Template('tpl');
 $db = new db($dbfile);
@@ -90,8 +91,13 @@ foreach($langs as $lang) {
                   if ( !(is_array($tbooks[$book]['author']) && in_array($author,$tbooks[$book]['author'])) ) $tbooks[$book]['author'][] = $author;
                 }
               }
-              if ( $GLOBALS['autoExtract'] ) {
-                if ( $GLOBALS['extractCover'] > 0 && isset($tbooks[$book]['files']['epub']) && $GLOBALS['cover_mode']!='off' ) extract_cover($tbooks[$book]['files']['epub']);
+              if ( $GLOBALS['autoExtract'] && isset($tbooks[$book]['files']['epub']) ) {
+                $epub = new epubdesc($tbooks[$book]['files']['epub']);
+                $pathinfo = pathinfo($tbooks[$book]['files']['epub']);
+                $cover = $filefuncs->getCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
+                if ( $GLOBALS['extractCover'] > 0 && $GLOBALS['cover_mode']!='off' && empty($cover) ) {
+                  $epub->writeCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
+                }
               }
               if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
               if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];                      // from *.data file

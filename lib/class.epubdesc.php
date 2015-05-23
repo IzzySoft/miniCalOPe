@@ -100,7 +100,7 @@ class epubdesc extends epub {
      */
     function extract_file($zipfile,$zip_entry,$target) {
       if ( substr($zipfile,0,1) != '/' ) $zipfile = './'.$zipfile;
-      file_put_contents($target,file_get_contents('zip://'.$zipfile.'#'.$zip_entry));
+      return file_put_contents($target,file_get_contents('zip://'.$zipfile.'#'.$zip_entry));
     }
 
     /**
@@ -128,7 +128,7 @@ class epubdesc extends epub {
       if ( !empty($item) ) {
         $ext = preg_replace('!.*\.([^\.]+)$!','$1',$item['href']);
         if ( $ext == 'jpeg' ) $ext = 'jpg';
-        $this->extract_file($this->ebookDir, $item['href'], $basename .'.'. $ext);
+        return $this->extract_file($this->ebookDir, $item['href'], $basename .'.'. $ext);
       }
     }
 
