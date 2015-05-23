@@ -66,6 +66,7 @@ class db extends DB_Sql {
       $delcats = array_diff($genres,$dbcats); // in files, but not in DB
       $genres = $delcats; // those are left for insert
       $i = $this->query_single_value("SELECT MAX(id)+1 AS nextid FROM tags");
+      if ( empty($i) ) $i = 0;
     } else {
       $GLOBALS['logger']->info('  + Inserting Tags ('.count($genres).')',$who);
     }
