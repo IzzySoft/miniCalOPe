@@ -97,6 +97,7 @@ class epubdesc extends epub {
      * @param str zipfile filename to extract from (the *.epub)
      * @param str zip_entry name of the file to extract (with path from tze zip root, if any)
      * @param str target full path and file name of where the extracted file should be placed
+     * @return bool success
      */
     function extract_file($zipfile,$zip_entry,$target) {
       if ( substr($zipfile,0,1) != '/' ) $zipfile = './'.$zipfile;
@@ -122,6 +123,7 @@ class epubdesc extends epub {
     /**
      * Write the cover image file
      * @param str basename Basename of the file - without extension, but with (optional) full path
+     * @return bool success
      */
     public function writeCover($basename) {
       $item = $this->getCover();
