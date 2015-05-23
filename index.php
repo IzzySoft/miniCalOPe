@@ -11,7 +11,10 @@
 
 require_once('./lib/logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
-require_once('./lib/files.php');
+require_once('./lib/common.php');
+require_once('./lib/class.filefuncs.php');
+$filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
+
 // Setup templates
 require_once('./lib/template.php');
 $pageformat = req_word('pageformat');

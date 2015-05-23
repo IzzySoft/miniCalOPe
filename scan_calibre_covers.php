@@ -16,7 +16,8 @@ $use_lang = 'cal';
 
 require_once('./config.php');
 require_once('./lib/common.php');
-require_once('./lib/files.php');
+require_once('./lib/class.filefuncs.php');
+$filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
 require_once('./lib/db_sqlite3.php');
 require_once('./lib/db.php');
 
