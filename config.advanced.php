@@ -80,10 +80,10 @@ $use_markdown = 0;
 // we can extract some details from EPUB files. Define here whether we shall do
 // so, and what to extract.
 // Main switch to toggle it on/off:
-$autoExtract = FALSE;
-// Shall we extract covers? 0=no, 1=extract, 2=extract&resize (2 not yet implemented)
+$autoExtract = TRUE;
+// Shall we extract covers? 0=no, 1=extract, 2=extract&resize
 // Covers will only be extracted if there is no cover image already.
-$extractCover = 0;
+$extractCover = 1;
 
 #============================[ Web Service ]===
 // Timezone

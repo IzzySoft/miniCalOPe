@@ -189,6 +189,58 @@ class filefuncs {
     return $coverimg;
   }
 
+  /**
+   * Resize cover image to specified max width (unless it's already smaller)
+   * @param string img Path-and-name of the image file
+   * @param int maxwid Max allowed width for the "thumbnail"
+   * @return bool success
+   */
+  public function resizeCover($img, $maxwid) {
+    if ( !function_exists('imagecreatefromjpeg') ) {
+      $this->logger->error("No support for PHP graphics library (GD) found, cannot resize images.",'SCAN');
+      return FALSE;
+    }
+    if ( !file_exists($img) ) {
+      $this->logger->error("Cannot resize non-existing image '${img}'",'SCAN');
+      return FALSE;
+    }
+    list($source_image_width, $source_image_height, $source_image_type) = getimagesize($img);
+    if ( $source_image_width <= $maxwid ) return TRUE; // is already fine
+    switch ($source_image_type) {
+      case IMAGETYPE_GIF:
+        $source_gd_image = imagecreatefromgif($img);
+        break;
+      case IMAGETYPE_JPEG:
+        $source_gd_image = imagecreatefromjpeg($img);
+        break;
+      case IMAGETYPE_PNG:
+        $source_gd_image = imagecreatefrompng($img);
+        break;
+    }
+    if ($source_gd_image === false) {
+      $this->logger->error("Could not initialize GD for '${img}'",'SCAN');
+      return FALSE;
+    }
+    $new_height = (int) $maxwid * $source_image_height / $source_image_width;
+    $this->logger->info("    - resizing '${img}' to ${maxwid}x${new_height}",'SCAN');
+    $thumb_gd_image = imagecreatetruecolor($maxwid,$new_height);
+    imagecopyresampled($thumb_gd_image, $source_gd_image, 0, 0, 0, 0, $maxwid,$new_height, $source_image_width, $source_image_height);
+    switch ($source_image_type) {
+      case IMAGETYPE_GIF:
+        $rc = imagegif($thumb_gd_image, $img);
+        break;
+      case IMAGETYPE_JPEG:
+        $rc = imagejpeg($thumb_gd_image, $img, 75);
+        break;
+      case IMAGETYPE_PNG:
+        $rc = imagepng($thumb_gd_image, $img, 9);
+        break;
+    }
+    imagedestroy($source_gd_image);
+    imagedestroy($thumb_gd_image);
+    if ( !$rc ) $this->logger->error("Could not write resized image '${img}'",'SCAN');
+    return $rc;
+  }
 
   /**
    * Scan a folder in the book location for either sub-directories or book files

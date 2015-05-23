@@ -95,8 +95,14 @@ foreach($langs as $lang) {
                 $epub = new epubdesc($tbooks[$book]['files']['epub']);
                 $pathinfo = pathinfo($tbooks[$book]['files']['epub']);
                 $cover = $filefuncs->getCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
-                if ( $GLOBALS['extractCover'] > 0 && $GLOBALS['cover_mode']!='off' && empty($cover) ) {
-                  $epub->writeCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
+                if ( $extractCover > 0 && $GLOBALS['cover_mode']!='off' && empty($cover) ) {
+                  if ( $rc = $epub->writeCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']) ) {
+                    $cover = $filefuncs->getCover($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
+                    $logger->info("    - extracted cover: '${cover}'",'SCAN');
+                  }
+                  if ( $extractCover > 1 && $rc ) {
+                    $filefuncs->resizeCover($cover,$cover_width);
+                  }
                 }
               }
               if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
