@@ -38,7 +38,7 @@ $logger->info("Scanning $bookroot [MODE=$scan_dbmode]",'SCAN');
 $logger->debug("use_lang: $use_lang",'SCAN');
 $logger->debug("Languages: ".implode(', ',$uselangs),'SCAN');
 $logger->debug("DBFile: $dbfile",'SCAN');
-$langs = scanFolder($bookroot);
+$langs = $filefuncs->scanFolder($bookroot);
 
 // Now collect the genres
 foreach($langs as $lang) {
@@ -48,7 +48,7 @@ foreach($langs as $lang) {
         continue;
     }
     $logger->info("* Scanning langDir '$lang'",'SCAN');
-    $genres[$lang] = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
+    $genres[$lang] = $filefuncs->scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
 
     // Now come the authors
     foreach($genres[$lang] as $gidx => $genre) {
@@ -61,7 +61,7 @@ foreach($langs as $lang) {
           $genres[$lang][$gidx] = $genre;
         }
         $allGenres = array_merge($allGenres,array($genre));
-        $tauthors = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir);
+        $tauthors = $filefuncs->scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir);
 
         // Guess what - they wrote books!
         foreach($tauthors as $aidx => $author) {
@@ -72,9 +72,9 @@ foreach($langs as $lang) {
               $tauthors[$aidx] = $author;
             }
             if ( $gmarkdown && !file_exists($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir . DIRECTORY_SEPARATOR . '.nomarkdown') ) {
-              $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', $gmarkdown);
+              $tbooks = $filefuncs->scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', $gmarkdown);
             } else {
-              $tbooks = scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', 0);
+              $tbooks = $filefuncs->scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $gdir . DIRECTORY_SEPARATOR . $adir, 'files', 0);
             }
             //array[name] with [files][ext], [desc] ([series],[series_index],[rating],[publisher],[isbn], [author],[tag]
             foreach($tbooks as $book=>$dummy) {

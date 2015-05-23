@@ -833,7 +833,7 @@ switch($prefix) {
             }
             // book cover
             if ($use_lang=='cal') $covername = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid;
-            $coverimg = coverPath($covername);
+            $coverimg = $filefuncs->getCover($covername);
             if ( !empty($coverimg) && file_exists($coverimg) && is_readable($coverimg) ) {
                 $cover_type = pathinfo($coverimg)['extension']; if ( $cover_type == 'jpg' ) $cover_type = 'jpeg';
                 $t->set_var('cover_type',$cover_type); // MimeType (opds only)

@@ -23,5 +23,5 @@ require_once('./lib/db.php');
 $coverdir = $cover_base.DIRECTORY_SEPARATOR.$use_lang;
 if ( !is_dir($cover_base) ) mkdir($cover_base);
 if ( !is_dir($coverdir) ) mkdir($coverdir);
-prepare_covers($coverdir);
+$filefuncs->prepareCalibreCovers($coverdir,$bookroot,$cover_mode,$dbfile);
 ?>
