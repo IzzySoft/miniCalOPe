@@ -98,7 +98,7 @@ class filefuncs {
     $this->nobrregs = '';
     foreach($nobrtags as $x) $this->nobrregs .= "|\<\/$x\>|\<$x\>|\<$x\/\>";
     $this->nobrregs = substr($this->nobrregs,1);
-    // end block-level definitions (used below on each description file)
+    // end block-level definitions (used by formatDesc())
   }
 
   /**
@@ -152,9 +152,10 @@ class filefuncs {
    * This performs just a raw check for unmatched HTML tags and unencoded "&"
    * @param ref string xml Text to validate
    * @param string filename Which file name to report for logging
+   * @version ATTENTION: this currently does NOT catch wrong nestings like "<b><i></b></i>" !!!
    */
   public function validateXML(&$xml, $filename) {
-    // check for unmatched HTML tags. ATTENTION: this currently does NOT catch wrong nestings like "<b><i></b></i>" !!!
+    // check for unmatched HTML tags
     $foo = preg_replace("!(<([\w]+)[^>]*/>)!ims",'',$xml); // simple <TAG/>s
     $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',preg_replace('![\n\r]!ms','',$foo));
     while ( preg_match_all("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",$foo,$matches) ) $foo = preg_replace("/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/ims",'$3',$foo); // nested?
@@ -221,7 +222,7 @@ class filefuncs {
       $this->logger->error("Could not initialize GD for '${img}'",'SCAN');
       return FALSE;
     }
-    $new_height = (int) $maxwid * $source_image_height / $source_image_width;
+    $new_height = (int) ( $maxwid * $source_image_height / $source_image_width );
     $this->logger->info("    - resizing '${img}' to ${maxwid}x${new_height}",'SCAN');
     $thumb_gd_image = imagecreatetruecolor($maxwid,$new_height);
     imagecopyresampled($thumb_gd_image, $source_gd_image, 0, 0, 0, 0, $maxwid,$new_height, $source_image_width, $source_image_height);

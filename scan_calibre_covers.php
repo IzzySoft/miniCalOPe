@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?
 #############################################################################
-# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -19,7 +19,7 @@ require_once('./lib/common.php');
 require_once('./lib/class.filefuncs.php');
 $filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
 require_once('./lib/db_sqlite3.php');
-require_once('./lib/db.php');
+require_once('./lib/class.db.php');
 
 $coverdir = $cover_base.DIRECTORY_SEPARATOR.$use_lang;
 if ( !is_dir($cover_base) ) mkdir($cover_base);

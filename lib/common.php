@@ -1,6 +1,6 @@
 <?php
 #############################################################################
-# miniCalOPe                               (c) 2010-2011 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -9,7 +9,7 @@
 #############################################################################
 # $Id$
 
-require_once(dirname(__FILE__).'/logging.php'); // just in case
+require_once(dirname(__FILE__).'/class.logging.php'); // just in case
 
 // Central Logger instance
 if (IS_CLI) {

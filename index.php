@@ -1,6 +1,6 @@
 <?php
 #############################################################################
-# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -9,14 +9,14 @@
 #############################################################################
 # $Id$
 
-require_once('./lib/logging.php'); // must come first as it also defines some CONST
+require_once('./lib/class.logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
 require_once('./lib/common.php');
 require_once('./lib/class.filefuncs.php');
 $filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
 
 // Setup templates
-require_once('./lib/template.php');
+require_once('./lib/class.template.php');
 $pageformat = req_word('pageformat');
 switch($pageformat) {
     case 'html' : $pageformat = 'html'; break;
@@ -24,7 +24,7 @@ switch($pageformat) {
 }
 $t = new Template("tpl/$pageformat");
 // Setup translations
-require_once('./lib/translation.php');
+require_once('./lib/class.translation.php');
 $transl = new translation(dirname(__FILE__).'/lang','en');
 $transl->get_translations();
 function trans($key,$m1="",$m2="",$m3="",$m4="",$m5="") {
