@@ -9,6 +9,7 @@ name::value
 
 The following "names" are recognized and used:
 
+title           title of the book (can differ from the file name)
 series          collection a book belongs to (if there are multiple volumes)
 series_index    which volume in above collection is this book
 isbn            ISBN number for this book (may refer to the printed edition)

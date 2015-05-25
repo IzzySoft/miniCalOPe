@@ -1,6 +1,6 @@
 <?php
 #############################################################################
-# miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -9,11 +9,14 @@
 #############################################################################
 # $Id$
 
-require_once('./lib/logging.php'); // must come first as it also defines some CONST
+require_once('./lib/class.logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
-require_once('./lib/files.php');
+require_once('./lib/common.php');
+require_once('./lib/class.filefuncs.php');
+$filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
+
 // Setup templates
-require_once('./lib/template.php');
+require_once('./lib/class.template.php');
 $pageformat = req_word('pageformat');
 switch($pageformat) {
     case 'html' : $pageformat = 'html'; break;
@@ -21,7 +24,7 @@ switch($pageformat) {
 }
 $t = new Template("tpl/$pageformat");
 // Setup translations
-require_once('./lib/translation.php');
+require_once('./lib/class.translation.php');
 $transl = new translation(dirname(__FILE__).'/lang','en');
 $transl->get_translations();
 function trans($key,$m1="",$m2="",$m3="",$m4="",$m5="") {
@@ -824,7 +827,7 @@ switch($prefix) {
                 $t->set_var('ftype',$formats[$file['format']]['mimetype']);
                 $t->set_var('ftype_human',$formats[$file['format']]['ftype_human']);
                 $t->set_var('ftitle',$formats[$file['format']]['ftitle']);
-                $coverimg = $file['path'].DIRECTORY_SEPARATOR.$file['name'].'.jpg';
+                $covername = $file['path'].DIRECTORY_SEPARATOR.$file['name']; // file w/o ext
                 $t->set_var('flength',$file['size']);
                 $t->set_var('flength_human',number_format(round($file['size']/1024)).'kB');
                 $t->set_var('format',$file['format']);
@@ -832,14 +835,11 @@ switch($prefix) {
                 $more = TRUE;
             }
             // book cover
-            if ($use_lang=='cal') $coverimg = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid.'.jpg';
-            $cover_type = 'jpeg';
-            if ( !empty($coverimg) && !file_exists($coverimg) ) {
-              $coverimg = preg_replace('!jpg$!','png',$coverimg);
-              $cover_type = 'png';
-            }
+            if ($use_lang=='cal') $covername = $cover_base.DIRECTORY_SEPARATOR.$use_lang.DIRECTORY_SEPARATOR.$bookid;
+            $coverimg = $filefuncs->getCover($covername);
             if ( !empty($coverimg) && file_exists($coverimg) && is_readable($coverimg) ) {
-                $t->set_var('cover_type',$cover_type);
+                $cover_type = pathinfo($coverimg)['extension']; if ( $cover_type == 'jpg' ) $cover_type = 'jpeg';
+                $t->set_var('cover_type',$cover_type); // MimeType (opds only)
                 $t->set_var('cover_src',str_replace(' ','%20',$coverimg));
                 $t->set_var('cover_width',$cover_width);
                 $t->parse('cover','coverblock');

@@ -1,6 +1,6 @@
 <?php
  #############################################################################
- # miniCalOPe                                    (c) 2010 by Itzchak Rehberg #
+ # miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
  # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
  # http://www.izzysoft.de/                                                   #
  # ------------------------------------------------------------------------- #
@@ -10,9 +10,7 @@
  # Translation handling methods                                              #
  #############################################################################
 
- /* $Id$ */
-
- require_once(dirname(__FILE__).'/csv.php');
+ require_once(dirname(__FILE__).'/class.csv.php');
 
  /** Translation handling methods
   * @package Api

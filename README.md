@@ -13,7 +13,7 @@ The contents of this archive may only be distributed all together.
 
 
 ### Requirements
-miniCalOPe requires a web server powered by PHP 5.3+ with SQLite3 to present its
+miniCalOPe requires a web server powered by PHP 5.4+ with SQLite3 to present its
 data. For data collection and preparation, you will need the PHP CLI (again with
 SQLite3 support).
 
