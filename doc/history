@@ -8,6 +8,9 @@ v2.1.0
 + adding Markdown support
 * re-styling the book description area
 + adding classes to deal with metadata in .epub files directly, and a script to extract those
++ support for more cover formats added
+* some code reorg and cleanup
++ cover extraction now uses new epub classes, allow for "thumbnailing"
 
 v2.0.0 (03.04.2015)
 -------------------
