@@ -46,6 +46,20 @@ class epubdesc extends epub {
     protected $tocLevels = 2;
 
     /**
+     * Which terms to extract to .data files. Default: 'all'
+     * @protected array extract2data
+     * @see setExtract2data()
+     */
+    protected $extract2data = array('all');
+
+    /**
+     * File extension for the Metadata files. Default: 'data'
+     * @protected string dataExt
+     * @see setDataExt()
+     */
+    protected $dataExt = 'data';
+
+    /**
      * Our "dictionary" for text output. For setting up yours, see setDict()
      * @protected array terms
      */
@@ -93,6 +107,29 @@ class epubdesc extends epub {
     }
 
     /**
+     * Which terms to extract to .data files. Default: 'all'
+     * @param array values
+     * @brief valid values are either 'all' (to extract everything), or one or a
+     *        combination of author,isbn,publisher,rating,series,series_index,tag,title,uri
+     *        note that while 'isbn' and 'uri' are safe to use, there might be
+     *        issues with the others. For details, see issue #4 at Github:
+     *        https://github.com/IzzySoft/miniCalOPe/issues/4
+     */
+    public function setExtract2data($values) {
+      $this->extract2data = array(); // reset first
+      foreach ($values as $value) $this->extract2data[] = strtolower($value);
+    }
+
+    /**
+     * Set the file extension for the Metadata files. Default (if this method is
+     * not called): 'data'
+     * @param str ext File extension
+     */
+    public function setDataExt($ext) {
+      $this->dataExt = $ext;
+    }
+
+    /**
      * Extract a sincle file from the eBook
      * @param str zipfile filename to extract from (the *.epub)
      * @param str zip_entry name of the file to extract (with path from tze zip root, if any)
@@ -117,7 +154,8 @@ class epubdesc extends epub {
      * @param str basename Basename of the file - without extension, but with (optional) full path
      */
     public function writeData($basename) {
-      file_put_contents("${basename}.data", $this->getData());
+      $data = $this->getData();
+      if ( !empty($data) ) file_put_contents("${basename}.".$this->dataExt, $data);
     }
 
     /**
@@ -158,7 +196,10 @@ class epubdesc extends epub {
      * @param str line
      */
     protected function addData($line) {
-      if ( !empty($line) ) $this->data .= "${line}\n";
+      if ( !empty($line) ) {
+        $split = explode('::',$line);
+        if ( in_array($split[0],$this->extract2data) || in_array('all',$this->extract2data) ) $this->data .= "${line}\n";
+      }
     }
 
     /**

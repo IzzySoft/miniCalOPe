@@ -11,6 +11,7 @@ v2.1.0
 + support for more cover formats added
 * some code reorg and cleanup
 + cover extraction now uses new epub classes, allow for "thumbnailing"
++ added possibility to auto-extract Metadata from epub files. Make sure reading https://github.com/IzzySoft/miniCalOPe/issues/4 before using this!
 
 v2.0.0 (03.04.2015)
 -------------------

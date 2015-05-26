@@ -84,6 +84,14 @@ $autoExtract = TRUE;
 // Shall we extract covers? 0=no, 1=extract, 2=extract&resize
 // Covers will only be extracted if there is no cover image already.
 $extractCover = 1;
+// Which details to extract to .data files if autoExtract is enabled.
+// Valid values are either 'all' (to extract everything), or one or a
+// combination of author,isbn,publisher,rating,series,series_index,tag,title,uri
+// note that while 'isbn' and 'uri' are safe to use, there might be
+// issues with the others. For details, see issue #4 at Github:
+// https://github.com/IzzySoft/miniCalOPe/issues/4
+// Empty array switches off .data extraction completely (default)
+$extract2data = array();
 
 #============================[ Web Service ]===
 // Timezone
