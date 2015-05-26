@@ -103,7 +103,8 @@ foreach($langs as $lang) {
                     $filefuncs->resizeCover($cover,$cover_width);
                   }
                 }
-                if ( !empty($extract2data) ) {
+                if ( !empty($extract2data) && !file_exists($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'].'.'.$bookmeta_ext) ) {
+                  $logger->info("    - extracting Metadata: '".$pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'].'.'.$bookmeta_ext."'",'SCAN');
                   $epub->setExtract2data($extract2data);
                   $epub->setDataExt($bookmeta_ext);
                   $epub->writeData($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
