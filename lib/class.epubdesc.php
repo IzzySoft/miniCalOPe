@@ -251,7 +251,7 @@ class epubdesc extends epub {
      * @param str line
      */
     protected function addDescHead($line) {
-      if ( !in_array('all',$this->extract2desc) ) return;
+      if ( !(in_array('all',$this->extract2desc) || in_array('head',$this->extract2desc)) ) return;
       if ( empty($this->desc) ) $this->desc = $line;
       else {
         if ( $this->type == 'html' ) $this->desc .= "\n${line}";
@@ -362,7 +362,7 @@ class epubdesc extends epub {
         if ( !empty($this->desc) ) $this->addDescRaw("\n\n");
         $this->addDescRaw(nl2br($item));
       }
-      if ( in_array('all',$this->extract2desc) && $this->tocLevels > 0 ) {
+      if ( (in_array('all',$this->extract2desc)||in_array('toc',$this->extract2desc)) && $this->tocLevels > 0 ) {
         $item = $this->getTOC();
         if ( !empty($item) ) {
           $this->addDescRaw("\n\n<u>".$this->terms['content']."</u>\n\n");
