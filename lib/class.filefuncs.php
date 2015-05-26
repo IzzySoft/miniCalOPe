@@ -292,6 +292,22 @@ class filefuncs {
   }
 
 
+  /**
+   * Check whether files with a given "base-name" exist matching a group of extensions.
+   * As the native glob() can't handle groups, we need a wrapper here.
+   * @param string filename Base name of the file without extension
+   * @param array exts File extensions to check for
+   * @return bool exists
+   */
+  public function file_exists_glob($filename,$exts) {
+    $files = glob($filename."\.*"); $file = '';
+    $mask = '!('.implode('|',$exts).')!';
+    foreach ($files as $c) if ( preg_match($mask,$c) ) {
+      return TRUE; break;
+    }
+    return FALSE;
+  }
+
   // ======================================================[ Calibre stuff ]===
   // miniCalOPe doesn't work with recent Calibre versions, but we might fix that
   // later – so we keep this

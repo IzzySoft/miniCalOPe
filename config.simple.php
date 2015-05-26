@@ -92,6 +92,13 @@ $extractCover = 1;
 // https://github.com/IzzySoft/miniCalOPe/issues/4
 // Empty array switches off .data extraction completely (default)
 $extract2data = array();
+// What to extract to .desc files if autoExtract is enabled.
+// Valid values are either 'all' (to extract everything), or 'desc' to extract
+// the book description only (future versions might diverse further)
+// For some background, make sure to read issue #4 at Github:
+// https://github.com/IzzySoft/miniCalOPe/issues/4
+// Empty array switches off .data extraction completely (default)
+$extract2desc = array();
 
 #============================[ Web Service ]===
 // Timezone

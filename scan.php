@@ -109,6 +109,12 @@ foreach($langs as $lang) {
                   $epub->setDataExt($bookmeta_ext);
                   $epub->writeData($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
                 }
+                if ( !empty($extract2desc) && !$filefuncs->file_exists_glob($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'],$bookdesc_ext) ) {
+                  $logger->info("    - extracting Descdata: '".$pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'].'.'.$bookdesc_ext[0]."'",'SCAN');
+                  $epub->setExtract2desc($extract2desc);
+                  $epub->setDescExt($bookdesc_ext[0]);
+                  $epub->writeDesc($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
+                }
               }
               if ( !empty($tbooks[$book]['tag']) ) $allGenres = array_merge($allGenres,$tbooks[$book]['tag']);   // from *.data file
               if ( !empty($tbooks[$book]['series']) ) $series[] = $tbooks[$book]['series'];                      // from *.data file

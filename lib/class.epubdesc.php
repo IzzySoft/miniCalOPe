@@ -60,6 +60,20 @@ class epubdesc extends epub {
     protected $dataExt = 'data';
 
     /**
+     * What to extract to .desc files. Default: 'all'
+     * @protected array extract2desc
+     * @see setExtract2desc()
+     */
+    protected $extract2desc = array('all');
+
+    /**
+     * File extension for the Description files. Default: 'desc'
+     * @protected string descExt
+     * @see setDescExt()
+     */
+    protected $descExt = 'desc';
+
+    /**
      * Our "dictionary" for text output. For setting up yours, see setDict()
      * @protected array terms
      */
@@ -130,6 +144,26 @@ class epubdesc extends epub {
     }
 
     /**
+     * What to extract to .desc files. Default: 'all'
+     * @param array values
+     * @brief valid values are 'all' (to extract everything) or 'desc'
+     *        (for "description only"). In future versions, we might diverse more.
+     */
+    public function setExtract2desc($values) {
+      $this->extract2desc = array(); // reset first
+      foreach ($values as $value) $this->extract2desc[] = strtolower($value);
+    }
+
+    /**
+     * Set the file extension for the Description files. Default (if this method is
+     * not called): 'desc'
+     * @param str ext File extension
+     */
+    public function setDescExt($ext) {
+      $this->descExt = $ext;
+    }
+
+    /**
      * Extract a sincle file from the eBook
      * @param str zipfile filename to extract from (the *.epub)
      * @param str zip_entry name of the file to extract (with path from tze zip root, if any)
@@ -146,7 +180,8 @@ class epubdesc extends epub {
      * @param str basename Basename of the file - without extension, but with (optional) full path
      */
     public function writeDesc($basename) {
-      file_put_contents("${basename}.desc", $this->getDesc());
+      $desc = $this->getDesc();
+      if ( !empty($desc) ) file_put_contents("${basename}.desc", $desc);
     }
 
     /**
@@ -216,6 +251,7 @@ class epubdesc extends epub {
      * @param str line
      */
     protected function addDescHead($line) {
+      if ( !in_array('all',$this->extract2desc) ) return;
       if ( empty($this->desc) ) $this->desc = $line;
       else {
         if ( $this->type == 'html' ) $this->desc .= "\n${line}";
@@ -322,8 +358,11 @@ class epubdesc extends epub {
 
       // Description & TOC
       $item = $this->getDcItem('description');
-      if ( !empty($item) ) $this->addDescRaw("\n\n${item}");
-      if ( $this->tocLevels > 0 ) {
+      if ( !empty($item) ) {
+        if ( !empty($this->desc) ) $this->addDescRaw("\n\n");
+        $this->addDescRaw(nl2br($item));
+      }
+      if ( in_array('all',$this->extract2desc) && $this->tocLevels > 0 ) {
         $item = $this->getTOC();
         if ( !empty($item) ) {
           $this->addDescRaw("\n\n<u>".$this->terms['content']."</u>\n\n");
