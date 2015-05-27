@@ -26,6 +26,8 @@ if ( $autoExtract ) {
   } else {
     $csv = NULL;
   }
+} else {
+  $csv = NULL;
 }
 
 $db = new db($dbfile);
