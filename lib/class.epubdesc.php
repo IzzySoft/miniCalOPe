@@ -164,6 +164,17 @@ class epubdesc extends epub {
     }
 
     /**
+     * language specific adjustments to our "dictionary"
+     * @param array terms Array[0..n] or array[term,trans]
+     * @brief this array doesn't have to be complete; we overwrite only those pairs specified
+     */
+    public function setTerms($terms) {
+      foreach ($terms as $term) {
+        $this->terms[$term['term']] = $term['trans'];
+      }
+    }
+
+    /**
      * Extract a sincle file from the eBook
      * @param str zipfile filename to extract from (the *.epub)
      * @param str zip_entry name of the file to extract (with path from tze zip root, if any)
@@ -275,7 +286,7 @@ class epubdesc extends epub {
      */
     protected function parsePerson($item) { // used for dc:creator & dc:contributor
       if ( is_array($item) && !empty($item) ) foreach($item as $it) {
-        if ( !isset($it['role']) ) { $this->addDescHead("Autor: ${it['value']}"); continue; }
+        if ( !isset($it['role']) ) { $this->addDescHead($this->terms['author'].": ${it['value']}"); continue; }
         switch ($it['role']) {
           case 'aut': $this->addDescHead($this->terms['author'].": ${it['value']}"); $this->addData("author::${it['value']}"); break;
           case 'bkp': $this->addDescHead($this->terms['bookproducer'].": ${it['value']}"); break;

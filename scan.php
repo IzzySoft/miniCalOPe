@@ -18,7 +18,15 @@ require_once('./lib/class.filefuncs.php');
 $filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
 require_once('./lib/db_sqlite3.php');
 require_once('./lib/class.db.php');
-if ( $autoExtract ) require_once('./lib/class.epubdesc.php');
+if ( $autoExtract ) {
+  require_once('./lib/class.epubdesc.php');
+  if ( in_array('all',$extract2desc) || in_array('desc',$extract2desc) ) { // for trans of terms in bookdesc
+    require_once('./lib/class.csv.php');
+    $csv = new csv(";",'"',TRUE,FALSE);
+  } else {
+    $csv = NULL;
+  }
+}
 
 $db = new db($dbfile);
 
@@ -48,6 +56,11 @@ foreach($langs as $lang) {
         continue;
     }
     $logger->info("* Scanning langDir '$lang'",'SCAN');
+    if ( $csv !== NULL && file_exists("./lang/ebookterms.${lang}") ) {
+      $csv = new csv(";",'"',TRUE,FALSE);
+      $logger->debug('# Loaded terms for ebook desc from '.__DIR__."./lang/ebookterms.${lang}",'SCAN');
+      $csv->import("./lang/ebookterms.${lang}");
+    }
     $genres[$lang] = $filefuncs->scanFolder($bookroot . DIRECTORY_SEPARATOR . $lang);
 
     // Now come the authors
@@ -111,6 +124,7 @@ foreach($langs as $lang) {
                 }
                 if ( !empty($extract2desc) && !$filefuncs->file_exists_glob($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'],$bookdesc_ext) ) {
                   $logger->info("    - extracting Descdata: '".$pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename'].'.'.$bookdesc_ext[0]."'",'SCAN');
+                  if ( !empty($csv->data) ) $epub->setTerms($csv->data);
                   $epub->setExtract2desc($extract2desc);
                   $epub->setDescExt($bookdesc_ext[0]);
                   $epub->writeDesc($pathinfo['dirname'].DIRECTORY_SEPARATOR.$pathinfo['filename']);
