@@ -76,6 +76,16 @@ $dotname_overrides = array('author','genre');
 // This is the global switch. If enabled (1), you can override it per-genre
 // and/or per author by placing a file named .nomarkdown in their directory.
 $use_markdown = 0;
+#-------------------------------[ Checking ]---
+// check for possible XML errors in description files and log them?
+$check_xml = TRUE;
+// as XML errors break OPDS, better skip the broken content.
+// Needs above check to be enabled in order to work.
+$skip_broken_xml = TRUE;
+// how to insert books into the database:
+// 'rebuild': drop all data and do a fresh insert (books are likely to get new IDs this way)
+// 'merge'  : try to figure out what has changed (experimental; keeps the book IDs, but is slower)
+$scan_dbmode = 'rebuild';
 #------------------------[ data extraction ]---
 // we can extract some details from EPUB files. Define here whether we shall do
 // so, and what to extract.
