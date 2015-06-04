@@ -158,6 +158,10 @@ if (!empty($series)) $db->make_series($series);
 $db->make_authors($authors);
 $db->make_books($books);
 
+$logger->info('* Cleaning up database','SCAN');
+$db->query('VACUUM');
+$db->query('REINDEX');
+
 $logger->info("* Done",'SCAN');
 
 exit;
