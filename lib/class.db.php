@@ -14,6 +14,12 @@ class db extends DB_Sql {
 
   function __construct($dbfile) {
     $this->Database = $dbfile;
+    $this->query("PRAGMA journal_mode = TRUNCATE");
+    $this->query("PRAGMA synchronous = OFF");
+  }
+
+  function __destruct() {
+    $this->query("PRAGMA journal_mode = DELETE"); // have it remove the journal file when done
   }
 
   //==============================================================[ Helper ]===
