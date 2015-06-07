@@ -686,7 +686,8 @@ switch($prefix) {
                 $authors[] = array('id'=>$db->f('id'),'name'=>$db->f('name'));
             }
             $author = substr($author,2);
-            $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
+            if ( $cover_mode == 'calibre' ) $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,'' as uri FROM books WHERE id=".$bookid);
+            else $db->query("SELECT title,isbn,series_index,strftime('%Y-%m-%dT%H:%M:%S',timestamp) pubdate,uri FROM books WHERE id=".$bookid);
             if ( !$db->next_record() ) { // we don't have a book with this ID
               NoSuchBook:
               header("HTTP/1.0 404 Not Found");
@@ -717,7 +718,10 @@ switch($prefix) {
             $db->next_record();
             $book['comment'] = htmlentities($db->f('text'));
             $db->query("SELECT r.rating FROM ratings r, books_ratings_link br WHERE br.book=$bookid AND r.id=br.rating");
-            if ( $db->next_record() ) $book['rating'] = $db->f('rating'); else $book['rating'] = 0;
+            if ( $db->next_record() ) {
+              if ( $cover_mode == 'calibre' ) $book['rating'] = round( $db->f('rating') / 2); // Calibre has 0..10, we have only 0..5
+              else $book['rating'] = $db->f('rating');
+            } else $book['rating'] = 0;
             $files = get_filenames($db,$bookid);
             Parse:
             $t->set_file(array("template"=>"book.tpl"));
@@ -820,6 +824,7 @@ switch($prefix) {
             $more = FALSE;
             $formats = get_formats();
             foreach ($files as $file) {
+                $file['format'] = strtolower($file['format']); // Calibre uses UPPERcase
                 if ( empty($formats[$file['format']]) ) {
                   $logger->error('Unsupported format "'.$file['format'].'" for book "'.$file['name'].'"','DETAILS');
                   continue;
@@ -878,7 +883,7 @@ switch($prefix) {
                     $dllogger->info($book,'DOWNLOAD');
                 }
                 $fformats = get_formats();
-                header("Content-type: ".$fformats[$files[0]['format']]['mimetype']);
+                header("Content-type: ".$fformats[strtolower($files[0]['format'])]['mimetype']); // Calibre uses UPPERcase
                 header("Content-Disposition: attachment; filename=\"".$files[0]['name'].'.'.strtolower($files[0]['format']."\""));
                 header("Content-length: ".filesize($book));
                 fpassthru($fd);

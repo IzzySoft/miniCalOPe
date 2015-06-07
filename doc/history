@@ -1,6 +1,11 @@
 History for miniCalOPe
 ======================
 
+v2.2.0
+-------------------
+* scan now cleans up / optimizes database in its final step (VACUUM, REINDEX) for a faster DB
+! (hopefully) restored Calibre compatibility (tested with 0.9.16 on Ubuntu 12.04)
+
 v2.1.0 (28.05.2015)
 -------------------
 + adding possibility to skip pages in lists

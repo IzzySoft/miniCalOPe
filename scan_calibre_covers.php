@@ -14,6 +14,7 @@
 
 $use_lang = 'cal';
 
+require_once('./lib/class.logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
 require_once('./lib/common.php');
 require_once('./lib/class.filefuncs.php');
