@@ -308,7 +308,10 @@ class epubdesc extends epub {
       if ( preg_match('!^http.+gutenberg!',$item) ) $this->addDescHead($this->terms['source'].": [Project Gutenberg](${item})");
       elseif ( preg_match('!^http.+wikisource!',$item) ) $this->addDescHead($this->terms['source'].": [WikiSource](${item})");
       elseif ( preg_match('!^http.+mobileread!',$item) ) $this->addDescHead($this->terms['source'].": [MobileRead](${item})");
-      elseif ( !empty($item) ) $this->addDescHead($this->terms['source'].": [Src](${item})");
+      elseif ( !empty($item) ) {
+        if ( preg_match('!^(ftp|http)s?\:!',$item) ) $this->addDescHead($this->terms['source'].": [Src](${item})");
+        else $this->addDescHead($this->terms['source'].": ${item}");
+      }
     }
 
     /**
