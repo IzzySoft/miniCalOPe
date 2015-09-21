@@ -257,7 +257,7 @@ class epub {
           $names = array('_cover_','cover','cover-image','cover1','cover-page','titel');
           if (!empty($imgs)) foreach($names as $name) {
             foreach($imgs as $img) {
-              if ( preg_match('!'.$name.'\.(jpg|jpeg|png|gif)$!',$img['href']) ) {
+              if ( preg_match('!'.$name.'\.(jpg|jpeg|png|gif)$!i',$img['href']) ) {
                 $this->cover = $img;
                 $this->cover['trueCover'] = FALSE;
                 return $this->cover;
