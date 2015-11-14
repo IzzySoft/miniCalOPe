@@ -332,8 +332,15 @@ class epubdesc extends epub {
       $item = $this->getDcItemFull('creator'); $this->parsePerson($item);
       $item = $this->getDcItemFull('contributor'); $this->parsePerson($item);
       $item = $this->getDcItem('publisher'); if ( !empty($item) ) {
-        $this->addDescHead($this->terms['publisher'].": ${item}");
-        $this->addData("publisher::${item}");
+        if ( is_array($item) ) {
+          foreach ($item as $it) {
+            $this->addDescHead($this->terms['publisher'].": ${it}");
+            $this->addData("publisher::${it}");
+          }
+        } else {
+          $this->addDescHead($this->terms['publisher'].": ${item}");
+          $this->addData("publisher::${item}");
+        }
       }
 
       // Dates
