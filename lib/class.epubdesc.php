@@ -327,6 +327,14 @@ class epubdesc extends epub {
       if ( empty($title) ) $title = $epubname;
       $this->addDescHead("<u>${title}</u>");
       $this->addData("title::${title}");
+      foreach ( $this->opfContents->metadata->meta as $meta ) {
+        $meta = (array) $meta;
+        if ( $meta['@attributes']['name'] == 'calibre:series' && ( in_array('series',$this->extract2data) || in_array('all',$this->extract2data) ) ) {
+          $this->addData("series::".$meta['@attributes']['content']);
+        } elseif ( $meta['@attributes']['name'] == 'calibre:series_index' && ( in_array('series_index',$this->extract2data) || in_array('all',$this->extract2data) ) ) {
+          $this->addData("series_index::".$meta['@attributes']['content']);
+        }
+      }
 
       // Creator, Contributor, Publisher
       $item = $this->getDcItemFull('creator'); $this->parsePerson($item);
