@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/common.php'); // for debug output
 
-class db extends DB_Sql {
+class db extends db_sqlite {
 
   function __construct($dbfile) {
     $this->Database = $dbfile;

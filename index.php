@@ -276,7 +276,7 @@ function parse_titles(&$tpl,&$db,$offset,$all,$url,$prefix='titles',$searchvals=
 
 // We need the database
 require_once('./lib/db_sqlite3.php');
-$db = new DB_Sql();
+$db = new db_sqlite();
 $db->Database = $dbfile;
 
 $db->query('SELECT COUNT(id) AS num FROM books');

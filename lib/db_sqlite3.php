@@ -6,11 +6,11 @@
 
 /** Basic database methods for SQLite
  * @package Api
- * @class DB_Sql
+ * @class db_sqlite
  * @author Izzy (izzysoft AT qumran DOT org)
  * @copyright (c) 2009 by Itzchak Rehberg and IzzySoft
  */ 
-class DB_Sql extends SQLite3 {
+class db_sqlite extends SQLite3 {
   var $Host     = ""; // Dummy for compatibility
   var $Database = ""; // Filename of the database file
   var $User     = ""; // Dummy for compatibility
@@ -35,7 +35,7 @@ class DB_Sql extends SQLite3 {
 
   /** Initialization
    * @package Api
-   * @constructor DB_Sql
+   * @constructor db_sqlite
    * @param optional string query query to run
    */
   function __construct($query = "") {
@@ -54,7 +54,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Connect to database
-   * @class DB_Sql
+   * @class db_sqlite
    * @method connect
    * @return integer Link_ID on success, 0 otherwise
    */
@@ -68,7 +68,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Disconnect from database
-   * @class DB_Sql
+   * @class db_sqlite
    * @method disconnect
    */
   function disconnect() {
@@ -92,7 +92,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Perform a query
-   * @class DB_Sql
+   * @class db_sqlite
    * @method query
    * @param string Query_String SQL Query
    * @return integer Query_ID on success, 0 otherwise
@@ -102,7 +102,7 @@ class DB_Sql extends SQLite3 {
     if ($Query_String == "")
       /* The empty query string is passed on from the constructor,
        * when calling the class without a query, e.g. in situations
-       * like these: '$db = new DB_Sql_Subclass;'
+       * like these: '$db = new db_sqlite_Subclass;'
        */
       return 0;
     $this->connect();
@@ -171,7 +171,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Walk result set
-   * @class DB_Sql
+   * @class db_sqlite
    * @method next_record
    * @return boolean success
    */
@@ -183,7 +183,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Position in result set
-   * @class DB_Sql
+   * @class db_sqlite
    * @method seek
    * @param optional integer pos Position to set the pointer to (result/row number)
    * @return boolean success
@@ -252,7 +252,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Evaluate the result for DML operation
-   * @class DB_Sql
+   * @class db_sqlite
    * @method affected_rows
    * @return integer affected rows
    */
@@ -261,7 +261,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Evaluate the result for SELECT operation (row count)
-   * @class DB_Sql
+   * @class db_sqlite
    * @method num_rows
    * @return integer number of rows in result set
    * @version not available in PHP API, so this always returns FALSE
@@ -275,7 +275,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Evaluate the result for SELECT operation (fieldset count)
-   * @class DB_Sql
+   * @class db_sqlite
    * @method num_fields
    * @return integer number of columns in result set
    */
@@ -292,7 +292,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Retrieve the content of a field in the current record of the result set
-   * @class DB_Sql
+   * @class db_sqlite
    * @method f
    * @return string content of field
    */
@@ -328,7 +328,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Retrieve all table names
-   * @class DB_Sql
+   * @class db_sqlite
    * @method table_names
    * @return array table_name, tablespace_name (=Database), database
    */
@@ -346,7 +346,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Table locking
-   * @class DB_Sql
+   * @class db_sqlite
    * @method lock
    * @param mixed table table to lock (either string or array of strings)
    * @param optional string mode locking mode (defaults to "write")
@@ -377,7 +377,7 @@ class DB_Sql extends SQLite3 {
   }
 
   /** Unlock all tables
-   * @class DB_Sql
+   * @class db_sqlite
    * @method unlock
    * @return boolean success
    */
