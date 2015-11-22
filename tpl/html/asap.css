@@ -1,0 +1,45 @@
+/* Styles for ASAP (Amazon Simple ADs) */
+
+/* 3 horizontal elements */
+.amazon3col {
+  width:500px;
+  max-height:100px;
+  background-color:transparent;
+  margin-bottom:.3em;
+}
+.amazon3col td {
+  background-color:#ffffff;
+  margin:1em;
+  border-radius:4px;
+  border-spacing:1em;
+  border:2px solid gray;
+  box-shadow: 4px 4px 2px #8a8;
+  font-family: "DejaVu Sans", Tahoma, Verdana, sans-serif;
+  font-size:10px !important;
+}
+.amazon3col td.premium {
+  border-color: rgb(255, 153, 102); /* #f96 */
+  background-color: rgb(255, 238, 170);
+}
+.amazon3col img {
+  border:0;
+  vertical-align:middle;
+  float:left;
+  margin-right:0.5em;
+  max-height:75px;
+  max-width:50px;
+}
+.amazon3col a, .amazon3col a:visited {
+  text-decoration:none;
+  color:#00f;
+}
+#amazon .priceinfo { color:#009000; }
+#amazon {
+  text-align:center;
+  margin-top:3em;
+}
+#amazon .ama_cachedate {
+  font-size:9px !important;
+  color:#202;
+  margin-bottom:1em;
+}

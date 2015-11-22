@@ -286,8 +286,15 @@ $allbookcount = $db->f('num');
 #========================================================[ Process request ]===
 $prefix = req_word('prefix');
 if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
+    if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+      require_once('./lib/asap.php');
+      if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('start','initial','regex');
+      $asap = getAds($ads_asap_default_string);
+      $adblock = getAdBlock($asap);
+    } else $adblock = '';
     $t->set_file(array("template"=>"index.tpl"));
     set_basics($t);
+    if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
     $t->set_var('author_list',trans('authors'));
     $t->set_var('title_list',trans('titles'));
     $t->set_var('tags_list',trans('tags'));
@@ -296,6 +303,7 @@ if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_var('num_allbooks',$allbookcount);
     if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
     else $t->set_var('allbooks',trans('books'));
+    if ($pageformat='html') $t->set_var('adblock',$adblock);
     $t->pparse("out","template");
     exit;
 }

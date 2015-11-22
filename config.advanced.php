@@ -131,7 +131,7 @@ $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Bu
 $booksearchservices = array('Amazon.DE','Bookzilla.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
 
 #============================[ Person Info ]===
-// about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)
+// about you: Name, Homepage, Email
 $owner   = 'John Doe';
 $homepage= 'http://www.johndoe.com/';
 $email   = 'john@johndoe.com';
@@ -143,12 +143,25 @@ $email   = 'john@johndoe.com';
 $flattrID = '';
 // -=[ Amazon ]=-
 // Your AmazonID will be used for Amazon ads (see below) as well as for the ISBN
-// and book-search services (see above)
+// and book-search services (see above). Simple leave it empty if you have none.
 $amazonID='';
 // Amazon ad content for book details page? (needs AmazonID, see Personal Info)
 $ads_bookdetails = TRUE;
 $ads_bordercolor = '4D9DFC';
 $ads_logocolor   = 'AA4400';
+// --[ Amazon Simple Api (ASAP) ]--
+// your public and private API keys are needed for this. Leave empty if you have none,
+// this automatically disables ASAP. Same applies if you have no amazonID (see above).
+$ads_asap_pubkey = '';
+$ads_asap_privkey = '';
+$ads_asap_country = 'de';
+// use additional webvertizer class
+$ads_asap_webvertizer = FALSE;
+$ads_asap_webvertizer_domain = 'ebooks';
+// display ads on "initial pages" (i.e. those with no books, genres, authors)
+$ads_asap_initial = FALSE;
+// default string for "initial pages"
+$ads_asap_default_string = 'keywords::Buch;prodgroup::Books,DVD,Electronics';
 
 #=========================[ Language dependent stuff ]===
 # Here we make use of the language-specific directories. You either can set

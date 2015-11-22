@@ -118,10 +118,26 @@ $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Bu
 // Enable some book search services (search by author and title of the selected book;
 // empty array to disable this feature)
 $booksearchservices = array('Amazon.DE','Bookzilla.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
+
+#=========================[ Monetarization ]===
+// While our content is served for free, we won't object to any donations :)
 // Amazon ad content for book details page? (needs AmazonID, see Personal Info)
 $ads_bookdetails = FALSE;
 $ads_bordercolor = '4D9DFC';
 $ads_logocolor   = 'AA4400';
+// --[ Amazon Simple Api (ASAP) ]--
+// your public and private API keys are needed for this. Leave empty if you have none,
+// this automatically disables ASAP. Same applies if you have no amazonID (see above).
+$ads_asap_pubkey = '';
+$ads_asap_privkey = '';
+$ads_asap_country = 'de';
+// use additional webvertizer class
+$ads_asap_webvertizer = FALSE;
+$ads_asap_webvertizer_domain = 'ebooks';
+// display ads on "initial pages" (i.e. those with no books, genres, authors)
+$ads_asap_initial = FALSE;
+// default string for "initial pages"
+$ads_asap_default_string = 'keywords::Buch;prodgroup::Books,DVD,Electronics';
 
 #============================[ Person Info ]===
 // about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)
