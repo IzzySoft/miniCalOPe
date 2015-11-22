@@ -157,12 +157,12 @@ function getAdBlock($ads) {
       if ( strlen($item['title']) > 400 ) $item['title'] = substr($item['title'],0,400) . '…';
       if ( !isset($item['price']) || empty($item['price']) || !preg_match('!(EUR|USD|GBP) [0-9\.\,]+!',$item['price']) ) $item['price'] = '';
       $tpl->set_var('url',str_replace('http:','https:',$item['url']));
-      $tpl->set_var('title',strip_tags($item['title']));
+      $tpl->set_var('title',str_replace("'","´",strip_tags($item['title'])));
       $tpl->set_var('desc',$item['title']);
       $tpl->set_var('img',$item['img']);
-      if ( empty($item['price']) ) $tpl->set_var('price_info','');
+      if ( empty($item['price']) ) $tpl->set_var('price_info','&nbsp;');
       elseif ( isset($item['source']) && $item['source'] == 'local' ) {
-        if ( preg_match('! 0[,.]00$!',$item['price']) ) $tpl->set_var('price_info','');
+        if ( preg_match('! 0[,.]00$!',$item['price']) ) $tpl->set_var('price_info','&nbsp;');
         else $tpl->set_var('price_info',$item['price']);
       } else {
         $tpl->set_var('price_info',$item['price']);
