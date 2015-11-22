@@ -335,6 +335,16 @@ switch($prefix) {
             $t->parse('tagsel','tagselblock',$more);
             $more = TRUE;
         }
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','initial','regex');
+          $asap = getAds($ads_asap_default_string);
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
         break;
@@ -450,6 +460,16 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         // pagination:
         paginate('?prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$num_authors);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','initial','regex');
+          $asap = getAds($ads_asap_default_string);
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //------------------------[ List of books for a given author requested ]---
@@ -474,7 +494,8 @@ switch($prefix) {
         $db->query('SELECT name FROM authors WHERE id='.$aid);
         $db->next_record();
         $t->set_var('wikiauthor',str_replace(' ','_',$db->f('name')));
-        $t->set_var('books_by_whom',trans('books_by_whom',$db->f('name')));
+        $bookauthor = $db->f('name');
+        $t->set_var('books_by_whom',trans('books_by_whom',$bookauthor));
         $sortorder = req_word('sort_order');
         switch($sortorder) {
             case 'title': $order = ' ORDER BY title'; $sortorder='title'; break;
@@ -493,6 +514,16 @@ switch($prefix) {
         // pagination:
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat,$offset,$all);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','list','regex');
+          $asap = getAds($ads_asap_default_string);
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //------------------------------[ List of all books by title requested ]---
@@ -540,6 +571,16 @@ switch($prefix) {
         // pagination:
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('tags','initial','regex');
+          $asap = getAds($ads_asap_default_string);
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //---------------------------[ List of books for a given tag requested ]---
@@ -558,7 +599,8 @@ switch($prefix) {
         }
         $db->query('SELECT name FROM tags WHERE id='.$tag_id);
         $db->next_record();
-        $t->set_var('books_with_tag',trans('books_with_tag',$db->f('name')));
+        $tagname = $db->f('name');
+        $t->set_var('books_with_tag',trans('books_with_tag',$tagname));
         $t->set_var('aid',$tag_id);
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -587,6 +629,17 @@ switch($prefix) {
         // pagination:
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat,$offset,$all);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('tags','list','regex');
+          $asap = @getAds(str_replace('keywords::',"keywords::+$tagname +",$ads_asap_default_string)); // need to hide error message for some genres
+          // TODO: genre specific string
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //----------------------------------------------------[ List of series ]---
@@ -622,6 +675,16 @@ switch($prefix) {
         // pagination:
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('series','initial','regex');
+          $asap = getAds($ads_asap_default_string);
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //-------------------------[ List of books for a given serie requested ]---
@@ -641,7 +704,8 @@ switch($prefix) {
         }
         $db->query('SELECT name FROM series WHERE id='.$series_id);
         $db->next_record();
-        $t->set_var('books_in_serie',trans('books_in_serie',$db->f('name')));
+        $seriesname = $db->f('name');
+        $t->set_var('books_in_serie',trans('books_in_serie',$seriesname));
         $t->set_var('aid',$series_id);
         $sortorder = req_word('sort_order');
         switch($sortorder) {
@@ -671,6 +735,19 @@ switch($prefix) {
         // pagination:
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat,$offset,$all);
+        // Ads (ASAP):
+        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+          require_once('./lib/asap.php');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('series','list','regex');
+          $sn = preg_replace('!.*\(.*?(\w+)\)$!u','$1',$seriesname);
+          if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$ads_asap_default_string);
+          else $asdtring = $ads_asap_default_string;
+          $asap = @getAds($adstring); // need to hide error message for some terms
+          $adblock = getAdBlock($asap);
+        } else $adblock = '';
+        if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        // Done:
         $t->pparse("out","template");
         exit;
     //----------------------------------------------[ Handle a single book ]---
