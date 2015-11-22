@@ -22,6 +22,8 @@ function setAutoAds($tag,$pagetype,$wildcard='regex') {
   $GLOBALS['localAds'] = array_merge($GLOBALS['localAds'],$webvert->getItemsByAutoMatch($tag,$pagetype,3,$wildcard));
   $GLOBALS['localAutoCrits'] = "latag::${tag};latyp::${pagetype};lamatch::$wildcard";
   $GLOBALS['autoAdsCalled']  = TRUE;
+  // adjust partnerID to match config
+  if ( !empty($GLOBALS['localAds']['items']) ) for ($i=0;$i<count($GLOBALS['localAds']['items']);++$i) $GLOBALS['localAds']['items'][$i]['url'] = preg_replace('!tag=([A-z0-9].+?)-21!','tag='.$GLOBALS['amazonID'],$GLOBALS['localAds']['items'][$i]['url']);
 }
 
 /** Prepare advertizements based on given specifications
