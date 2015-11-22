@@ -632,7 +632,7 @@ switch($prefix) {
         // Ads (ASAP):
         if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
-          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('tags','list','regex');
+          if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds($tagname,'genre','regex');
           $asap = @getAds(str_replace('keywords::',"keywords::+$tagname +",$ads_asap_default_string)); // need to hide error message for some genres
           // TODO: genre specific string
           $adblock = getAdBlock($asap);
