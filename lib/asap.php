@@ -158,10 +158,10 @@ function getAdBlock($ads) {
       $tpl->set_var('title',strip_tags($item['title']));
       $tpl->set_var('desc',$item['title']);
       $tpl->set_var('img',$item['img']);
-      if ( empty($ads[$i]['price']) ) $tpl->set_var('price_info','');
-      elseif ( isset($ads[$i]['source']) && $ads[$i]['source'] == 'local' ) {
-        if ( preg_match('! 0[,.]00$!',$ads[$i]['price']) ) $tpl->set_var('price_info','');
-        else $tpl->set_var('price_info',$ads[$i]['price']);
+      if ( empty($item['price']) ) $tpl->set_var('price_info','');
+      elseif ( isset($item['source']) && $item['source'] == 'local' ) {
+        if ( preg_match('! 0[,.]00$!',$item['price']) ) $tpl->set_var('price_info','');
+        else $tpl->set_var('price_info',$item['price']);
       } else {
         $tpl->set_var('price_info',$item['price']);
       }
@@ -170,7 +170,8 @@ function getAdBlock($ads) {
       $tpl->parse('item','itemblock',$i);
       ++$i;
     }
-    $tpl->set_var('cachedate','Stand: '.$ads['cachedate'].'<br>Preis &amp; Verfügbarkeit können sich geändert haben.');
+    $disclaimer = str_replace('%cachedate%',$ads['cachedate'],$GLOBALS['ads_asap_disclaimer']);
+    $tpl->set_var('cachedate',$disclaimer);
     $adblock = $tpl->parse('out','template');
   } else $adblock = '';
   return $adblock;
