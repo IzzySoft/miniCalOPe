@@ -14,6 +14,7 @@ require_once('./config.php');
 require_once('./lib/common.php');
 require_once('./lib/class.filefuncs.php');
 $filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
+if ( isset($_SERVER['HTTPS']) ) $baseurl = str_replace('http://','https://',$baseurl);
 
 // Setup templates
 require_once('./lib/class.template.php');
