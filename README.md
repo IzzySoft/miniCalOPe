@@ -6,6 +6,8 @@ on the net (LAN and/or WAN) in order for eBook readers to directly connect and
 download books, and also to allow people to access it with their web browsers
 to walk through it.
 
+![Start Page](doc/startpage.png)
+
 This little program is (c)opyrighted by Andreas Itzchak Rehberg
 (devel AT izzysoft DOT de) and protected by the GNU Public License Version 2
 (GPL). For details on the License see the file LICENSE in the `doc/` directory.
@@ -15,7 +17,9 @@ The contents of this archive may only be distributed all together.
 ### Requirements
 miniCalOPe requires a web server powered by PHP 5.4+ with SQLite3 to present its
 data. For data collection and preparation, you will need the PHP CLI (again with
-SQLite3 support).
+SQLite3 support). If you want to integrate Amazon ads, *miniCalOPe* supports that
+via the [Amazon Simple Api for PHP](https://github.com/IzzySoft/Asap), which then
+must be installed in your PHP `include_path`.
 
 
 ### Limitations
