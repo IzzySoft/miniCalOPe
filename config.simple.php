@@ -123,6 +123,7 @@ $booksearchservices = array('Amazon.DE','Bookzilla.DE','Google.DE','Buchfreund.D
 // While our content is served for free, we won't object to any donations :)
 // Amazon ad content for book details page? (needs AmazonID, see Personal Info)
 $ads_bookdetails = FALSE;
+$ads_bookdetails_type = 'flash'; // flash|asap
 $ads_bordercolor = '4D9DFC';
 $ads_logocolor   = 'AA4400';
 // --[ Amazon Simple Api (ASAP) ]--

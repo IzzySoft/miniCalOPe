@@ -147,6 +147,7 @@ $flattrID = '';
 $amazonID='';
 // Amazon ad content for book details page? (needs AmazonID, see Personal Info)
 $ads_bookdetails = TRUE;
+$ads_bookdetails_type = 'flash'; // flash|asap
 $ads_bordercolor = '4D9DFC';
 $ads_logocolor   = 'AA4400';
 // --[ Amazon Simple Api (ASAP) ]--

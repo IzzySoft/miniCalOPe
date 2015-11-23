@@ -817,7 +817,6 @@ switch($prefix) {
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
             $t->set_block('template','fakecoverblock','fakecover');
-            $t->set_block('template','adblock','ads');
             set_basics($t);
             $t->set_var('back_to_authors',trans('back_to_authors'));
             $t->set_var('data_name',trans('title'));
@@ -937,16 +936,39 @@ switch($prefix) {
                 $t->parse('fakecover','fakecoverblock');
             }
             // Ads (if wanted)
-            if ( $ads_bookdetails ) {
-                $t->set_var('amazonID',$amazonID);
-                $t->set_var('amazon_bordercolor',$ads_bordercolor);
-                $t->set_var('amazon_logocolor',$ads_logocolor);
-                $t->set_var('booktitle_urlenc',urlencode($book['title'])); // used for Amazon ads
-                $t->set_var('authorname_urlenc',urlencode($author)); // used for Amazon ads
-                $t->set_var('booktags_urlenc',urlencode(str_replace(', ',';',$book['tags']))); // used for Amazon ads
-                $t->parse('ads','adblock');
+            if ( $ads_bookdetails && $pageformat='html' ) {
+              switch ( strtolower($ads_bookdetails_type) ) {
+                case 'flash':                                   // Amazon Flash Widget
+                  if ( empty($amazonID) ) $adblock = '';
+                  else {
+                    require_once('./lib/adflash.php');
+                    $adblock = getFlashAd($amazonID,$book['title'],$author,$book['tags']);
+                  }
+                  break;
+                case 'asap':                                    // Amazon Simple Ads (ASAP)
+                  if ( empty($ads_asap_pubkey) || empty($ads_asap_privkey) || empty($amazonID) ) $adblock = '';
+                  else {
+                    require_once('./lib/asap.php');
+                    if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) {
+                      foreach( explode(', ',$book['tags']) as $tagname ) setAutoAds($tagname,'genre','regex');
+                      setAutoAds($book['title'],'book','regex');
+                    }
+                    // TODO: tag/genre specific ad string
+                    $sn = preg_replace('!(.*\s+|)(\w+)$!u','$2',$author); // author's last name
+                    if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$ads_asap_default_string);
+                    else $adstring = $ads_asap_default_string;
+                    $asap = @getAds($adstring); // need to hide error message for some terms
+                    $adblock = getAdBlock($asap);
+                  }
+                  if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
+                  break;
+                default:
+                  $adblock = '';
+                  break;
+              }
+              $t->set_var('adblock',$adblock);
             } else {
-                $t->set_var('ads','');
+              $t->set_var('adblock','');
             }
             // end ads
             $t->pparse("out","template");
