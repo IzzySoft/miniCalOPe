@@ -972,9 +972,11 @@ switch($prefix) {
                       }
                     }
                     // book specifica
+                    $adstring1 = $adstring; // backup
                     $sn = preg_replace('!(.*\s+|)(\w+)$!u','$2',$author); // author's last name
                     if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$adstring);
                     $asap = @getAds($adstring); // need to hide error message for some terms
+                    if ( empty($asap['items']) ) $asap = @getAds($adstring1); // fallback; sometimes book-specific additions cause empty ads
                     $adblock = getAdBlock($asap);
                   }
                   if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
