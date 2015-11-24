@@ -742,7 +742,7 @@ switch($prefix) {
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('series','list','regex');
           $sn = preg_replace('!.*\(.*?(\w+)\)$!u','$1',$seriesname);
           if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$ads_asap_default_string);
-          else $asdtring = $ads_asap_default_string;
+          else $adstring = $ads_asap_default_string;
           $asap = @getAds($adstring); // need to hide error message for some terms
           $adblock = getAdBlock($asap);
         } else $adblock = '';
