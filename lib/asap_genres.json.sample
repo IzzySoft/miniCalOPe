@@ -1,0 +1,7 @@
+{
+    "Abenteuer":"keywords::Abenteuer;prodgroup::Books,DVD",
+    "Computer":"keywords::Computer;prodgroup::Books,Electronics",
+    "Heimatroman":"keywords::Heimat;prodgroup::Books,DVD",
+    "Gesellschaft+Soziales":"keywords::Gesellschaft Soziales;prodgroup::Books,DVD",
+    "Kinder":"keywords::Kinder;prodgroup::Books,DVD,Toys"
+}

@@ -163,6 +163,11 @@ $ads_asap_webvertizer_domain = 'ebooks';
 $ads_asap_initial = FALSE;
 // default string for "initial pages"
 $ads_asap_default_string = 'keywords::Buch;prodgroup::Books,DVD,Electronics';
+// file with genre specific strings (JSON; see 'lib/asap_genres.json.sample' for
+// an example file). Empty string disables this.
+$ads_asap_genre_strings = '';
+// disclaimer below the ads. Make sure it contains the '%cachedate%' placeholder.
+$ads_asap_disclaimer = 'Stand: %cachedate%<br>Preis &amp; Verfügbarkeit können sich geändert haben.';
 
 #=========================[ Language dependent stuff ]===
 # Here we make use of the language-specific directories. You either can set
@@ -180,6 +185,7 @@ switch ($use_lang) {
         $uselangs = array('en');
         $dbfile   = dirname(__FILE__).'/metadata_en.db';
         $isbnservices = array('Amazon.COM','Google.COM','BookCrossing.COM','EuroBuch.COM');
+        $ads_asap_disclaimer = 'As of %cachedate%<br>prices &amp; availability might be subject to change.';
         break;
     default  :
         $uselangs = array('de');

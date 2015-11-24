@@ -139,6 +139,11 @@ $ads_asap_webvertizer_domain = 'ebooks';
 $ads_asap_initial = FALSE;
 // default string for "initial pages"
 $ads_asap_default_string = 'keywords::Buch;prodgroup::Books,DVD,Electronics';
+// file with genre specific strings (JSON; see 'lib/asap_genres.json.sample' for
+// an example file). Empty string disables this.
+$ads_asap_genre_strings = '';
+// disclaimer below the ads. Make sure it contains the '%cachedate%' placeholder.
+$ads_asap_disclaimer = 'Stand: %cachedate%<br>Preis &amp; Verfügbarkeit können sich geändert haben.';
 
 #============================[ Person Info ]===
 // about you: Name, Homepage, Email, Amazon PartnerID (leave empty if you have none)

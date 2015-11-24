@@ -634,7 +634,15 @@ switch($prefix) {
         if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds($tagname,'genre','regex');
-          $asap = @getAds(str_replace('keywords::',"keywords::+$tagname +",$ads_asap_default_string)); // need to hide error message for some genres
+          // tag/genre specific ad string
+          $adstring = str_replace('keywords::',"keywords::+$tagname +",$ads_asap_default_string);
+          if ( !empty($ads_asap_genre_strings) && file_exists($ads_asap_genre_strings) ) {
+            $asap_genres = @json_decode(file_get_contents($ads_asap_genre_strings));
+            if ( is_object($asap_genres) ) {
+              if ( isset($asap_genres->$tagname) ) $adstring = $asap_genres->$tagname;
+            }
+          }
+          $asap = @getAds($adstring); // need to hide error message for some genres
           // TODO: genre specific string
           $adblock = getAdBlock($asap);
         } else $adblock = '';
@@ -954,10 +962,18 @@ switch($prefix) {
                       foreach( explode(', ',$book['tags']) as $tagname ) setAutoAds($tagname,'genre','regex');
                       setAutoAds($book['title'],'book','regex');
                     }
-                    // TODO: tag/genre specific ad string
+                    // tag/genre specific ad string
+                    $adstring = $ads_asap_default_string;
+                    if ( !empty($ads_asap_genre_strings) && file_exists($ads_asap_genre_strings) ) {
+                      $asap_genres = @json_decode(file_get_contents($ads_asap_genre_strings));
+                      if ( is_object($asap_genres) ) {
+                        $tagname = explode(', ',$book['tags'])[0];
+                        if ( isset($asap_genres->$tagname) ) $adstring = $asap_genres->$tagname;
+                      }
+                    }
+                    // book specifica
                     $sn = preg_replace('!(.*\s+|)(\w+)$!u','$2',$author); // author's last name
-                    if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$ads_asap_default_string);
-                    else $adstring = $ads_asap_default_string;
+                    if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$adstring);
                     $asap = @getAds($adstring); // need to hide error message for some terms
                     $adblock = getAdBlock($asap);
                   }
