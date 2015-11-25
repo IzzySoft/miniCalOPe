@@ -973,8 +973,13 @@ switch($prefix) {
                     }
                     // book specifica
                     $adstring1 = $adstring; // backup
-                    $sn = preg_replace('!(.*\s+|)(\w+)$!u','$2',$author); // author's last name
-                    if ( !empty($sn) ) $adstring = str_replace('keywords::',"keywords::+$sn +",$adstring);
+                    foreach(explode(', ',$author) as $aut) {
+                      $sn = preg_replace('!(.*\s+|)(\w+)$!u','$2',$aut); // author's last name
+                      if ( !empty($sn) ) {
+                        $adstring = str_replace('keywords::',"keywords::+$sn +",$adstring);
+                        $adstring = str_replace('++','+',$adstring);
+                      }
+                    }
                     $asap = @getAds($adstring); // need to hide error message for some terms
                     if ( empty($asap['items']) ) $asap = @getAds($adstring1); // fallback; sometimes book-specific additions cause empty ads
                     $adblock = getAdBlock($asap);
