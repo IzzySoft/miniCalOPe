@@ -75,7 +75,7 @@ $check_xml = TRUE;
 $skip_broken_xml = TRUE;
 // how to insert books into the database:
 // 'rebuild': drop all data and do a fresh insert (books are likely to get new IDs this way)
-// 'merge'  : try to figure out what has changed (experimental; keeps the book IDs, but is slower)
+// 'merge'  : try to figure out what has changed (recommended; keeps the book IDs, but is slower)
 $scan_dbmode = 'rebuild';
 #------------------------[ data extraction ]---
 // we can extract some details from EPUB files. Define here whether we shall do
