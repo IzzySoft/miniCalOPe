@@ -51,6 +51,8 @@ $cover_base = 'covers';
 $cover_fake_fallback = TRUE;
 
 #==========================[ Scan Specials ]===
+// Protect scan scripts against being run by web visitors
+$scan_cli_only = TRUE;
 // when found in .data files, what shall override definitions collected from the
 // directory structure? If not named here, it will be "merged". Currently
 // supported: author

@@ -13,6 +13,12 @@
 
 require_once('./lib/class.logging.php'); // must come first as it also defines some CONST
 require_once('./config.php');
+if ( $scan_cli_only && php_sapi_name() != 'cli' ) { // protect agains access by visitors
+  header('HTTP/1.0 403 Forbidden');
+  echo "<h1>You are not allowed to be here.</h1>\n<p>The gatekeeper won't let you see this page. Please point your browser to a different one.</p>\n";
+  trigger_error('Web access to scan scripts denied by config', E_USER_ERROR);
+  exit;
+}
 require_once('./lib/common.php');
 require_once('./lib/class.filefuncs.php');
 $filefuncs = new filefuncs($logger,$use_markdown,$bookformats,$bookdesc_ext,$bookmeta_ext,$check_xml,$skip_broken_xml);
