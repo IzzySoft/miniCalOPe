@@ -7,7 +7,7 @@
   background-color:transparent;
   margin-bottom:.3em;
 }
-.amazon3col td {
+.amazon3col .amarow div {
   background-color:#ffffff;
   margin:1em;
   border-radius:4px;
@@ -17,7 +17,7 @@
   font-family: "DejaVu Sans", Tahoma, Verdana, sans-serif;
   font-size:10px !important;
 }
-.amazon3col td.premium {
+.amazon3col div.premium {
   border-color: rgb(255, 153, 102); /* #f96 */
   background-color: rgb(255, 238, 170);
 }
@@ -42,4 +42,14 @@
   font-size:9px !important;
   color:#555555;
   margin-bottom:1em;
+}
+
+.amazon3col { display:table; margin-left:auto;margin-right:auto; border:0; }
+.amazon3col .amarow { display:table-row; }
+.amazon3col .amarow div { display:table-cell; min-width:150px; margin-right:.5em; }
+@media (min-width: 601px) { .amazon3col { border-spacing:.1em; } }
+@media (max-width: 600px) {
+  .amazon3col, .amazon3col div { display:inline-table; }
+  .amazon3col .amarow div { display:inline-table; margin:.2em; border-spacing:.2em; max-width:400px; }
+  .amazon3col { width:auto; max-width: 250px; }
 }

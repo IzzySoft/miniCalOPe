@@ -1,13 +1,13 @@
 <div id='amazon'>
-<table align='center' class='amazon3col' border='0'>
- <tr>
+<div class='amazon3col'>
+<div class='amarow'>
 <!-- BEGIN itemblock -->
-  <td {class}><a href='{url}' target='_blank' title='{title}' rel='nofollow noindex'>
+  <div class='{class}'><a href='{url}' target='_blank' title='{title}' rel='nofollow noindex'>
     <img src='{img}' alt='{title}'>{desc}<br>
     <span class='priceinfo'>{price_info}</span>
-  </a></td>
+  </a></div>
 <!-- END itemblock -->
- </tr>
-</table>
+</div>
+</div>
 <div class='ama_cachedate'>{cachedate}</div>
 </div>

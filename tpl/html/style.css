@@ -87,9 +87,10 @@ img { border:0; vertical-align:middle; }
 }
 
 /* Adjustments for mobile devices in portait mode */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   #booktable tr { display:inline; }
   #booktable .bookcover { display:table; margin-left:auto; margin-right:auto; }
   #booktable td p.buttons { line-height: 1.7em; }
   #bookdesc { padding:.15em .5em; margin-right:.5em; }
+  #isbnsearch a, #booksearch a { padding-left:4px; padding-right:4px; }
 }
