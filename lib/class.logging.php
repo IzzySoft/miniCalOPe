@@ -91,8 +91,12 @@ class logging {
    * @param optional integer screenloglevel (default: INFO)
    */
   function __construct($fname='',$flevel=INFO,$slevel=INFO) {
-    $this->setlogfile($fname);
-    $this->setloglevel('file',$flevel);
+    if ( empty($fname) ) {
+      $this->setloglevel('file',NOLOG);
+    } else {
+      $this->setlogfile($fname);
+      $this->setloglevel('file',$flevel);
+    }
     $this->setloglevel('screen',$slevel);
     if (IS_CLI) {
       $this->scrnl = "\n";
