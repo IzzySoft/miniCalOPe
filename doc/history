@@ -3,7 +3,11 @@ History for miniCalOPe
 
 v2.2.1
 -------------------
-! fix for ASAP on book details page when title contained single-quotes
++ Integration of ASAP (Amazon Simple API for PHP, https://github.com/IzzySoft/Asap) to replace Amazon Flash Ads
+* protect scan scripts from being run by web visitors
+* MergeMode is no longer experimental (for years already), so remove that hint
+* responsive design improvements
+* avoiding error message when initializing logging class w/o log file
 
 v2.2.0 (21.11.2015)
 -------------------
