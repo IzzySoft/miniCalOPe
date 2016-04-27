@@ -1,6 +1,10 @@
 History for miniCalOPe
 ======================
 
+v2.2.1
+-------------------
+! fix for ASAP on book details page when title contained single-quotes
+
 v2.2.0 (21.11.2015)
 -------------------
 * scan now cleans up / optimizes database in its final step (VACUUM, REINDEX) for a faster DB

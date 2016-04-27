@@ -960,7 +960,7 @@ switch($prefix) {
                     require_once('./lib/asap.php');
                     if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) {
                       foreach( explode(', ',$book['tags']) as $tagname ) setAutoAds($tagname,'genre','regex');
-                      setAutoAds($book['title'],'book','regex');
+                      setAutoAds(str_replace("'","",$book['title']),'book','regex');
                     }
                     // tag/genre specific ad string
                     $adstring = $ads_asap_default_string;
