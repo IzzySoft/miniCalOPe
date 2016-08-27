@@ -822,6 +822,7 @@ switch($prefix) {
             $t->set_block('template','authorblock','author');
             $t->set_block('template','serialblock','serial');
             $t->set_block('template','flattrblock','flattr');
+            $t->set_block('template','flattrstaticblock','flattrstatic');
             $t->set_block('template','datablock','data');
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
@@ -834,10 +835,21 @@ switch($prefix) {
             // Do the FlattR
             if ( empty($GLOBALS['flattrID']) || empty($authors) ) {
               $t->set_var('flattr','');
+              $t->set_var('flattrstatic','');
             } else {
               $t->set_var('flattrID',$GLOBALS['flattrID']);
               $t->set_var('flattred_url',urlencode($GLOBALS['baseurl'].'?lang='.$GLOBALS['use_lang'].'pageformat=html&action=bookdetails&book='.$bookid));
-              $t->parse('flattr','flattrblock');
+              switch ( $flattrMode ) {
+                case 'dynamic':
+                  $t->parse('flattr','flattrblock');
+                  $t->set_var('flattrstatic','');
+                  break;
+                case 'static':
+                default      :
+                  $t->set_var('flattr','');
+                  $t->set_var('urlenc_title_by_author',urlencode($book['title']." by $author"));
+                  $t->parse('flattrstatic','flattrstaticblock');
+              }
             }
             $more = FALSE;
             foreach ($authors as $aut) {

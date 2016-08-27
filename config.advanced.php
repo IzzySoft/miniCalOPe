@@ -143,6 +143,8 @@ $email   = 'john@johndoe.com';
 // -=[ Flattr ]=-
 // Setting your FlattrID here will enable the FlattR button
 $flattrID = '';
+// The "dynamic button" shows FlattRs already received, but exposes your visitors to 3rd party sites
+$flattrMode = 'static'; // static|dynamic
 // -=[ Amazon ]=-
 // Your AmazonID will be used for Amazon ads (see below) as well as for the ISBN
 // and book-search services (see above). Simple leave it empty if you have none.
