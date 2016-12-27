@@ -34,6 +34,11 @@
         type="text/html"
         href="https://flattr.com/submit/auto?url={flattred_url}&amp;user_id={flattrID}"/>
 <!-- END flattrblock -->
+<!-- BEGIN flattrstaticblock -->
+  <link rel="payment"
+        type="text/html"
+        href="https://flattr.com/submit/auto?url={flattred_url}&amp;user_id={flattrID}"/>
+<!-- END flattrstaticblock -->
 
   <entry>
     <title>{start_page}</title>
