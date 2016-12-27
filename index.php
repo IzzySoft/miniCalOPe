@@ -287,7 +287,7 @@ $allbookcount = $db->f('num');
 #========================================================[ Process request ]===
 $prefix = req_word('prefix');
 if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
-    if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+    if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
       require_once('./lib/asap.php');
       if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('start','initial','regex');
       $asap = getAds($ads_asap_default_string);
@@ -304,7 +304,8 @@ if ( empty($prefix) && empty($_REQUEST['action']) ) { // Startpage
     $t->set_var('num_allbooks',$allbookcount);
     if ($allbookcount==1) $t->set_var('allbooks',trans('book'));
     else $t->set_var('allbooks',trans('books'));
-    if ($pageformat='html') $t->set_var('adblock',$adblock);
+    if ($pageformat=='html') $t->set_var('adblock',$adblock);
+    else header("Content-type: application/atom+xml;profile=opds-catalog");
     $t->pparse("out","template");
     exit;
 }
@@ -337,20 +338,21 @@ switch($prefix) {
             $more = TRUE;
         }
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','initial','regex');
           $asap = getAds($ads_asap_default_string);
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
         // Done:
         $t->pparse("out","template");
         exit;
         break;
     //-------------------------------------[ OpenSearch document requested ]---
     case 'ods':
+        header("Content-type: application/opensearchdescription+xml");
         echo '<?xml version="1.0" encoding="UTF-8"?>'."\n"
            . ' <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'."\n"
            . "  <ShortName>$sitetitle</ShortName>\n"
@@ -462,14 +464,15 @@ switch($prefix) {
         // pagination:
         paginate('?prefix=authors&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$num_authors);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','initial','regex');
           $asap = getAds($ads_asap_default_string);
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -516,14 +519,15 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=author_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$aid.'&amp;pageformat='.$pageformat,$offset,$all);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('authors','list','regex');
           $asap = getAds($ads_asap_default_string);
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -573,14 +577,15 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=tags&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('tags','initial','regex');
           $asap = getAds($ads_asap_default_string);
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -631,7 +636,7 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=tag_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$tag_id.'&amp;pageformat='.$pageformat,$offset,$all);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds($tagname,'genre','regex');
           // tag/genre specific ad string
@@ -647,7 +652,8 @@ switch($prefix) {
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -685,14 +691,15 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=series&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;pageformat='.$pageformat,$offset,$all);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('series','initial','regex');
           $asap = getAds($ads_asap_default_string);
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -745,7 +752,7 @@ switch($prefix) {
         $t->set_var('sortorder',$sortorder);
         paginate('?prefix=series_id&amp;lang='.$GLOBALS['use_lang'].'&amp;sort_order='.$sortorder.'&amp;query='.$series_id.'&amp;pageformat='.$pageformat,$offset,$all);
         // Ads (ASAP):
-        if ( $pageformat='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
+        if ( $pageformat=='html' && $ads_asap_initial && !empty($ads_asap_pubkey) && !empty($ads_asap_privkey) && !empty($amazonID) ) { // care for ads
           require_once('./lib/asap.php');
           if ( $ads_asap_webvertizer && !empty($ads_asap_webvertizer_domain) ) setAutoAds('series','list','regex');
           $sn = preg_replace('!.*\(.*?(\w+)\)$!u','$1',$seriesname);
@@ -755,7 +762,8 @@ switch($prefix) {
           $adblock = getAdBlock($asap);
         } else $adblock = '';
         if ( !empty($adblock) ) $t->set_var('ad_css','<LINK REL="stylesheet" TYPE="text/css" HREF="'.$relurl.'tpl/html/asap.css">');
-        if ($pageformat='html') $t->set_var('adblock',$adblock);
+        if ($pageformat=='html') $t->set_var('adblock',$adblock);
+        else header("Content-type: application/atom+xml;profile=opds-catalog");
         // Done:
         $t->pparse("out","template");
         exit;
@@ -1007,6 +1015,7 @@ switch($prefix) {
               $t->set_var('adblock','');
             }
             // end ads
+            if ( $pageformat=="opds" ) header("Content-type: application/atom+xml");
             $t->pparse("out","template");
             exit;
         // Send the requested book for download
