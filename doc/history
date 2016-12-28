@@ -1,7 +1,7 @@
 History for miniCalOPe
 ======================
 
-v2.3.0
+v2.3.0 (28.12.2016)
 -------------------
 + Integration of ASAP (Amazon Simple API for PHP, https://github.com/IzzySoft/Asap) to replace Amazon Flash Ads
 * protect scan scripts from being run by web visitors
