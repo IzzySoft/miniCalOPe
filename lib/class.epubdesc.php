@@ -324,6 +324,7 @@ class epubdesc extends epub {
 
       // Book Title
       $title = $this->getDcItem('title');
+      if ( is_array($title) ) $title = $title[0];
       if ( empty($title) ) $title = $epubname;
       $this->addDescHead("<u>${title}</u>");
       $this->addData("title::${title}");
