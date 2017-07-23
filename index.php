@@ -965,7 +965,7 @@ switch($prefix) {
                 $t->parse('fakecover','fakecoverblock');
             }
             // Ads (if wanted)
-            if ( $ads_bookdetails && $pageformat='html' ) {
+            if ( $ads_bookdetails && $pageformat=='html' ) {
               switch ( strtolower($ads_bookdetails_type) ) {
                 case 'flash':                                   // Amazon Flash Widget
                   if ( empty($amazonID) ) $adblock = '';
