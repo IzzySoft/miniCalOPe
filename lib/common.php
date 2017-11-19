@@ -65,7 +65,7 @@ function req_alnum($name,$default='') {
     $GLOBALS['logger']->debug("URLParam '$name' was expected but is not set",'WEBIF');
     return $default;
   }
-  if ( preg_match('![^\w\s_-\pL]!u',$_REQUEST[$name],$match) ) {
+  if ( preg_match('![^\w\s_\-\pL]!u',$_REQUEST[$name],$match) ) {
     $GLOBALS['logger']->warn("URLParam '$name' expected to be ALNUM - got '".$_REQUEST[$name]."'",'WEBIF');
     return $default;
   }
@@ -83,7 +83,7 @@ function req_alnumwild($name,$default='') {
     return $default;
   }
   $output = preg_replace('![,.:*?]!ims','%',$_REQUEST[$name]);
-  if ( preg_match('![^\w\s\%_-\pL]!u',$output,$match) ) {
+  if ( preg_match('![^\w\s\%_\-\p{L}]!u',$output,$match) ) {
     $GLOBALS['logger']->warn("Rejecting input '".$_REQUEST[$name]."' for '$name'",'VERIFY');
     return $default;
   }
