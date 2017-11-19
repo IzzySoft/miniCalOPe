@@ -54,7 +54,7 @@ class Template {
    * @param optional string root template directory
    * @param optional string unknowns how to handle unknown variables (remove/comment/keep)
    */
-  function Template($root = ".", $unknowns = "remove") {
+  function __construct($root = ".", $unknowns = "remove") {
     $this->set_root($root);
     $this->set_unknowns($unknowns);
     if (function_exists("lang")) {
