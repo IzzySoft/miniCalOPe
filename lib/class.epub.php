@@ -265,6 +265,19 @@ class epub {
             }
           }
         }
+        if ( property_exists($this->opfContents,'metadata') && property_exists($this->opfContents->metadata,'meta') ) { // some editors put it in regular MetaData
+          foreach ($this->opfContents->metadata->meta as $meta) {
+            $attr = current($meta->attributes());
+            if ( !array_key_exists('name',$attr) ) continue;
+            if ( $attr['name'] == 'cover') {
+              $this->cover['href'] = $attr['content'];
+              if ( strpos(DIRECTORY_SEPARATOR,$this->cover['href'])===FALSE )
+                $this->cover['href'] =  $this->zip->getNameIndex($this->zip->locateName($attr['content'],ZipArchive::FL_NODIR));
+              $this->cover['trueCover'] = FALSE;
+              return $this->cover;
+            }
+          }
+        }
         $this->cover = array(); // if we reach this point, there is no cover
       }
       return $this->cover;
