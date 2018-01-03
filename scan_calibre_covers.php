@@ -1,5 +1,5 @@
 #!/usr/bin/php
-<?
+<?php
 #############################################################################
 # miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
