@@ -57,7 +57,7 @@ function getAds($criteria) {
       trigger_error('getAds: invalid keyword "'.$item[0].'" (from '.$criteria.')', E_USER_WARNING);
       continue;
     }
-    $$item[0] = $item[1];
+    ${$item[0]} = $item[1];
   }
 
   // Our localAds have top priority as they're paid for in advance – so we deal with them first
@@ -75,7 +75,7 @@ function getAds($criteria) {
 
   if ( empty($asin) && empty($keywords) ) { // no ads to retrieve without criteria, sorry
     if ($GLOBALS['autoAdsCalled']) {
-      $dAds = $GLOBALS['page']->getDefaultAds();
+      $dAds = []; //$GLOBALS['page']->getDefaultAds();
       foreach ($dAds as $ad) {
         if ( $lacount == $limit ) break;
         $GLOBALS['localAds']['items'][] = $ad;
