@@ -47,7 +47,7 @@
     * @param optional mixed recode either recode definition string
     *  (e.g. "lat1..utf-8", see method recode) or FALSE for no recoding)
     */
-   function csv($sep=";",$txt='"',$trim=FALSE,$recode="lat1..utf-8") {
+   function __construct($sep=";",$txt='"',$trim=FALSE,$recode="lat1..utf-8") {
      $this->sep  = $sep;
      $this->txt  = $txt;
      $this->trim = $trim;
