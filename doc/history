@@ -1,6 +1,13 @@
 History for miniCalOPe
 ======================
 
+v2.4.0 (03.02.2018)
+-------------------
+! fix epub title extraction with multiple DC entries
+! fix some broken compares and RegEx warnings
+* improved cover detection
+* some other small improvements / compatibility adjustments
+
 v2.3.0 (28.12.2016)
 -------------------
 + Integration of ASAP (Amazon Simple API for PHP, https://github.com/IzzySoft/Asap) to replace Amazon Flash Ads
