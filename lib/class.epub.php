@@ -277,8 +277,16 @@ class epub {
             if ( !array_key_exists('name',$attr) ) continue;
             if ( $attr['name'] == 'cover') {
               $this->cover['href'] = $attr['content'];
-              if ( strpos(DIRECTORY_SEPARATOR,$this->cover['href'])===FALSE )
-                $this->cover['href'] =  $this->zip->getNameIndex($this->zip->locateName($attr['content'],ZipArchive::FL_NODIR));
+              if ( strpos(DIRECTORY_SEPARATOR,$this->cover['href'])===FALSE ) {
+                if ( $this->zip->locateName($attr['content'],ZipArchive::FL_NODIR) )
+                  $this->cover['href'] =  $this->zip->getNameIndex($this->zip->locateName($attr['content'],ZipArchive::FL_NODIR));
+                elseif ( $this->getManifest($attr['content']) ) {
+                  $this->cover['href'] = $this->getManifest($attr['content'])['href'];
+                } else {
+                  $this->cover = [];
+                  return $this->cover;
+                }
+              }
               $this->cover['trueCover'] = FALSE;
               return $this->cover;
             }
