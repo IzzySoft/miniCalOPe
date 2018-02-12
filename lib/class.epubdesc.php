@@ -325,11 +325,12 @@ class epubdesc extends epub {
       // Book Title
       $title = $this->getDcItem('title');
       if ( is_array($title) ) $title = $title[0];
-      if ( empty($title) ) $title = $epubname;
+      if ( empty($title) ) $title = substr(basename($this->ebookDir),0.-4);
       $this->addDescHead("<u>${title}</u>");
       $this->addData("title::${title}");
       foreach ( $this->opfContents->metadata->meta as $meta ) {
         $meta = (array) $meta;
+        if ( !array_key_exists('name',$meta['@attributes']) ) continue;
         if ( $meta['@attributes']['name'] == 'calibre:series' && ( in_array('series',$this->extract2data) || in_array('all',$this->extract2data) ) ) {
           $this->addData("series::".$meta['@attributes']['content']);
         } elseif ( $meta['@attributes']['name'] == 'calibre:series_index' && ( in_array('series_index',$this->extract2data) || in_array('all',$this->extract2data) ) ) {
