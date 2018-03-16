@@ -92,6 +92,7 @@ class epubdesc extends epub {
       'modification' => 'Änderung',
       'published' => 'Veröffentlicht',
       'publisher' => 'Herausgeber',
+      'pubplace' => 'Erscheinungsort',
       'redactor' => 'Redakteur',
       'source' => 'Quelle',
       'topic' => 'Thema',
@@ -293,6 +294,7 @@ class epubdesc extends epub {
           case 'edt': $this->addDescHead($this->terms['editor'].": ${it['value']}"); break;
           case 'ill': $this->addDescHead($this->terms['illustrator'].": ${it['value']}"); break;
           case 'pbl': $this->addDescHead($this->terms['publisher'].": ${it['value']}"); break;
+          case 'pup': $this->addDescHead($this->terms['pubplace'].": ${it['value']}"); break;
           case 'red': $this->addDescHead($this->terms['redactor'].": ${it['value']}"); break;
           case 'trl': $this->addDescHead($this->terms['translator'].": ${it['value']}"); break;
           default: $this->addDescHead($this->terms['collaborator'].": ${it['value']}"); break;
@@ -374,9 +376,9 @@ class epubdesc extends epub {
       elseif (!empty($item)) $this->addDescHead($this->terms['topic'].": ${item}");
       $item = $this->getDcItem('rights'); if ( !empty($item) ) $this->addDescHead($this->terms['copyright'].": ${item}");
 
-      // Source
+      // Source and relations
       $this->parseSource( $this->getDcItem('source') );
-      $this->parseSource( $this->getDcItem('relation') );
+      if ( substr($this->getDcItem('relation'),0,4)=='http' ) $this->addData("uri::".$this->getDcItem('relation'));
 
       // Identifiers
       foreach( $this->getDcItemFull('identifier') as $it ) {
