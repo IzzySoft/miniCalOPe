@@ -306,13 +306,16 @@ class epubdesc extends epub {
      * Parse a source item (DcSource & identifier) for where the eBook was taken from (where it originated)
      * @param str item
      */
-    protected function parseSource($item) { // DcSource & identifier
-      if ( preg_match('!^http.+gutenberg!',$item) ) $this->addDescHead($this->terms['source'].": [Project Gutenberg](${item})");
-      elseif ( preg_match('!^http.+wikisource!',$item) ) $this->addDescHead($this->terms['source'].": [WikiSource](${item})");
-      elseif ( preg_match('!^http.+mobileread!',$item) ) $this->addDescHead($this->terms['source'].": [MobileRead](${item})");
-      elseif ( !empty($item) ) {
-        if ( preg_match('!^(ftp|http)s?\:!',$item) ) $this->addDescHead($this->terms['source'].": [Src](${item})");
-        else $this->addDescHead($this->terms['source'].": ${item}");
+    protected function parseSource($iitem) { // DcSource & identifier
+      if ( !is_array($iitem) ) $iitem = [$iitem];
+      foreach ( $iitem as $item ) {
+        if ( preg_match('!^http.+gutenberg!',$item) ) $this->addDescHead($this->terms['source'].": [Project Gutenberg](${item})");
+        elseif ( preg_match('!^http.+wikisource!',$item) ) $this->addDescHead($this->terms['source'].": [WikiSource](${item})");
+        elseif ( preg_match('!^http.+mobileread!',$item) ) $this->addDescHead($this->terms['source'].": [MobileRead](${item})");
+        elseif ( !empty($item) ) {
+          if ( preg_match('!^(ftp|http)s?\:!',$item) ) $this->addDescHead($this->terms['source'].": [Src](${item})");
+          else $this->addDescHead($this->terms['source'].": ${item}");
+        }
       }
     }
 
