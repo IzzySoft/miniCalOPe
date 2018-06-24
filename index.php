@@ -23,6 +23,7 @@ switch($pageformat) {
     case 'html' : $pageformat = 'html'; break;
     default     : $pageformat = 'opds'; break;
 }
+if (!isset($donationType)) $donationType = '';
 $t = new Template("tpl/$pageformat");
 // Setup translations
 require_once('./lib/class.translation.php');
@@ -835,11 +836,22 @@ switch($prefix) {
             $t->set_block('template','itemblock','item');
             $t->set_block('template','coverblock','cover');
             $t->set_block('template','fakecoverblock','fakecover');
+            if ($pageformat=='html') $t->set_block('template','donationblock','donation');
             set_basics($t);
             $t->set_var('back_to_authors',trans('back_to_authors'));
             $t->set_var('data_name',trans('title'));
             $t->set_var('data_data',$book['title']);
             $t->parse('data','datablock');
+            if ( $pageformat=='html' ) switch ( strtolower($GLOBALS['donationType']) ) {
+              case 'liberapay':
+                $t->set_var('donation_url',$GLOBALS['donationURL']);
+                $t->set_var('donation_img','tpl/icons/liberapay-badge.png');
+                $t->parse('donation','donationblock');
+                break;
+              default:
+                $t->set_var('donation','');
+                break;
+            }
             // Do the FlattR
             if ( empty($GLOBALS['flattrID']) || empty($authors) ) {
               $t->set_var('flattr','');

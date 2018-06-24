@@ -140,6 +140,11 @@ $email   = 'john@johndoe.com';
 
 #=========================[ Monetarization ]===
 // While our content is served for free, we won't object to any donations :)
+// -=[ Donations ]-
+// Specifying your Donation page here will enable the corresponding button.
+// currently supported: liberapay
+$donationType = '';
+$donationURL = '';
 // -=[ Flattr ]=-
 // Setting your FlattrID here will enable the FlattR button
 $flattrID = '';

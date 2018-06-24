@@ -54,6 +54,10 @@
 
 {adblock}
 
+<!-- BEGIN donationblock -->
+<div class='appsig'><a href='{donation_url}' title='Donations'><img src='{donation_img}' height='18'></a></div>
+<!-- END donationblock -->
+
 <DIV CLASS='appsig'>{created_by} <A HREF='http://projects.izzysoft.de/trac/minicalope'>miniCalOPe</A></DIV>
 
 </BODY></HTML>
