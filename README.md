@@ -31,10 +31,10 @@ Page](https://github.com/IzzySoft/miniCalOPe).
 
 
 ### Additional Information
-For additional information like the project wiki, you may want to visit the
-[original project site](http://projects.izzysoft.de/trac/minicalope). To file a
-bug report, feature request or simply have a look at the current development,
-please use the [issues tab on the project's wiki
+For additional information you may want to visit the
+[wiki](https://github.com/IzzySoft/miniCalOPe/wiki). To file a bug report,
+feature request or simply have a look at the current development, please use
+the [issues tab on the project's wiki
 page](https://github.com/IzzySoft/miniCalOPe/issues). To see miniCalOPe live in
-action, visit [Izzy's eBook Library](http://ebooks.qumran.org/) – where you can
-find thousands of eBooks, available at no cost for your personal use.
+action, visit [Izzy's eBook Library](https://ebooks.qumran.org/) – where you
+can find thousands of eBooks, available at no cost for your personal use.
