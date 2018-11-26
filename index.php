@@ -265,7 +265,7 @@ function parse_titles(&$tpl,&$db,$offset,$all,$url,$prefix='titles',$searchvals=
     $more = FALSE;
     while ( $db->next_record() ) {
         $tpl->set_var('bid',$db->f('id'));
-        $tpl->set_var('title',$db->f('title') .' '.trans('by').' '. $db->f('name'));
+        $tpl->set_var('title',htmlentities($db->f('title')) .' '.trans('by').' '. $db->f('name'));
         $tpl->set_var('isbn',$db->f('isbn'));
         //$tpl->set_var('pubdate',str_replace(' ','T',$db->f('timestamp')).$GLOBALS['timezone']); // pubdate is per page (current template)
         //$tpl->set_var('pubdate_human', $db->f('timestamp'));
