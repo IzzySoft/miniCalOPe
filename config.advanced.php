@@ -1,6 +1,6 @@
 <?php
 #############################################################################
-# miniCalOPe                               (c) 2010-2015 by Itzchak Rehberg #
+# miniCalOPe                               (c) 2010-2019 by Itzchak Rehberg #
 # written by Itzchak Rehberg <izzysoft AT qumran DOT org>                   #
 # http://www.izzysoft.de/                                                   #
 # ------------------------------------------------------------------------- #
@@ -125,7 +125,7 @@ $relurl  = '/opds/';
 // how many items per page
 $perpage = 25;
 // Full URL to the Wikipedia to use for author info
-$wikibase= 'http://de.wikipedia.org/wiki/';
+$wikibase= 'https://de.wikipedia.org/wiki/';
 // Enable some ISBN searches (empty array to disable this feature)
 $isbnservices = array('Amazon.DE','Bookzilla.DE','Buchhandel.DE','Google.DE','Buchfreund.DE','ZVAB.COM');
 // Enable some book search services (search by author and title of the selected book;
